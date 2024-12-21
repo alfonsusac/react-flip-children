@@ -84,7 +84,7 @@ export function ReorderArray(props: {
           }
         ],
         {
-          duration: !props.fixedSpeed ? 700 : Math.abs((deltaY + deltaX) / 40) * 40,
+          duration: !props.fixedSpeed ? 300 : Math.abs((deltaY + deltaX) / 40) * 40,
           iterations: 1,
           easing: 'ease-out',
         }

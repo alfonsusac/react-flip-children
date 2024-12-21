@@ -35,7 +35,7 @@ export function Client() {
         <Button onClick={() => setFixedSpeed(false)} className={!isFixedSpeed ? "bg-white/30" : undefined}>Fixed Duration</Button>
       </div>
 
-      <div className="flex mb-8 gap-2">
+      <div className="flex gap-2">
         <Button onClick={shuffle} className="mb-4">Shuffle</Button>
         <Button onClick={reverse} className="mb-4">Reverse</Button>
       </div>
