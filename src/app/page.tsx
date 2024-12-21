@@ -1,10 +1,20 @@
+import { codeToTokens } from "shiki";
 import { Client } from "./client";
 
-export default function Home() {
+export default async function Home() {
+  const { tokens } = await codeToTokens(`<ReorderArray>
+  {arr.map(item => (
+    <div key={item}>{item}</div>
+  ))}
+</ReorderArray>`, {
+    theme: 'dark-plus',
+    lang: 'tsx'
+})
+  
+  
   return (
-    <div className="p-8  flex flex-col items-start">
-      <h1 className="text-4xl font-semibold mb-8">Array FLIP Animation ✨</h1>
-      <Client />
+    <div className="p-8  flex flex-col items-start [&_a]:underline">
+      <Client token={tokens} />
     </div>
   );
 }

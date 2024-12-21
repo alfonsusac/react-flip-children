@@ -3,8 +3,11 @@
 import { useState } from "react"
 import { Button } from "./ui/Button"
 import { ReorderArray } from "./ui/Reorder"
+import type { ThemedToken } from "shiki"
 
-export function Client() {
+export function Client(props: {
+  token: ThemedToken[][]
+}) {
 
   const [arr, setArr] = useState(Array.from({ length: 50 }, (_, i) => i + 1))
 
@@ -26,20 +29,42 @@ export function Client() {
   return (
     <div className="flex flex-col items-start [&_h2]:my-4 [&_h2]:text-xl [&_h2]:font-semibold w-full">
 
-      <div className="flex mb-8 gap-2">
-        <Button onClick={() => setFixedWidth(true)} className={isFixedWidth ? "bg-white/30" : undefined}>Fixed Width</Button>
-        <Button onClick={() => setFixedWidth(false)} className={!isFixedWidth ? "bg-white/30" : undefined}>Varying Width</Button>
-      </div>
-      <div className="flex mb-8 gap-2">
-        <Button onClick={() => setFixedSpeed(true)} className={isFixedSpeed ? "bg-white/30" : undefined}>Fixed Speed</Button>
-        <Button onClick={() => setFixedSpeed(false)} className={!isFixedSpeed ? "bg-white/30" : undefined}>Fixed Duration</Button>
-      </div>
+      <div className="flex w-full gap-8">
+        <div className="">
 
-      <div className="flex gap-2">
-        <Button onClick={shuffle} className="mb-4">Shuffle</Button>
-        <Button onClick={reverse} className="mb-4">Reverse</Button>
-      </div>
+          <div>
+            <h1 className="text-4xl font-semibold mb-2">Array FLIP Animation ✨</h1>
+            <div className="font-mono font-bold mb-8">site by <a href="https://x.com/alfonsusac">@alfonsusac</a> | <a href="https://github.com/alfonsusac/react-flip-array">repo</a></div>
+          </div>
 
+
+          <div className="flex mb-8 gap-2">
+            <Button onClick={() => setFixedWidth(true)} className={isFixedWidth ? "bg-white/30" : undefined}>Fixed Width</Button>
+            <Button onClick={() => setFixedWidth(false)} className={!isFixedWidth ? "bg-white/30" : undefined}>Varying Width</Button>
+          </div>
+          <div className="flex mb-8 gap-2">
+            <Button onClick={() => setFixedSpeed(true)} className={isFixedSpeed ? "bg-white/30" : undefined}>Fixed Speed</Button>
+            <Button onClick={() => setFixedSpeed(false)} className={!isFixedSpeed ? "bg-white/30" : undefined}>Fixed Duration</Button>
+          </div>
+
+          <div className="flex gap-2">
+            <Button onClick={shuffle} className="mb-4">Shuffle</Button>
+            <Button onClick={reverse} className="mb-4">Reverse</Button>
+          </div>
+        </div>
+
+        <pre className="p-8 border border-white/20 rounded-md self-start">
+          {props.token.map((line, i) => {
+            return (
+              <div key={i}>
+                {line.map((token, i) => {
+                  return <span key={i} style={{ color: token.color }}>{token.content}</span>
+                })}
+              </div>
+            )
+          })}
+        </pre>
+      </div>
       {
         isFixedWidth && (
           <>
