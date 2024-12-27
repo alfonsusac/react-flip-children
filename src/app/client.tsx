@@ -74,16 +74,15 @@ export function Client(props: {
   })
 
   return (
-    <div className="flex flex-col items-start [&_h2]:my-4 [&_h2]:text-xl [&_h2]:font-semibold w-full h-screen  py-10">
+    <div className="flex flex-col  items-start [&_h2]:my-4 [&_h2]:text-xl [&_h2]:font-semibold w-full h-screen  py-10">
 
       <div className="flex w-full gap-8">
         <div className="flex flex-col items-start gap-2">
           <div>
             <h1 className="text-4xl font-light mb-1 text-zinc-300 blur-[0.4px] leading-none">Array FLIP Animation</h1>
-            <div className="font-mono font-light text-zinc-300 blur-[0.4px]">site by <a href="https://x.com/alfonsusac">@alfonsusac</a> | <a href="https://github.com/alfonsusac/react-flip-array">repo</a></div>
+            <div className="font-normal text-zinc-400 blur-[0.4px]">site by <a href="https://x.com/alfonsusac">@alfonsusac</a> | <a href="https://github.com/alfonsusac/react-flip-array">repo</a></div>
           </div>
 
-          {/* <div className="text-sm mb-2 text-zinc-600 font-medium">Settings</div> */}
           <div className="flex mb-4 gap-3">
             <div className="flex gap-[3px] p-0.5 relative">
               <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
@@ -123,6 +122,7 @@ export function Client(props: {
               }
             </div>
           </div>
+
         </div>
 
 
@@ -172,7 +172,6 @@ export function Client(props: {
             })
           }
         </div>
-
         <div className="grow flex gap-[3px] relative p-0.5">
           <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
           {
