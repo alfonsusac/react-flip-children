@@ -79,12 +79,12 @@ export function Client(props: {
       <div className="flex w-full gap-8">
         <div className="flex flex-col items-start gap-2">
           <div>
-            <h1 className="text-4xl font-light mb-2 text-zinc-300 blur-[0.4px] leading-none">Array FLIP Animation</h1>
-            <div className="font-mono font-light mb-4 text-zinc-300 blur-[0.4px]">site by <a href="https://x.com/alfonsusac">@alfonsusac</a> | <a href="https://github.com/alfonsusac/react-flip-array">repo</a></div>
+            <h1 className="text-4xl font-light mb-1 text-zinc-300 blur-[0.4px] leading-none">Array FLIP Animation</h1>
+            <div className="font-mono font-light text-zinc-300 blur-[0.4px]">site by <a href="https://x.com/alfonsusac">@alfonsusac</a> | <a href="https://github.com/alfonsusac/react-flip-array">repo</a></div>
           </div>
 
           {/* <div className="text-sm mb-2 text-zinc-600 font-medium">Settings</div> */}
-          <div className="flex mb-8 gap-3">
+          <div className="flex mb-4 gap-3">
             <div className="flex gap-[3px] p-0.5 relative">
               <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
               <Button
@@ -126,7 +126,7 @@ export function Client(props: {
         </div>
 
 
-        <pre className="p-3 border whitespace-pre  border-white/10 bg-black rounded-md self-start relative overflow-hidden">
+        <pre className="grow p-3 border whitespace-pre  border-white/10 bg-black rounded-md self-start relative overflow-hidden">
           <div className="absolute inset-0 bg-white/5 glass z-10 m-[1px] pointer-events-none" />
           <div className={cn(
             "relative w-[48rem] h-[8.5rem] font-medium font-mono",
@@ -151,7 +151,7 @@ export function Client(props: {
         </pre>
       </div>
 
-      <div className="flex gap-4">
+      <div className="flex self-stretch gap-4">
         <div className="flex mb-3 gap-[3px] relative p-0.5">
           <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
           {
@@ -173,7 +173,7 @@ export function Client(props: {
           }
         </div>
 
-        <div className="flex gap-[3px] relative p-0.5">
+        <div className="grow flex gap-[3px] relative p-0.5">
           <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
           {
             ([
@@ -212,7 +212,7 @@ export function Client(props: {
             className="bg-[#333] rounded-[8px] h-[4rem] w-[18rem] z-10 shadow-[inset_0_1px_0_0_#fff2] flex items-center justify-center font-mono text-white/30 font-semibold text-xs select-none cursor-pointer">
             {`<-- remove first ··· insert first -->`}
           </DragArea>
-          <div className="w-40 h-[4rem] bg-black z-10 rounded-md shadow-[inset_1px_1px_1px_0_#fff4] p-2 flex flex-col items-end">
+          <div className="w-40 grow h-[4rem] bg-black z-10 rounded-md shadow-[inset_1px_1px_1px_0_#fff4] p-2 flex flex-col items-end">
             <div className="text-zinc-600/60 text-xs font-bold">COUNT</div>
             <div className="relative">
               <span className="font-digit text-3xl text-[#ff3c3c] relative blur-[0.5px] z-20">{arr.length}</span>
