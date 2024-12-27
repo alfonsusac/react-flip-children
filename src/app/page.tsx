@@ -18,7 +18,7 @@ return (
   const t2 = await codeToToken(getCode(false))
 
   return (
-    <div className="min-h-screen p-10  flex flex-col items-start [&_a]:underline bg-gradient-to-tl from-[#fff1] to-[#fff2]">
+    <div className="min-h-screen px-10 flex flex-col items-start [&_a]:underline bg-gradient-to-tl from-[#fff1] to-[#fff2]">
       <Client code={[t1, t2]} />
     </div>
   );

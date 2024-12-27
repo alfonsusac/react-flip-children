@@ -74,34 +74,13 @@ export function Client(props: {
   })
 
   return (
-    <div className="flex flex-col items-start [&_h2]:my-4 [&_h2]:text-xl [&_h2]:font-semibold w-full">
+    <div className="flex flex-col items-start [&_h2]:my-4 [&_h2]:text-xl [&_h2]:font-semibold w-full h-screen  py-10">
 
       <div className="flex w-full gap-8">
         <div className="flex flex-col items-start gap-2">
           <div>
             <h1 className="text-4xl font-light mb-2 text-zinc-300 blur-[0.4px] leading-none">Array FLIP Animation</h1>
             <div className="font-mono font-light mb-4 text-zinc-300 blur-[0.4px]">site by <a href="https://x.com/alfonsusac">@alfonsusac</a> | <a href="https://github.com/alfonsusac/react-flip-array">repo</a></div>
-          </div>
-
-          <div className="flex mb-3 gap-[3px] relative p-0.5">
-            <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
-            {
-              [<>Fixed<br />Width</>,
-              <>Changing<br />Width</>,
-              <>Varying<br />Width</>,
-              <>Vertical<br />List</>,
-              <>🃏 Balatro</>].map((t, i) => {
-                return (
-                  <div key={i} className="flex flex-col items-center gap-2">
-                    <Button onClick={gotoExample(i)} data-selected={example === i}>
-                      <ButtonIndicator selected={example === i} />
-                      {i}
-                    </Button>
-                    <ButtonLabel>{t}</ButtonLabel>
-                  </div>
-                )
-              })
-            }
           </div>
 
           {/* <div className="text-sm mb-2 text-zinc-600 font-medium">Settings</div> */}
@@ -144,15 +123,13 @@ export function Client(props: {
               }
             </div>
           </div>
-
-
         </div>
 
 
-        <pre className="p-4 border whitespace-pre  border-white/10 bg-black rounded-md self-start relative overflow-hidden">
+        <pre className="p-3 border whitespace-pre  border-white/10 bg-black rounded-md self-start relative overflow-hidden">
           <div className="absolute inset-0 bg-white/5 glass z-10 m-[1px] pointer-events-none" />
           <div className={cn(
-            "relative w-[48rem] h-[10rem] font-medium font-mono",
+            "relative w-[48rem] h-[8.5rem] font-medium font-mono",
             "[&_span]:transition-all",
             "[&_span]:duration-700",
             "[&_span]:opacity-100",
@@ -174,7 +151,28 @@ export function Client(props: {
         </pre>
       </div>
 
-      <div className="flex flex-col items-start h-screen w-full -mb-12 pb-12 pt-8 -mt-4 gap-4">
+      <div className="flex gap-4">
+        <div className="flex mb-3 gap-[3px] relative p-0.5">
+          <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
+          {
+            [<>Fixed<br />Width</>,
+            <>Changing<br />Width</>,
+            <>Varying<br />Width</>,
+            <>Vertical<br />List</>,
+            <>🃏 Balatro</>].map((t, i) => {
+              return (
+                <div key={i} className="flex flex-col items-center gap-2">
+                  <Button onClick={gotoExample(i)} data-selected={example === i}>
+                    <ButtonIndicator selected={example === i} />
+                    {i}
+                  </Button>
+                  <ButtonLabel>{t}</ButtonLabel>
+                </div>
+              )
+            })
+          }
+        </div>
+
         <div className="flex gap-[3px] relative p-0.5">
           <div className="bg-black h-[4.3rem] absolute -top-[1px] -left-[1px] -right-[1px] rounded-[6] shadow-[0_1px_0_0_#fff2]" />
           {
@@ -196,7 +194,7 @@ export function Client(props: {
           <DragArea
             onMoveRight={() => setArr([...arr, idRef.current++])}
             onMoveLeft={() => setArr(arr.slice(0, arr.length - 1))}
-            className="bg-[#333] rounded-[8px] h-[4rem] w-[20rem] z-10 shadow-[inset_0_1px_0_0_#fff2] flex items-center justify-center font-mono text-white/30 font-semibold text-sm select-none cursor-pointer">
+            className="bg-[#333] rounded-[8px] h-[4rem] w-[18rem] z-10 shadow-[inset_0_1px_0_0_#fff2] flex items-center justify-center font-mono text-white/30 font-semibold text-xs select-none cursor-pointer">
             {`<-- remove last ··· insert last -->`}
           </DragArea>
           <DragArea
@@ -211,7 +209,7 @@ export function Client(props: {
               console.log("removed", arr[0])
               setArr(arr.slice(1))
             }}
-            className="bg-[#333] rounded-[8px] h-[4rem] w-[20rem] z-10 shadow-[inset_0_1px_0_0_#fff2] flex items-center justify-center font-mono text-white/30 font-semibold text-sm select-none cursor-pointer">
+            className="bg-[#333] rounded-[8px] h-[4rem] w-[18rem] z-10 shadow-[inset_0_1px_0_0_#fff2] flex items-center justify-center font-mono text-white/30 font-semibold text-xs select-none cursor-pointer">
             {`<-- remove first ··· insert first -->`}
           </DragArea>
           <div className="w-40 h-[4rem] bg-black z-10 rounded-md shadow-[inset_1px_1px_1px_0_#fff4] p-2 flex flex-col items-end">
@@ -222,64 +220,64 @@ export function Client(props: {
             </div>
           </div>
         </div>
+      </div>
 
-        {/* CONTENT */}
+      {/* CONTENT */}
+      <div className={cn(
+        "bg-black/40 rounded-lg flex items-start p-6 overflow-hidden relative shadow-[inset_0_10px_20px_0_#0008]",
+        "grow w-full transition-all",
+        example === 4 && "bg-green-800 shadow-none"
+      )}>
         <div className={cn(
-          "bg-black/40 rounded-lg flex items-start p-6 overflow-hidden relative shadow-[inset_0_10px_20px_0_#0008]",
-          "h-[80svh] w-full transition-all",
-          example === 4 && "bg-green-800 shadow-none"
+          "flex gap-2 flex-wrap max-h-none w-full self-start",
+          example === 3 && "flex-col self-stretch",
+          example === 4 && "flex-row self-stretch items-center justify-center flex-nowrap *:shrink *:min-w-0 pr-32"
         )}>
-          <div className={cn(
-            "flex gap-2 flex-wrap max-h-none w-full self-start",
-            example === 3 && "flex-col self-stretch",
-            example === 4 && "flex-row self-stretch items-center justify-center flex-nowrap *:shrink *:min-w-0 pr-32"
-          )}>
-            <ReorderArray
-              usingFixedSpeed={isFixedSpeed}
-              animationOptions={{
-                easing: useEaseInOut ? "ease-in-out" : "ease-out",
-              }}
-              speed={speed}
-              duration={duration}
-              exitAnimation={example === 3 ? [
-                [
-                  { opacity: 1, transform: "translateX(0)" },
-                  { opacity: 0, transform: "translateX(100%)" },
-                ],
-                undefined
-              ] : example === 4 ? [
-                [
-                  { transform: "translateX(0)" },
-                  { transform: "translateY(60vh) rotateY(80deg)" },
-                ],
-                undefined
-              ] : undefined}
-            >
-              {example === 0 &&
-                arr.map(item => <Card key={item} {...cardProps(item)} />)}
-              {example === 1 &&
-                arr.map(item => <Card key={item} {...cardProps(item)} className="grow bg-emerald-700 border-emerald-600"
-                  style={{ width: `${ ~~(item * Math.PI % 4) * 100 + 100 }px` }} />)}
-              {example === 2 &&
-                arr.map(item => <Card key={item} {...cardProps(item)} className="bg-yellow-600 border-yellow-400 data-[adding=true]:!-translate-x-[10rem]"
-                  style={{ width: `${ ~~(item * Math.PI % 4) * 100 + 100 }px` }} />)}
-              {example === 3 &&
-                arr.map(item => <Card key={item} {...cardProps(item)}
-                  className="bg-zinc-800 border-none self-center p-3 px-5 h-auto w-full max-w-96 rounded-lg [&_.db]:top-2.5 [&_.db]:right-2 [&_.rb]:top-2.5 [&_.rb]:right-[2rem] [&_.rb]:rotate-90 [&_.lb]:right-[3.5rem] [&_.lb]:left-[unset] [&_.lb]:top-2.5 [&_.lb]:rotate-90 flex-row items-start gap-3 relative shadow-[inset_0_1px_0_0_#fff2,_inset_0_-1px_0_0_#0002]">
-                  {~~(item * Math.PI % 4) > 1
-                    ? (<div className="w-4 h-4 mt-1 shrink-0 rounded-md bg-lime-600 relative after:w-1 after:h-1 after:bg-zinc-200 after:absolute after:rounded-md after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2" />)
-                    : (<div className="w-4 h-4 mt-1 shrink-0 rounded-md bg-white/5" />)}
-                  <div className="flex flex-col gap-1">
-                    {todoList[item % todoList.length][0]}
-                    <span className="text-sm">
-                      {todoList[item % todoList.length][1]}
-                    </span>
-                  </div>
-                </Card>)}
-              {example === 4 &&
-                arr.map((item, index) => <PlayingCard itemId={item} key={item} {...cardProps(item)} zIndex={index} length={arr.length} />)}
-            </ReorderArray>
-          </div>
+          <ReorderArray
+            usingFixedSpeed={isFixedSpeed}
+            animationOptions={{
+              easing: useEaseInOut ? "ease-in-out" : "ease-out",
+            }}
+            speed={speed}
+            duration={duration}
+            exitAnimation={example === 3 ? [
+              [
+                { opacity: 1, transform: "translateX(0)" },
+                { opacity: 0, transform: "translateX(100%)" },
+              ],
+              undefined
+            ] : example === 4 ? [
+              [
+                { transform: "translateX(0)" },
+                { transform: "translateY(60vh) rotateY(80deg)" },
+              ],
+              undefined
+            ] : undefined}
+          >
+            {example === 0 &&
+              arr.map(item => <Card key={item} {...cardProps(item)} />)}
+            {example === 1 &&
+              arr.map(item => <Card key={item} {...cardProps(item)} className="grow bg-emerald-700 border-emerald-600"
+                style={{ width: `${ ~~(item * Math.PI % 4) * 100 + 100 }px` }} />)}
+            {example === 2 &&
+              arr.map(item => <Card key={item} {...cardProps(item)} className="bg-yellow-600 border-yellow-400 data-[adding=true]:!-translate-x-[10rem]"
+                style={{ width: `${ ~~(item * Math.PI % 4) * 100 + 100 }px` }} />)}
+            {example === 3 &&
+              arr.map(item => <Card key={item} {...cardProps(item)}
+                className="bg-zinc-800 border-none self-center p-3 px-5 h-auto w-full max-w-96 rounded-lg [&_.db]:top-2.5 [&_.db]:right-2 [&_.rb]:top-2.5 [&_.rb]:right-[2rem] [&_.rb]:rotate-90 [&_.lb]:right-[3.5rem] [&_.lb]:left-[unset] [&_.lb]:top-2.5 [&_.lb]:rotate-90 flex-row items-start gap-3 relative shadow-[inset_0_1px_0_0_#fff2,_inset_0_-1px_0_0_#0002]">
+                {~~(item * Math.PI % 4) > 1
+                  ? (<div className="w-4 h-4 mt-1 shrink-0 rounded-md bg-lime-600 relative after:w-1 after:h-1 after:bg-zinc-200 after:absolute after:rounded-md after:top-1/2 after:-translate-y-1/2 after:left-1/2 after:-translate-x-1/2" />)
+                  : (<div className="w-4 h-4 mt-1 shrink-0 rounded-md bg-white/5" />)}
+                <div className="flex flex-col gap-1">
+                  {todoList[item % todoList.length][0]}
+                  <span className="text-sm">
+                    {todoList[item % todoList.length][1]}
+                  </span>
+                </div>
+              </Card>)}
+            {example === 4 &&
+              arr.map((item, index) => <PlayingCard itemId={item} key={item} {...cardProps(item)} zIndex={index} length={arr.length} />)}
+          </ReorderArray>
         </div>
       </div>
     </div>
@@ -368,7 +366,7 @@ function PlayingCard(
         zIndex: zIndex,
         // Create an arc based on the length of the array
         top: `${ (() => {
-          return Math.round((160 / (((length - 1)/2) ** 2)) * (zIndex - ((length - 1) / 2)) ** 2);
+          return Math.round((160 / (((length - 1) / 2) ** 2)) * (zIndex - ((length - 1) / 2)) ** 2);
         })() }px`,
         // perspective: "10000px",
       }}
