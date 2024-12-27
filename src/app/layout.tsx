@@ -16,9 +16,10 @@ const geistMono = JetBrains_Mono({
 //   variable: "--font-digital",
 //   weight: "400",
 // })
-export const digital = Orbitron({
+const digital = Orbitron({
   variable: "--font-digital",
   weight: "700",
+  subsets: ["latin"],
 })
 
 
