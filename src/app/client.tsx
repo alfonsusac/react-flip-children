@@ -163,13 +163,13 @@ export function Client(props: {
             "data-[deleting=true]:[&_span]:opacity-0",
             "data-[deleting=true]:[&_span]:blur-sm",
           )}>
-            {/* <AnimateCode
+            <AnimateCode
               charHeight={24}
               charWidth={9.8}
               state={isFixedSpeed ? 0 : 1}
               // eslint-disable-next-line @typescript-eslint/no-explicit-any
               tokens={props.code as any}
-            /> */}
+            />
           </div>
         </pre>
       </div>
