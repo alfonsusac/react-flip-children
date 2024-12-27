@@ -12,6 +12,24 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
       },
+      fontFamily: {
+        sans: ["var(--font-sans)"],
+        mono: ["var(--font-geist-mono)"],
+        digit: ["var(--font-digital)"],
+      },
+      keyframes: {
+        sway: {
+          "0%, 100%": {
+            transform: "rotate(-2deg)",
+          },
+          "50%": {
+            transform: "rotate(2deg)",
+          },
+        },
+      },
+      animation: {
+        sway: "sway 2s ease-in-out infinite",
+      },
     },
   },
   plugins: [],

@@ -9,3 +9,97 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dashoffset: 800;
+  }
+}
+
+.button-bg::before {
+  background: conic-gradient(
+      from 0deg at 20px 40%,
+      #4a4a4a00 50%,
+      #0d0d0d66 60%,
+      #4a4a4a00 73%
+    ),
+    conic-gradient(
+      from 0deg at right 20px top 40%,
+      #4a4a4a00 27%,
+      #0d0d0d66 40%,
+      #4a4a4a00 50%
+    ),
+    #3b3b3b;
+}
+.button-bg:active::before,
+.button-bg[data-pressed="true"]::before {
+  background: conic-gradient(
+      from 0deg at 20px 40%,
+      #4a4a4a00 50%,
+      #0d0d0d66 60%,
+      #4a4a4a00 73%
+    ),
+    conic-gradient(
+      from 0deg at right 20px top 40%,
+      #4a4a4a00 27%,
+      #0d0d0d66 40%,
+      #4a4a4a00 50%
+    ),
+    #333;
+}
+
+.glass {
+  background: linear-gradient(45deg, #4441 50%, #fff1 50%, #1111);
+  backdrop-filter: blur(0.4px);
+  border-radius: 6px;
+  box-shadow: inset 1px 1px 1px 0 #fff2, 1px 1px 1px 0 #000;
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+}
+
+a {
+  @apply underline-offset-4 decoration-zinc-600;
+}
+
+.pcard-display {
+  transition: all 1s ease-in-out;
+  transform: rotateY(180deg);
+  border-radius: 6px;
+  box-shadow: 0 0 0 0px #fff;
+}
+.pcard-display.idle {
+  animation: sway 1s linear infinite;
+}
+
+.pcard:hover > .pcard-display,
+.pcard[data-hover="true"] > .pcard-display {
+  transition: all 0.3s ease-in-out;
+  transform: rotate(2deg) scale(1.05) translate(0, -14rem);
+}
+
+.pcard[data-adding="true"] .pcard-display {
+  background-color: red;
+  outline: 1px solid red;
+  transition: none;
+  transform: translate(0, 50vh) rotateY(80deg);
+}
+
+/* .playing-card {
+  will-change: transform;
+  transform: rotateY(0deg) !important;
+  transition: all 0.5s !important;
+  position: relative;
+  @apply antialiased;
+}
+
+.playing-card:hover {
+  scale: 1.1;
+  rotate: 2deg !important;
+  transform: rotateY(90deg) !important;
+} */
+
+.top {
+  z-index: 9999 !important;
+}
