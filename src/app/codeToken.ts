@@ -1,9 +1,9 @@
 import type { Change } from "diff";
-import { codeToTokens, type ThemedToken } from "shiki";
+import { codeToTokens, type BundledTheme, type ThemedToken } from "shiki";
 
-export async function codeToToken(code: string) {
+export async function codeToToken(code: string, theme: BundledTheme = 'vesper') {
   const { tokens } = await codeToTokens(code, {
-    theme: 'vesper',
+    theme,
     lang: 'tsx'
   })
   return tokens

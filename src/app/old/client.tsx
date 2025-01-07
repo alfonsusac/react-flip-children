@@ -2,14 +2,14 @@
 "use client"
 
 import { useEffect, useImperativeHandle, useRef, useState, type ComponentProps, type ReactNode, type SVGProps } from "react"
-import { Button } from "./ui/Button"
-import { ReorderArray } from "./ui/Reorder"
-import { useKeycap } from "./ui/Keyboard"
+import { Button } from "../ui/Button"
+import { ReorderArray } from "../ui/Reorder"
+import { useKeycap } from "../ui/Keyboard"
 import type { ThemedToken } from "shiki"
-import { AnimateCode } from "./ui/AnimateCode"
+import { AnimateCode } from "../ui/AnimateCode"
 import { cn } from "lazy-cn"
-import { DragArea } from "./ui/DragArea"
-import BackCard from "./ui/backcard.png"
+import { DragArea } from "../ui/DragArea"
+import BackCard from "../ui/backcard.png"
 
 
 export function Client(props: {

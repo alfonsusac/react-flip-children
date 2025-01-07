@@ -1,7 +1,7 @@
-import { Client } from "./client";
 import { diffWordsWithSpace } from "diff";
-import { assignIDToToken, codeToToken, flattenToken } from "./codeToken";
 import type { ThemedToken } from "shiki";
+import { codeToToken } from "../codeToken";
+import { Client } from "./client";
 
 export default async function Home() {
 
