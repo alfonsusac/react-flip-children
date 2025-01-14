@@ -10,6 +10,7 @@ import Link from "next/link"
 import { Flipped, Flipper } from "react-flip-toolkit"
 import { AutoAnimate } from "../ui/AutoAnimate"
 import { MagicMotion } from "react-magic-motion"
+import { AnimateChild2 } from "../ui/Reorder3"
 
 
 export function ClientTestPage() {
@@ -97,8 +98,7 @@ export function ClientTestPage() {
 
 
   return (
-    <div className="flex flex-col min-h-screen bg-slate-200 -mx-8 -my-8">
-
+    <div className="flex flex-col h-screen bg-slate-200 -mx-8 -my-8">
 
       <div className="p-4 pb-4 border-b bg-white shadow-sm flex flex-col gap-2">
         <div className="text-slate-500 text-[0.7em] uppercase font-bold">
@@ -145,6 +145,7 @@ export function ClientTestPage() {
         <SettingGroup label="Animator">
           <div className="flex gap-2 flex-wrap">
             <ButtonGroup>
+              <Button data-selected={match("reorderer", "3")} onClick={change("reorderer")("3")}>V0.3</Button>
               <Button data-selected={match("reorderer", "2")} onClick={change("reorderer")("2")}>V0.2</Button>
               <Button data-selected={match("reorderer", "1")} onClick={change("reorderer")("1")}>V0.1</Button>
               <Button data-selected={match("reorderer", "viewtransition")} onClick={change("reorderer")("viewtransition")}>ViewTransition</Button>
@@ -246,106 +247,119 @@ export function ClientTestPage() {
         </SettingGroup>
       </div>
 
-      {settings.reorderer === "2" && (
-        <div {...parentProps}>
-          <AnimateChild duration={settings.duration} easing={easing}>
-            {childrenProps.map(({ key, ...props }) => {
-              return (<AnimateChildDiv {...props} key={key} />)
-            })}
-          </AnimateChild>
-        </div>
-      )}
+      <div className="h-0 grow overflow-auto">
 
-      {settings.reorderer === "1" && (
-        <div {...parentProps}>
-          <ReorderArray
-            duration={settings.duration}
-            usingFixedSpeed={settings.fixedSpeed}
-            speed={settings.speed}
-            blur={settings.blur}
-            easing={easing}
-            disableRotation={settings.disableRotation}
-            disableBlur={settings.disableBlur}
-            deferElementDeletions={settings.deferElementDeletion}
-            delayEntryAnimation={settings.delayEntryAnimation}
-          >
-            {childrenProps.map(({ key, ...props }) => {
-              return (<AnimateChildDiv {...props} key={key} />)
-            })}
-          </ReorderArray>
-        </div>
-      )}
-
-      {settings.reorderer === "viewtransition" && (
-        <ViewTransition duration={settings.duration} enabled={isUsingViewTransition} easing={easing}>
+        {settings.reorderer === "3" && (
           <div {...parentProps}>
-            {childrenProps.map(({ key, style, ...props }) => {
-              return (<AnimateChildDiv {...props} style={{ viewTransitionName: `item-${ key }`, ...style }} key={key} />)
-            })}
+            <AnimateChild2 duration={settings.duration} easing={easing}>
+              {childrenProps.map(({ key, ...props }) => {
+                return (<AnimateChildDiv {...props} key={key} />)
+              })}
+            </AnimateChild2>
           </div>
-        </ViewTransition>
-      )}
+        )}
 
-      {settings.reorderer === "react-flip-toolkit" && <Flipper flipKey={array.join('')} spring={{
-        stiffness: 300,
-        damping: 30,
-      }} staggerConfig={{
-        default: {
-          reverse: settings.rftStagger === "reverse",
-          speed: settings.rftStaggerSpeed,
-        }
-      }}>
-        <div {...parentProps}>
-          {childrenProps.map(({ key, style, ...props }) => {
-            return (
-              <Flipped key={key} flipId={key} stagger={settings.rftStagger !== "none"}>
-                <AnimateChildDiv {...props} style={{
-                  transition: `none`,
-                  ...style
-                }} key={key} />
-              </Flipped>
-            )
-          })}
-        </div>
-      </Flipper>}
+        {settings.reorderer === "2" && (
+          <div {...parentProps}>
+            <AnimateChild duration={settings.duration} easing={easing}>
+              {childrenProps.map(({ key, ...props }) => {
+                return (<AnimateChildDiv {...props} key={key} />)
+              })}
+            </AnimateChild>
+          </div>
+        )}
 
-      {settings.reorderer === "auto-animate" && (
-        <AutoAnimate props={parentProps} useAutoAnimateOptions={{
-          duration: settings.duration,
-          easing: easing,
+        {settings.reorderer === "1" && (
+          <div {...parentProps}>
+            <ReorderArray
+              duration={settings.duration}
+              usingFixedSpeed={settings.fixedSpeed}
+              speed={settings.speed}
+              blur={settings.blur}
+              easing={easing}
+              disableRotation={settings.disableRotation}
+              disableBlur={settings.disableBlur}
+              deferElementDeletions={settings.deferElementDeletion}
+              delayEntryAnimation={settings.delayEntryAnimation}
+            >
+              {childrenProps.map(({ key, ...props }) => {
+                return (<AnimateChildDiv {...props} key={key} />)
+              })}
+            </ReorderArray>
+          </div>
+        )}
+
+        {settings.reorderer === "viewtransition" && (
+          <ViewTransition duration={settings.duration} enabled={isUsingViewTransition} easing={easing}>
+            <div {...parentProps}>
+              {childrenProps.map(({ key, style, ...props }) => {
+                return (<AnimateChildDiv {...props} style={{ viewTransitionName: `item-${ key }`, ...style }} key={key} />)
+              })}
+            </div>
+          </ViewTransition>
+        )}
+
+        {settings.reorderer === "react-flip-toolkit" && <Flipper flipKey={array.join('')} spring={{
+          stiffness: 300,
+          damping: 30,
+        }} staggerConfig={{
+          default: {
+            reverse: settings.rftStagger === "reverse",
+            speed: settings.rftStaggerSpeed,
+          }
         }}>
-          {childrenProps.map(({ key, ...props }) => {
-            return (<AnimateChildDiv {...props} key={key} />)
-          })}
-        </AutoAnimate>
-      )}
-
-      {settings.reorderer === "react-magic-motion" && (
-        <MagicMotion>
           <div {...parentProps}>
             {childrenProps.map(({ key, style, ...props }) => {
               return (
-                <UnmemoizedAnimateChildDiv {...props} style={{
-                  ...style,
-                  transition: `none`,
-                }} key={key} />
+                <Flipped key={key} flipId={key} stagger={settings.rftStagger !== "none"}>
+                  <AnimateChildDiv {...props} style={{
+                    transition: `none`,
+                    ...style
+                  }} key={key} />
+                </Flipped>
               )
             })}
           </div>
-        </MagicMotion>
-      )}
+        </Flipper>}
 
+        {settings.reorderer === "auto-animate" && (
+          <AutoAnimate props={parentProps} useAutoAnimateOptions={{
+            duration: settings.duration,
+            easing: easing,
+          }}>
+            {childrenProps.map(({ key, ...props }) => {
+              return (<AnimateChildDiv {...props} key={key} />)
+            })}
+          </AutoAnimate>
+        )}
 
-      {/* Floating Action Bar */}
-      <div className="sticky bottom-0 p-3 pl-14 z-[99999]">
-        <div className="sticky bottom-0 left-10 flex rounded-xl border p-1 bg-white shadow-md  gap-1 border-slate-300">
-          <Button onClick={shuffle}>Shuffle</Button>
-          <Button onClick={reverse}>Reverse</Button>
-          <Button onClick={add}>Add</Button>
-          <Separator />
-          <Button onClick={addOrRemove3}>Toggle (3)</Button>
+        {settings.reorderer === "react-magic-motion" && (
+          <MagicMotion>
+            <div {...parentProps}>
+              {childrenProps.map(({ key, style, ...props }) => {
+                return (
+                  <UnmemoizedAnimateChildDiv {...props} style={{
+                    ...style,
+                    transition: `none`,
+                  }} key={key} />
+                )
+              })}
+            </div>
+          </MagicMotion>
+        )}
+
+        {/* Floating Action Bar */}
+        <div className="sticky bottom-0 p-3 pl-14 z-[99999]">
+          <div className="sticky bottom-0 left-10 flex rounded-xl border p-1 bg-white shadow-md  gap-1 border-slate-300">
+            <Button onClick={shuffle}>Shuffle</Button>
+            <Button onClick={reverse}>Reverse</Button>
+            <Button onClick={add}>Add</Button>
+            <Separator />
+            <Button onClick={addOrRemove3}>Toggle (3)</Button>
+          </div>
         </div>
       </div>
+
     </div>
   );
 }
@@ -413,7 +427,7 @@ function useSettings() {
     height: number,
     grow: boolean,
     duration: number,
-    reorderer: "2" | "1" | "viewtransition" | "react-flip-toolkit" | "auto-animate" | "react-magic-motion",
+    reorderer: "3" | "2" | "1" | "viewtransition" | "react-flip-toolkit" | "auto-animate" | "react-magic-motion",
     gap: number,
     stiffness: number,
     damping: number,
@@ -429,7 +443,8 @@ function useSettings() {
     delayEntryAnimation: boolean,
     dropShadow: boolean,
     control: boolean,
-    animation: "none" | "appear" | "bounce"
+    animation: "none" | "appear" | "bounce",
+    separator: boolean,
   } = {
     initialLength: 20,
     flexDir: "row",
@@ -456,6 +471,7 @@ function useSettings() {
     dropShadow: true,
     control: true,
     animation: "none",
+    separator: true,
   }
 
   const readonlysp = useSearchParams()

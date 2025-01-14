@@ -11,6 +11,7 @@ import { cn } from "lazy-cn"
 import { DragArea } from "../ui/DragArea"
 import BackCard from "../ui/backcard.png"
 import { AnimateChild } from "../ui/Reorder2"
+import { AnimateChild2 } from "../ui/Reorder3"
 
 
 export function Client(props: {
@@ -233,7 +234,8 @@ export function Client(props: {
           example === 3 && "flex-col self-stretch",
           example === 4 && "flex-row self-stretch items-center justify-center flex-nowrap *:shrink *:min-w-0 pr-32"
         )}>
-          <AnimateChild
+          <AnimateChild2
+            // @ts-expect-error - not valid props.
             usingFixedSpeed={isFixedSpeed}
             animationOptions={{
               easing: useEaseInOut ? "ease-in-out" : "ease-out",
@@ -277,7 +279,7 @@ export function Client(props: {
               </Card>)}
             {example === 4 &&
               arr.map((item, index) => <PlayingCard itemId={item} key={item} {...cardProps(item)} zIndex={index} length={arr.length} />)}
-          </AnimateChild>
+          </AnimateChild2>
         </div>
       </div>
     </div>

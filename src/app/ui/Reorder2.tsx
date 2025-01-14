@@ -3,19 +3,13 @@
 import { Children, cloneElement, createRef, isValidElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactElement, type ReactNode, type RefObject, type SetStateAction, type TransitionEvent } from "react";
 
 export function AnimateChild(
-  props: {
+  { children, ...props }: {
     children: React.ReactNode;
     duration?: number;
     easing?: string;
     resetAnimation?: boolean;
   }
 ) {
-  // 𝒸𝒽𝒾𝓁𝒹𝓇𝑒𝓃
-  // This is the incoming children from the parent.
-  const children = props.children
-
-  // 𝓇𝑒𝓃𝒹𝑒𝓇𝑒𝒹
-  // This is the currently rendered children.
   const [rendered, setRendered] = useState<ValidReactElement[]>()
 
   // 𝓇𝑒𝓃𝒹𝑒𝓇𝑒𝒹𝑅𝑒𝒻𝓈
@@ -37,6 +31,7 @@ export function AnimateChild(
   const saveParent = () => {
     if (!parentRef.current) return
     prevParentRef.current = {
+      // TODO - try with clientWidth and clientHeight
       width: parentRef.current.offsetWidth,
       height: parentRef.current.offsetHeight
     }
@@ -184,7 +179,6 @@ export function AnimateChild(
       if (!parent) return
       if (!prev) return
       const curr = parent.getBoundingClientRect()
-      if (!curr) return
       const delta = {
         y: prev.height - curr.height,
         x: prev.width - curr.width,

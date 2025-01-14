@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState, type JSX, type SVGProps } from "react"
 import { ReorderArray } from "../ui/Reorder"
 import { codeToToken } from "../codeToken"
-import { Geist_Mono, Reddit_Mono, Roboto_Mono, Ubuntu_Sans_Mono } from "next/font/google"
+import { Roboto_Mono } from "next/font/google"
 import { appExample } from "./examples/apps"
 import { notificationsExample } from "./examples/notifications"
 
 const mono = Roboto_Mono({
+  subsets: ["latin"],
   variable: "--font-geist-mono",
 })
 
