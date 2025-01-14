@@ -1,6 +1,7 @@
 import { ReorderArray } from "@/app/ui/Reorder"
 import { useRef, useState, type SVGProps } from "react"
 import { Button } from "../homeui/button"
+import { AnimateChild } from "@/app/ui/Reorder2"
 
 export const notificationsExample = {
   code: `<div className="flex flex-col">
@@ -33,8 +34,8 @@ function TodoExample() {
       </div>
 
       <div className="h-10" />
-      <div className="flex flex-col gap-2">
-        <ReorderArray>
+      <div className="flex flex-col gap-2 bg-red-500 transition-all">
+        <AnimateChild>
           {arr.map(item => (
             <div key={item} className="flex gap-4 bg-[#F7E5C699] p-4 rounded-2xl animate-appear">
               <div className="w-10 h-10 bg-full rounded-2xl bg-black flex items-center justify-center"
@@ -53,7 +54,7 @@ function TodoExample() {
             </div>
           ))}
           <Button key={"add"} onClick={add} className="p-2 px-4 bg-[#4caf50] text-white rounded-md transition-all active:scale-110 font-bold">Add</Button>
-        </ReorderArray>
+        </AnimateChild>
       </div>
     </>
   )

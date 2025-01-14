@@ -5,6 +5,7 @@ export function ReorderArray(props: {
   usingFixedSpeed?: boolean
   speed?: number
   duration?: number
+  easing?: CSSProperties['transitionTimingFunction']
   blur?: number
   animationOptions?: KeyframeAnimationOptions,
   exitAnimation?: [
@@ -66,7 +67,12 @@ export function ReorderArray(props: {
   const deletedElements = useRef<Set<string>>(new Set())
 
   useEffect(() => {
-    // console.log("first useEffect called")
+
+    // benchmark useeffect
+    console.time("useEffect")
+
+    console.time("checking new children")
+
 
     // Gather the keys from the incoming children
     const newChildrenKeys = new Set<string>()
@@ -78,6 +84,9 @@ export function ReorderArray(props: {
       if (newChildrenKeys.has(child.key)) throw new Error("Duplicate key found with key: " + child.key)
       newChildrenKeys.add(child.key)
     })
+
+    console.timeEnd("checking new children")
+
 
     // Mark deleted elements by comparing rendered with incoming children
     Children.forEach(renderedChildren, (renderedChild, index) => {
@@ -111,6 +120,8 @@ export function ReorderArray(props: {
 
     // 2. Set renderedChildren to new children
     renderNewChildren(newRender)
+
+    console.timeEnd("useEffect")
 
   }, [children])
 
@@ -228,7 +239,7 @@ export function ReorderArray(props: {
             ...props.disableRotation ? {} : { rotate: prev.rotate ?? `0deg` },
           },
           {
-            ...props.disableBlur ? {} : { filter: `blur(${ (props.blur ?? 1) * Math.abs((deltaY + deltaX) / 120) }px)` },
+            ...props.disableBlur ? {} : { filter: `blur(${ (props.blur ?? 1) * distance / 120 }px)` },
             ...props.disableRotation ? {} : { rotate: `${ (-deltaX) / 20 }deg` },
           },
           {
@@ -239,7 +250,7 @@ export function ReorderArray(props: {
         ],
         {
           duration,
-          easing: 'ease-in-out',
+          easing: props.easing ?? 'ease-in-out',
           fill: 'both',
           ...props?.animationOptions,
         }

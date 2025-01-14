@@ -103,3 +103,20 @@ a {
 .top {
   z-index: 9999 !important;
 }
+
+.card {
+  @apply transition-all duration-1000 data-[adding]:bg-green-500 
+  data-[deleting]:bg-red-500 will-change-transform transform-gpu
+  w-[var(--width)] h-[var(--height)] text-xs tracking-tighter border 
+  shadow-[inset_0px_-1px_1px_0px_#5497ef33] rounded-md font-mono 
+  flex items-center justify-center cursor-pointer
+  hover:bg-slate-50 bg-white
+}
+
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
