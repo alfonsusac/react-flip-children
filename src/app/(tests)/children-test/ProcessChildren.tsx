@@ -1,8 +1,8 @@
 "use client"
 
 import { cloneElement, type ComponentProps, isValidElement, useState, type ReactNode, useRef, type RefObject, useEffect, Children, createRef, type ReactElement, type CSSProperties } from "react"
-import { isAsyncMode, isFragment, isLazy } from "react-is"
-import { flatMap } from "../lib/helper"
+import { isFragment } from "react-is"
+import { flatMap } from "../../../../lib/AnimateChildren/src/helper"
 
 export function Div(props: ComponentProps<"div">) { return <div {...props} /> }
 

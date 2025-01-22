@@ -4,7 +4,7 @@ import { Children, cloneElement, createRef, Fragment, isValidElement, useEffect,
 import { createPortal } from "react-dom"
 import { isFragment } from "react-is"
 import { Div, ProcessChildren } from "./ProcessChildren"
-import { AnimateChildren } from "../lib/AnimateChildren"
+import { AnimateChildren } from "../../../../lib/AnimateChildren/src"
 
 export default function ChildrenTestClientPage() {
 

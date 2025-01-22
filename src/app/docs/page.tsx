@@ -9,11 +9,13 @@ import Link from "next/link"
 
 const title = Inter({
   variable: '--font-title',
+  subsets: ['latin'],
 })
 
 
 const sans = Inter({
   variable: '--font-body',
+  subsets: ['latin'],
 })
 
 export default function DocsPage() {
