@@ -1,6 +1,6 @@
 "use client"
 
-import { createRef, isValidElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type ReactPortal, type Ref, type RefObject } from "react"
+import { createRef, isValidElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactElement, type ReactNode, type ReactPortal, type Ref, type RefObject } from "react"
 import { flatMap, isPortal, type ReactElementWithKey, cloneWithMergedRef, filterNodeByKey, createProp, clone, type AnimationTime } from "./helper"
 
 
@@ -88,7 +88,7 @@ export function AnimateChildren(
         //│ Add Animation     │
         //╰───────────────────╯
         if (inPrev) modifiedProp["data-adding"] = ''
-        //(A) This will be deleted later after layout paint to trigger CSS transition via attribute change
+        // This will be deleted later after layout paint to trigger CSS transition via attribute change
 
         return cloneWithMergedRef(child, entry.ref, modifiedProp)
       }

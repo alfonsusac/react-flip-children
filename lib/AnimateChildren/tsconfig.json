@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "removeComments": true,
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
@@ -25,6 +26,6 @@
     "src/**/*"
   ],
   "files": [
-    "./src/index.tsx"
+    "src/index.ts"
   ]
 }
