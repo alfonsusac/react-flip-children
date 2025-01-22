@@ -20,13 +20,13 @@ React Flip Children was inspired by [Josh Comeau's React Flip Move](https://gith
 
 - Automatic detection of child additions, deletions, and movements.
 - Reorder animation using Web Animation API that is performant and smooth.
-- Full support for customizable entry/exit animations entirely using custom data attributes.
+- Full support for customizable entry/exit animations entirely using custom `data-` attributes.
 - Ability to provide continuous animations for children that are in the middle of animating.
 - Support for custom animation durations and easing.
 
 ### Usage
 
-The usage of React Flip Children is simple. Wrap the children you want to animate in the `AnimateChildren` component and get reorder animation for free.
+The usage of React Flip Children is simple. Simply wrap the children you want to animate in the `AnimateChildren` component and get reorder animation for free.
 
 ```javascript
 import React, { useState } from 'react';
@@ -49,7 +49,7 @@ export default function App() {
 
 ### Enter/Leave Animations
 
-React Flip Children allows you to provide custom animations for children entering and leaving the DOM. This is done by adding a CSS class that reads the data- attribute provided by the component.
+React Flip Children allows you to provide custom animations for children entering and leaving the DOM. This is done by adding a CSS class that reads the `data-` attribute provided by the component.
 
 The `data-adding` attribute is added when a child enters the DOM, and `data-removing` is added when a child is removed. You can then target these attributes with CSS for custom animations.
 
@@ -96,21 +96,23 @@ const Card = forwardRef((props, ref) => {
 
 ### Demo
 
-- [Simple Demo](https://react-flip-array.alfon.dev/)
-- [Playground](https://react-flip-array.alfon.dev/test)
-- [Stress Test](https://react-flip-array.alfon.dev/test-stress)
+- [Simple Demo](https://react-flip-children.alfon.dev/)
+- [Playground](https://react-flip-children.alfon.dev/test)
+- [Stress Test](https://react-flip-children.alfon.dev/test-stress)
 
 ### Compatibility
 
-- React Flip Children is compatible with all modern browsers and IE11.
-- React Flip Children bundles to ESNext
+- React Flip Children is compatible with all modern browsers, including Internet Explorer 11.
+
+- The library is bundled to the ESNext module format.
+
 
 
 ### Gotchas
 
-- CSS Transitions are unable to be persisted across re-renders. If a child is animating and the parent re-renders, there is a chance the animation will be interrupted.
+- CSS Transitions are unable to be persisted across re-renders. If a child is in the middle of a transition and the parent re-renders, there is a chance the animation will be interrupted.
 - Async components (React 18+) do not pass keys to their actual React elements, causing potential issues with React Flip Children. Workaround: wrap async components in a `<div>`.
-- React Flip Children uses the `translate` CSS property for child reordering. If the parent component is set to `overflow: auto`, it may cause scrolling issues. To avoid this, wrap the parent in a `<div>` with `overflow: hidden` or avoid `overflow: auto`.
+- React Flip Children uses the `translate` CSS property for child reordering. If the parent component is set to `overflow: auto`, it may cause scrolling issues. It is recommended to set the parent to `overflow: hidden` or `overflow:visible` to avoid this issue.
 - Overriding the `translate` property in child components may not work as expected due to the use of WAAPI.
 - While it’s not necessary to provide a key to children of the `<AnimateChildren>` component (it will auto-generate keys), it is recommended to provide keys to avoid unwanted behavior.
 - Proper animations require user-defined CSS for transitions.

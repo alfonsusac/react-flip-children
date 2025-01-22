@@ -187,10 +187,10 @@ export default function DocsPage() {
 
           <H3 id="overview">Overview</H3>
           <p>
-            React Flip Children is a React component that aims to provide a simple way to animate change in children props allowing for smooth transitions between states while also keeping the Developer Experience in mind.
+            React Flip Children is a React component that aims to provide a simple way to animate change in children props allowing for smooth transitions between states while also keeping the Developer Experience (DX) in mind.
           </p>
           <p>
-            The package leverages React&apos;s lifecycle hooks, the FLIP technique, WebAnimation API, and CSS transitions to provide a seamless and customizable animation experience.
+            The package leverages React&apos;s lifecycle hooks, the FLIP technique, Web Animation API, and CSS transitions to provide a seamless and customizable animation experience.
           </p>
           <p>
             Install the package via your package manager of choice.
@@ -211,7 +211,7 @@ npm install react-flip-children
               Reorder animation using Web Animation API that is performant and smooth.
             </li>
             <li>
-              Full support for customizable entry/exit animations entirely using custom data- attributes.
+              Full support for customizable entry/exit animations entirely using custom <code>data-</code> attributes.
             </li>
             <li>
               Ability to provide continuous animations for children that are in the middle of animating
@@ -225,11 +225,9 @@ npm install react-flip-children
 
           <H3 id="usage">Usage</H3>
           <p>
-            The usage of React Flip Children is pretty simple. Simply wrap the children you want to animate in the Flip component and get reorder animation for free.
+            The usage of React Flip Children is simple. Simply wrap the children you want to animate in the <code>AnimateChildren</code> component and get reorder animation for free.
           </p>
-          <p>
-            Here is the basic example:
-          </p>
+
           <CodeBlock code={`
 import React, { useState } from 'react';
 import { AnimateChildren } from 'animate-children';
@@ -253,10 +251,10 @@ export default function App() {
 
           <H3 id="enter-leave-animation">Enter/Leave Animations</H3>
           <p>
-            React Flip Children allows you to provide custom animations for children entering and leaving the DOM. This is done by adding a CSS class that reads the data- attribute provided by the component.
+            React Flip Children allows you to provide custom animations for children entering and leaving the DOM. This is done by adding a CSS class that reads the <code>data-</code> attribute provided by the component.
           </p>
           <p>
-            The <code>data-adding</code> attribute is added to the child when it is added to the DOM and <code>data-removing</code> is added when the child is removed from the DOM. Allowing you to provide CSS rules targeting this attribute for custom entry animations.
+            The <code>data-adding</code> attribute is added to the child when it is added to the DOM and <code>data-removing</code> is added when the child is removed from the DOM. You can then target these attributes with CSS for custom animations.
           </p>
           <p>
             Here is an example in tailwind of how you can provide custom animations for entering and leaving children:
@@ -324,31 +322,37 @@ const Card = forwardRef((props, ref) => {
 
 
           <H3 id="compatibility">Compatibility</H3>
-          <p>
-            React Flip Children is compatible with all modern browsers and IE11.
-          </p>
+          <ul>
+            <li>
+              React Flip Children is compatible with all modern browsers, including Internet Explorer 11.
+            </li>
+            <li>
+              The library is bundled to the ESNext module format.
+            </li>
+          </ul>
+
 
 
 
           <H3 id="gotchas">Gotchas</H3>
           <ul>
             <li>
-              CSS Transitions are unable to be persisted across re-renders. This means that if you have a child that is animating and you re-render the parent, there is a likely chance that the animation will be interrupted.
+              CSS Transitions are unable to be persisted across re-renders. If a child is in the middle of a transition and the parent re-renders, there is a chance that the animation will be interrupted.
             </li>
             <li>
-              Async components (React 18+) do not pass keys to their actuall react elements. This can cause unwanted behavior when using React Flip Children. To work around this limitation, you can wrap each async component with in a <code>{'<div>'}</code>
+              Async components (React 18+) do not pass keys to their actuall React elements, causing potential issues with React Flip Children. To work around this limitation, you can wrap each async component with in a <code>{'<div>'}</code>
             </li>
             <li>
-              React Flip Children uses the <code>translate</code> CSS property to animate rearrangement of the children. This means that the parent component will have scrolling issues if it is set to <code>overflow: auto</code>. It is recommended to wrap the parent component in a <code>{'<div>'}</code> with <code>overflow: hidden</code> or to avoid this issue.
+              React Flip Children uses the <code>translate</code> CSS property for child reordering. If the parent component is set to <code>overflow: auto</code>, it may cause scrolling issues. It is recommended to set the parent to <code>overflow: hidden</code> or <code>overflow:visible</code> to avoid this issue.
             </li>
             <li>
-              React Flip Children also uses WAAPI to animate the children. This means that overriding the <code>translate</code> property in the child component may not work properly.
+              Overriding the <code>translate</code> property in child components may not work as expected due to the use of WAAPI.
             </li>
             <li>
-              It is not necessary to provide a key to the children of the <code>{'<AnimateChildren>'}</code> component. The component will automatically generate keys for the children. However, it is still recommended to provide keys to the children to avoid any unwanted behavior.
+              While it’s not necessary to provide a key to children of the <code>{`<AnimateChildren>`}</code> component (it will auto-generate keys), it is still recommended to provide keys to avoid unwanted behavior.
             </li>
             <li>
-              As shown above, proper animations require user-defined CSS for transitions.
+              Proper animations require user-defined CSS for transitions.
             </li>
           </ul>
 
@@ -357,7 +361,7 @@ const Card = forwardRef((props, ref) => {
           <H3 id="known-issues">Known Issues</H3>
           <ul>
             <li>
-              Using both async components and <code>useSearchParams</code> from Next.js has been known to cause hanging.
+              Using both async components and <code>useSearchParams</code> from Next.js can cause hanging.
             </li>
           </ul>
 
@@ -365,7 +369,7 @@ const Card = forwardRef((props, ref) => {
 
           <H3 id="contributions">Contributions</H3>
           <p>
-            Contributors welcome! Please discuss new features with me ahead of time, and submit PRs for bug fixes.
+            Contributors are welcome! Please discuss new features with me ahead of time, and submit PRs for bug fixes.
           </p>
 
 
@@ -382,7 +386,7 @@ const Card = forwardRef((props, ref) => {
             Special thanks to friends and family for their guidance and support during the development of this project.<br />
           </p>
           <p>
-            If you find any issues or have feature requests, please open an issue on GitHub.
+            If you find any issues or have feature requests, please open an issue on <a href="https://github.com/alfonsusac/react-flip-array" target="_blank">GitHub</a>.
           </p>
 
 
@@ -429,7 +433,7 @@ const Card = forwardRef((props, ref) => {
             </code>
           </H3>
           <p>
-            The children to animate. This can be any valid <code style={{ color: '#5DE4C7' }}>ReactNode</code>. However, only valid children will be animated. Others may be rendered but not animated, or omitted entirely.
+            The children to animate. This can be any valid <code style={{ color: '#5DE4C7' }}>ReactNode</code>, but only valid children will be animated. Others may be rendered but not animated, or omitted entirely.
           </p>
 
           <h5>Omitted Nodes</h5>
