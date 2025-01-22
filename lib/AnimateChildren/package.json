@@ -1,8 +1,7 @@
 {
   "name": "react-flip-children",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "A simple react component to animate children",
-
   "keywords": [
     "react",
     "animation",
@@ -16,46 +15,39 @@
     "waapi",
     "react19"
   ],
-
   "homepage": "https://react-flip-children.alfon.dev/",
   "bugs": {
     "url": "https://github.com/alfonsusac/react-flip-children/issues",
     "email": "react-flip-children@alfon.dev"
   },
   "repository": "github:alfonsusac/react-flip-children",
-
   "license": "MIT",
-
   "author": {
     "name": "Alfonsus Ardani",
     "email": "hey@alfon.dev",
     "url": "https://alfon.dev"
   },
-
-
-
-
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
-
-
-
   "exports": {
     ".": {
-      "import": "./dist/index.mjs", 
-      "require": "./dist/index.js"  
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs"
     }
   },
   "dependencies": {
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-is": "^19.0.0"
   },
   "scripts": {
     "build": "tsup src/index.tsx --format esm,cjs --dts"
   },
   "devDependencies": {
+    "@types/node": "^22.10.7",
+    "@types/react": "^19.0.7",
+    "@types/react-dom": "^19.0.3",
     "@changesets/cli": "^2.27.11",
     "tsup": "^8.3.5",
     "typescript": "^5.7.3"

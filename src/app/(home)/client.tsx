@@ -87,7 +87,7 @@ export function copyPackageNameToClipboard() {
 export function PackageName() {
   return (
     <span className="p-3 px-7 rounded-md font-black bg-[#9C8660] text-white font-mono flex items-center" onClick={copyPackageNameToClipboard}>
-      npm i react-flip-array
+      npm i react-flip-children
     </span>
   )
 }
