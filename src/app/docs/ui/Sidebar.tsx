@@ -50,8 +50,6 @@ export function Sidebar() {
         "w-52 shrink-0 p-2",
         "bg-[#151519]",
 
-        // "bg-red-500/50",
-
         "w-80",
         "fixed",
         "z-40",
