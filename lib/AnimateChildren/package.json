@@ -1,9 +1,46 @@
 {
   "name": "react-flip-children",
   "version": "0.0.5",
+  "description": "A simple react component to animate children",
+
+  "keywords": [
+    "react",
+    "animation",
+    "flip",
+    "children",
+    "react-flip-move",
+    "react-flip-children",
+    "css",
+    "css transition",
+    "css animation",
+    "waapi",
+    "react19"
+  ],
+
+  "homepage": "https://react-flip-children.alfon.dev/",
+  "bugs": {
+    "url": "https://github.com/alfonsusac/react-flip-children/issues",
+    "email": "react-flip-children@alfon.dev"
+  },
+  "repository": "github:alfonsusac/react-flip-children",
+
+  "license": "MIT",
+
+  "author": {
+    "name": "Alfonsus Ardani",
+    "email": "hey@alfon.dev",
+    "url": "https://alfon.dev"
+  },
+
+
+
+
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
+
+
+
   "exports": {
     ".": {
       "import": "./dist/index.mjs", 
