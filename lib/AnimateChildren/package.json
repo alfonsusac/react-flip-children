@@ -27,13 +27,14 @@
     "email": "hey@alfon.dev",
     "url": "https://alfon.dev"
   },
+  "source": "src/index.tsx",
   "types": "dist/index.d.ts",
   "main": "dist/index.js",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "exports": {
     ".": {
       "require": "./dist/index.js",
-      "import": "./dist/index.mjs"
+      "import": "./dist/index.js"
     }
   },
   "dependencies": {
@@ -45,10 +46,13 @@
     "build": "tsup src/index.tsx --format esm,cjs --dts"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.11",
+    "@parcel/packager-ts": "2.13.3",
+    "@parcel/transformer-typescript-types": "2.13.3",
     "@types/node": "^22.10.7",
     "@types/react": "^19.0.7",
     "@types/react-dom": "^19.0.3",
-    "@changesets/cli": "^2.27.11",
+    "parcel": "^2.13.3",
     "tsup": "^8.3.5",
     "typescript": "^5.7.3"
   }

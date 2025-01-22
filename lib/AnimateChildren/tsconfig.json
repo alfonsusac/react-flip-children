@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationMap": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
@@ -11,14 +10,21 @@
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
     "lib": [
       "dom",
     ],
     "module": "ESNext",
     "target": "ESNext",
+    "outDir": "dist",
   },
   "exclude": [
     "node_modules"
+  ],
+  "include": [
+    "src/**/*"
+  ],
+  "files": [
+    "./src/index.tsx"
   ]
 }

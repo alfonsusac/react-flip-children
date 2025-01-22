@@ -2,3 +2,4 @@ node_modules/
 src/
 .changeset
 tsconfig.json
+.parcel-cache
