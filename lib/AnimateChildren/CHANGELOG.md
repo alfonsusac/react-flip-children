@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.0.10
+
+### Patch Changes
+
+- fix deps & tsconfig
+
 ## 0.0.9
 
 ### Patch Changes
