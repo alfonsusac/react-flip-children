@@ -10,6 +10,7 @@
 
     "lib:build": "cd lib/AnimateChildren && pnpm build",
     "lib:changeset": "cd lib/AnimateChildren && changeset",
+    "lib:version": "cd lib/AnimateChildren && changeset version",
     "lib:publish": "cd lib/AnimateChildren && pnpm publish"
   },
   "dependencies": {
