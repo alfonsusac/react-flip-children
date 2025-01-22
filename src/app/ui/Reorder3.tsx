@@ -1,33 +1,54 @@
+"use client"
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import { Children, cloneElement, createRef, isValidElement, useEffect, useLayoutEffect, useRef, useState, type ReactElement, type ReactNode, type RefObject } from "react";
+import { Children, cloneElement, createRef, isValidElement, useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactElement, type ReactNode, type RefObject } from "react";
 
-// Todo - can this be made without the use of isValidElementStrict?
 
 export function AnimateChild2(
   { children, ...props }: {
     children: React.ReactNode;
     duration?: number;
     easing?: string;
+    deleteAnimationDuration?: number;
   }
 ) {
-  const [rendered, setRendered] = useState<ValidReactElement[]>()
+  // Defaults
+  const duration = props.duration ?? 500
+  const easing = useEasingValue("ease-out", props.easing)
+  const deleteAnimationDuration = props.deleteAnimationDuration ?? 500
+
+  // State
+  const [rendered, setRendered] = useState<ReactNode[]>()
   const [entries, getOrAddEntry] = useMap<SavedChildData>()
   const parentRef = useRef<SavedParentData>({})
 
   useEffect(() => {
 
+    console.log(children, typeof children)
+
     const uniqueNewKeys = new StrictSet()
-    const newRenders: ValidReactElement[] = []
+    let noKeysCount = 0
+    const newRenders: ReactNode[] = []
 
     // Loop through every child of incoming children.
     // The goal is to 1) inject refs to each child, 2) add data-adding to new children, 3) remove data-deleting from deleted children that are 
-    Children.forEach(children, child => {
-      if (!isValidElementStrict(child)) return
-      uniqueNewKeys.register(child.key)
-      const inPrev = entries.has(child.key)
+    Children.forEach(children, function (child) {
+      if (!isValidElement(child))
+        return newRenders.push(child)
+      
+      if (!isValidElementStrict(child)) {
+        const key = `_${ noKeysCount++ }`
+        uniqueNewKeys.register(key)
+        const oldref = (child as any).ref
+        const ref = getOrAddEntry(key, { ref: oldref ?? createRef<HTMLElement | null>() })[0].ref
+        const el = cloneElement(child, { key, ref } as any)
+        return newRenders.push(el)
+      }
 
-      const existingChild = getOrAddEntry(child.key, { ref: createRef<HTMLElement | null>() })
+      uniqueNewKeys.register(child.key)
+
+      const [existingChild, inPrev] = getOrAddEntry(child.key, { ref: createRef<HTMLElement | null>() })
 
       existingChild.ref.current?.removeAttribute("data-deleting")
       if (existingChild.deletingTimeout) {
@@ -42,26 +63,28 @@ export function AnimateChild2(
       newRenders.push(el)
     })
 
-    rendered?.forEach((child, index) => {
-      const node = child.props.ref?.current
+
+    rendered?.forEach(function (child, index) {
+      if (!isValidElementStrict(child)) return
+
+      const entry = entries.get(child.key)
+      if (!entry) return
+
+      const node = entry.ref.current
       if (!node) return
 
       // Save parent node
       parentRef.current.node ??= node.parentElement
 
-      const entry = entries.get(child.key)
-      if (!entry) return
-
       // Save rect data
-      const rect = node.getBoundingClientRect()
-      entry.rect = rect
+      entry.rect = node.getBoundingClientRect()
 
       // Save css animation times
-      const cssAnimations = node.getAnimations()
+      entry.cssAnimationTimes = node.getAnimations()
         .filter(a => a instanceof CSSAnimation)
         .map(a => a.currentTime)
-      entry.cssAnimationTimes = cssAnimations
 
+      // Filter to only deleted children
       if (uniqueNewKeys.has(child.key)) return
 
       // Deleting
@@ -91,13 +114,16 @@ export function AnimateChild2(
 
     // Queue Children Animation
     rendered.forEach(child => {
+      // console.log(child)
+      if (!isValidElementStrict(child)) {
+        return
+      }
+
       const node = child.props.ref?.current
       if (!node) return
 
-
       const entry = entries.get(child.key)
       if (!entry) return // if it happen it should reconstruct entry
-
 
       const key = child.key
 
@@ -137,7 +163,7 @@ export function AnimateChild2(
             }
           }
 
-          setRendered(prev => prev?.filter(child => child.key !== key))
+          setRendered(prev => prev?.filter(child => isValidElementStrict(child) && child.key !== key))
           entries.delete(key)
         }, 2000) // TODO - figure when to end animation!
         entry.deletingTimeout = timeout
@@ -276,18 +302,7 @@ function warnKeylessElement(node: ReactNode) {
 }
 
 
-function useMap<T>() {
-  const ref = useRef<Map<string, T>>(new Map())
-  const getOrAddRef = (key: string, value: T) => {
-    const val = ref.current.get(key)
-    if (!val) {
-      ref.current.set(key, value)
-      return value
-    }
-    return val
-  }
-  return [ref.current, getOrAddRef] as const
-}
+
 function cloneFrom(
   child: ValidReactElement,
   props?: Record<string, any>,
@@ -315,7 +330,35 @@ function MapUniqueChildrenElements<T>(children: ReactNode, callback: (child: Val
   return newChildren
 }
 
+// Hooks
+// --------------
 
+function useMap<T>() {
+  const ref = useRef<Map<string, T>>(new Map())
+  const getOrAddRef = (key: string, value: T) => {
+    const val = ref.current.get(key)
+    if (!val) {
+      ref.current.set(key, value)
+      return [value, false] as const
+    }
+    return [val, true] as const
+  }
+  return [ref.current, getOrAddRef] as const
+}
+
+function useEasingValue(defaultValue: string, prop?: string) {
+  return useMemo(() => {
+    if (!prop) return defaultValue
+    try {
+      const div = document.createElement("div")
+      div.animate({ opacity: 0 }, { duration: 500, easing: prop })
+      return prop
+    } catch (error) {
+      console.log(`Invalid easing value: ${ prop }. Using default easing: ${ defaultValue }`)
+      return defaultValue
+    }
+  }, [prop])
+}
 
 
 

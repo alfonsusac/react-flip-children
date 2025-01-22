@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 
 import { Fragment, memo, PureComponent, useEffect, useRef, useState, type ChangeEvent, type ComponentProps, type MouseEvent, type SVGProps } from "react"
@@ -11,6 +12,7 @@ import { Flipped, Flipper } from "react-flip-toolkit"
 import { AutoAnimate } from "../ui/AutoAnimate"
 import { MagicMotion } from "react-magic-motion"
 import { AnimateChild2 } from "../ui/Reorder3"
+import { AnimateChildren } from "../lib/AnimateChildren"
 
 
 export function ClientTestPage() {
@@ -35,7 +37,9 @@ export function ClientTestPage() {
     moveDown,
   } = useControls(settings.initialLength, isUsingViewTransition)
 
-  const childrenProps = [...array, "static"].map((item) => {
+
+
+  const childrenProps = [...array, "static"].map((item, index) => {
     return {
       key: item,
       style: {
@@ -57,6 +61,9 @@ export function ClientTestPage() {
       </div>,
     } as ComponentProps<"div"> & { key: string | number }
   })
+
+  const firstFive = childrenProps.slice(0, 5)
+  const restOfFive = childrenProps.slice(5)
 
   const parentProps = {
     style: {
@@ -139,12 +146,17 @@ export function ClientTestPage() {
               <input type="number" min={0} step={1} value={settings.gap ?? ""} onChange={changeWithNumber("gap")} />
               <label>px</label>
             </InputGroup>
+            <ButtonGroup>
+              <Button data-selected={match("separator", false)} onClick={change("separator")(false)}>None</Button>
+              <Button data-selected={match("separator", true)} onClick={change("separator")(true)}>With Separator</Button>
+            </ButtonGroup>
           </div>
         </SettingGroup>
 
         <SettingGroup label="Animator">
           <div className="flex gap-2 flex-wrap">
             <ButtonGroup>
+              <Button data-selected={match("reorderer", "4")} onClick={change("reorderer")("4")}>V0.4</Button>
               <Button data-selected={match("reorderer", "3")} onClick={change("reorderer")("3")}>V0.3</Button>
               <Button data-selected={match("reorderer", "2")} onClick={change("reorderer")("2")}>V0.2</Button>
               <Button data-selected={match("reorderer", "1")} onClick={change("reorderer")("1")}>V0.1</Button>
@@ -249,53 +261,109 @@ export function ClientTestPage() {
 
       <div className="h-0 grow overflow-auto">
 
+        {settings.reorderer === "4" && (
+          <div {...parentProps}>
+            {settings.separator ? (
+              <AnimateChildren >
+                {firstFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <Separator />
+                {restOfFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </AnimateChildren>
+            ) : (
+              <AnimateChildren>
+                {childrenProps.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </AnimateChildren>
+            )}
+          </div>
+        )}
+
         {settings.reorderer === "3" && (
           <div {...parentProps}>
-            <AnimateChild2 duration={settings.duration} easing={easing}>
-              {childrenProps.map(({ key, ...props }) => {
-                return (<AnimateChildDiv {...props} key={key} />)
-              })}
-            </AnimateChild2>
+            {settings.separator ? (
+              <AnimateChild2 duration={settings.duration} easing={easing}>
+                {firstFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <Separator />
+                {restOfFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </AnimateChild2>
+            ) : (
+              <AnimateChild2 duration={settings.duration} easing={easing}>
+                {childrenProps.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </AnimateChild2>
+            )}
           </div>
         )}
 
         {settings.reorderer === "2" && (
           <div {...parentProps}>
-            <AnimateChild duration={settings.duration} easing={easing}>
-              {childrenProps.map(({ key, ...props }) => {
-                return (<AnimateChildDiv {...props} key={key} />)
-              })}
-            </AnimateChild>
+            {settings.separator ? (
+              <AnimateChild duration={settings.duration} easing={easing}>
+                {firstFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <Separator />
+                {restOfFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </AnimateChild>
+            ) : (
+              <AnimateChild duration={settings.duration} easing={easing}>
+                {childrenProps.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </AnimateChild>
+            )}
           </div>
         )}
 
         {settings.reorderer === "1" && (
           <div {...parentProps}>
-            <ReorderArray
-              duration={settings.duration}
-              usingFixedSpeed={settings.fixedSpeed}
-              speed={settings.speed}
-              blur={settings.blur}
-              easing={easing}
-              disableRotation={settings.disableRotation}
-              disableBlur={settings.disableBlur}
-              deferElementDeletions={settings.deferElementDeletion}
-              delayEntryAnimation={settings.delayEntryAnimation}
-            >
-              {childrenProps.map(({ key, ...props }) => {
-                return (<AnimateChildDiv {...props} key={key} />)
-              })}
-            </ReorderArray>
+            {
+              (() => {
+                const animatorProps = {
+                  duration: settings.duration,
+                  usingFixedSpeed: settings.fixedSpeed,
+                  speed: settings.speed,
+                  blur: settings.blur,
+                  easing: easing,
+                  disableRotation: settings.disableRotation,
+                  disableBlur: settings.disableBlur,
+                  deferElementDeletions: settings.deferElementDeletion,
+                  delayEntryAnimation: settings.delayEntryAnimation,
+                }
+                if (settings.separator) return (
+                  <ReorderArray {...animatorProps}>
+                    {firstFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                    <Separator />
+                    {restOfFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                    <KeylessAnimateChildDiv />
+                  </ReorderArray>
+                )
+                return (
+                  <ReorderArray {...animatorProps}>
+                    {childrenProps.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
+                    <KeylessAnimateChildDiv />
+                  </ReorderArray>
+                )
+              })()
+            }
           </div>
         )}
 
         {settings.reorderer === "viewtransition" && (
           <ViewTransition duration={settings.duration} enabled={isUsingViewTransition} easing={easing}>
-            <div {...parentProps}>
-              {childrenProps.map(({ key, style, ...props }) => {
-                return (<AnimateChildDiv {...props} style={{ viewTransitionName: `item-${ key }`, ...style }} key={key} />)
-              })}
-            </div>
+            {settings.separator ? (
+              <div {...parentProps}>
+                {firstFive.map(({ key, style, ...props }) => <AnimateChildDiv {...props} style={{ viewTransitionName: `item-${ key }`, ...style }} key={key} />)}
+                <Separator />
+                {restOfFive.map(({ key, style, ...props }) => <AnimateChildDiv {...props} style={{ viewTransitionName: `item-${ key }`, ...style }} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </div>
+            ) : (
+              <div {...parentProps}>
+                {childrenProps.map(({ key, style, ...props }) => <AnimateChildDiv {...props} style={{ viewTransitionName: `item-${ key }`, ...style }} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </div>
+            )}
           </ViewTransition>
         )}
 
@@ -308,43 +376,81 @@ export function ClientTestPage() {
             speed: settings.rftStaggerSpeed,
           }
         }}>
-          <div {...parentProps}>
-            {childrenProps.map(({ key, style, ...props }) => {
-              return (
+
+          {settings.separator ? (
+            <div {...parentProps}>
+              {firstFive.map(({ key, style, ...props }) =>
                 <Flipped key={key} flipId={key} stagger={settings.rftStagger !== "none"}>
-                  <AnimateChildDiv {...props} style={{
-                    transition: `none`,
-                    ...style
-                  }} key={key} />
+                  <AnimateChildDiv {...props} style={{ transition: `none`, ...style }} key={key} />
                 </Flipped>
-              )
-            })}
-          </div>
+              )}
+              <Flipped key="separator" flipId="separator" stagger={settings.rftStagger !== "none"}>
+                <Separator />
+              </Flipped>
+              {restOfFive.map(({ key, style, ...props }) =>
+                <Flipped key={key} flipId={key} stagger={settings.rftStagger !== "none"}>
+                  <AnimateChildDiv {...props} style={{ transition: `none`, ...style }} key={key} />
+                </Flipped>
+              )}
+              <KeylessAnimateChildDiv />
+            </div>
+          ) : (
+            <div {...parentProps}>
+              {childrenProps.map(({ key, style, ...props }) =>
+                <Flipped key={key} flipId={key} stagger={settings.rftStagger !== "none"}>
+                  <AnimateChildDiv {...props} style={{ transition: `none`, ...style }} key={key} />
+                </Flipped>
+              )}
+              <Flipped key="static" flipId="static" stagger={settings.rftStagger !== "none"}>
+                <KeylessAnimateChildDiv />
+              </Flipped>
+            </div>
+          )}
+
         </Flipper>}
 
         {settings.reorderer === "auto-animate" && (
-          <AutoAnimate props={parentProps} useAutoAnimateOptions={{
-            duration: settings.duration,
-            easing: easing,
-          }}>
-            {childrenProps.map(({ key, ...props }) => {
-              return (<AnimateChildDiv {...props} key={key} />)
-            })}
-          </AutoAnimate>
+          settings.separator
+            ? <AutoAnimate props={parentProps} useAutoAnimateOptions={{
+              duration: settings.duration,
+              easing: easing,
+            }}>
+              {firstFive.map(({ key, ...props }) => {
+                return (<AnimateChildDiv {...props} key={key} />)
+              })}
+              <Separator />
+              {restOfFive.map(({ key, ...props }) => {
+                return (<AnimateChildDiv {...props} key={key} />)
+              })}
+              <KeylessAnimateChildDiv />
+            </AutoAnimate>
+            : <AutoAnimate props={parentProps} useAutoAnimateOptions={{
+              duration: settings.duration,
+              easing: easing,
+            }}>
+              {childrenProps.map(({ key, ...props }) => {
+                return (<AnimateChildDiv {...props} key={key} />)
+              })}
+              <KeylessAnimateChildDiv />
+            </AutoAnimate>
+
         )}
 
         {settings.reorderer === "react-magic-motion" && (
           <MagicMotion>
-            <div {...parentProps}>
-              {childrenProps.map(({ key, style, ...props }) => {
-                return (
-                  <UnmemoizedAnimateChildDiv {...props} style={{
-                    ...style,
-                    transition: `none`,
-                  }} key={key} />
-                )
-              })}
-            </div>
+            {settings.separator ? (
+              <div {...parentProps}>
+                {firstFive.map(({ key, style, ...props }) => <UnmemoizedAnimateChildDiv {...props} style={{ ...style, transition: `none` }} key={key} />)}
+                <Separator />
+                {restOfFive.map(({ key, style, ...props }) => <UnmemoizedAnimateChildDiv {...props} style={{ ...style, transition: `none` }} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </div>
+            ) : (
+              <div {...parentProps}>
+                {childrenProps.map(({ key, style, ...props }) => <UnmemoizedAnimateChildDiv {...props} style={{ ...style, transition: `none` }} key={key} />)}
+                <KeylessAnimateChildDiv />
+              </div>
+            )}
           </MagicMotion>
         )}
 
@@ -360,7 +466,7 @@ export function ClientTestPage() {
         </div>
       </div>
 
-    </div>
+    </div >
   );
 }
 
@@ -427,7 +533,7 @@ function useSettings() {
     height: number,
     grow: boolean,
     duration: number,
-    reorderer: "3" | "2" | "1" | "viewtransition" | "react-flip-toolkit" | "auto-animate" | "react-magic-motion",
+    reorderer: "4" | "3" | "2" | "1" | "viewtransition" | "react-flip-toolkit" | "auto-animate" | "react-magic-motion",
     gap: number,
     stiffness: number,
     damping: number,
@@ -458,7 +564,7 @@ function useSettings() {
     gap: 8,
     stiffness: 200,
     damping: 26,
-    rftStagger: "forward",
+    rftStagger: "none",
     rftStaggerSpeed: 0.1,
     easing: "ease-in-out",
     fixedSpeed: false,
@@ -564,9 +670,11 @@ export function MynauiChevronRightSolid(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-function Separator() {
+function Separator(
+  { className, ...props }: ComponentProps<"div">
+) {
   return (
-    <div className="mx-2 self-stretch border-r" />
+    <div className={cn("mx-2 self-stretch border-r", className)} {...props} />
   )
 }
 
@@ -600,7 +708,6 @@ function InputGroup(
         "[&_input]:pl-3",
         "[&_input]:rounded-md",
         "[&_input]:text-slate-600",
-        // "[&_input]:shadow-[inset_0_1px_6px_-2px_#43679ae8]",
         "[&_input]:outline",
         "[&_input]:outline-1",
         "[&_input]:outline-slate-200",
@@ -689,6 +796,16 @@ const AnimateChildDiv = memo(function AnimateChildDiv(
     />
   )
 })
+
+const KeylessAnimateChildDiv = (
+  { className, ...props }: ComponentProps<"div">
+) => {
+  return (
+    <UnmemoizedAnimateChildDiv
+      className={cn("card", className)} {...props}
+    >no key</UnmemoizedAnimateChildDiv>
+  )
+}
 
 const UnmemoizedAnimateChildDiv = function AnimateChildDiv(
   { className, ...props }: ComponentProps<"div">
