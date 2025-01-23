@@ -8,6 +8,7 @@ import { AnimateChildren } from "../../../../lib/AnimateChildren/src"
 import Link from "next/link"
 
 const geistmono = Geist_Mono({
+  subsets: ["latin"],
   variable: "--geist-mono",
 })
 

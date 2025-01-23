@@ -3,26 +3,28 @@
 import { cn } from "lazy-cn"
 import { useEffect, useState } from "react"
 
+
+type HeaderData = {
+  id: string,
+  text: string | null,
+  level: number,
+  code?: boolean,
+}
+
+
 export function Sidebar() {
 
-  const [headers, setHeaders] = useState<{
-    id: string,
-    text: string | null,
-    level: number
-  }[]>([])
+  const [headers, setHeaders] = useState<HeaderData[]>([])
 
   useEffect(() => {
     const headers = document.querySelectorAll("h2, h3, h4, h5, h6")
-    const newHeaders: {
-      id: string,
-      text: string | null,
-      level: number
-    }[] = []
+    const newHeaders: HeaderData[] = []
     headers.forEach(header => {
       newHeaders.push({
         id: header.id,
         text: header.textContent?.trimStart().trimEnd().replace(/#/g, "") || null,
-        level: Number(header.tagName[1])  // h2 -> 2
+        level: Number(header.tagName[1]),  // h2 -> 2
+        code: header.hasAttribute("data-code-heading") ? true : false
       })
     })
     setHeaders(newHeaders)
@@ -44,7 +46,9 @@ export function Sidebar() {
       )}
         onClick={() => setOpen(!open)}
       >
-        Open Table of Contents
+        {
+          open ? "Hide" : "Show"
+        } Table of Contents
       </div>
       <div className={cn(
         "w-52 shrink-0 p-2",
@@ -71,12 +75,15 @@ export function Sidebar() {
         <div
           tabIndex={0}
           className={cn(
-            // open ? "h-auto" : "h-0",
             "flex flex-col  min-h-0 max-h-[calc(100vh)] overflow-auto",
             "-mx-8",
             "px-8",
             "-mt-12",
-            "py-12"
+            "py-12",
+
+            "pt-16",
+
+            "sidebar-scrollbar",
           )}>
           {
             headers.map((header, index) => (
@@ -94,12 +101,16 @@ export function Sidebar() {
                 "outline-none",
                 "outline-transparent",
                 "break-all",
-                header.level === 2 && "pl-0 pt-8 !font-semibold",
-                header.level === 3 && "pl-4 py-0.5 ",
-                header.level === 4 && "pl-8 text-xs",
-                header.level === 5 && "pl-12 text-xs",
+                header.level === 2 && "pl-0 py-3 pt-6 !font-semibold",
+                header.level === 3 && "pl-4 py-1 ",
+                header.level === 4 && "pl-8 py-1 text-xs",
+                header.level === 5 && "pl-12 py-1 text-xs",
               )}>
-                {header.text}
+                {
+                  header.code ?
+                    <code className="text-[#ccd]">{header.text?.split(':')[0]}</code>
+                    : header.text
+                }
               </a>
             ))
           }

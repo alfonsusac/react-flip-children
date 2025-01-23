@@ -124,3 +124,8 @@ a {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
+.sidebar-scrollbar {
+  scrollbar-width: auto;
+  scrollbar-color: #505068 #151519;
+}

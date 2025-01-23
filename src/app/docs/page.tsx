@@ -417,7 +417,7 @@ const Card = forwardRef((props, ref) => {
             3. API Reference
           </h2>
 
-          <H3 id="AnimateChildren">
+          <H3 id="AnimateChildren" data-code-heading>
             <code>{'<AnimateChildren/>'}</code>
           </H3>
           <p>
@@ -425,7 +425,7 @@ const Card = forwardRef((props, ref) => {
           </p>
 
 
-          <H3 id="prop-children">
+          <H3 id="prop-children" data-code-heading>
             <code>
               <span style={{ color: '#E4F0FB' }}>children</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
@@ -466,7 +466,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="prop-duration">
+          <H3 id="prop-duration" data-code-heading>
             <code>
               <span style={{ color: '#E4F0FB' }}>duration</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
@@ -483,7 +483,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="prop-easing">
+          <H3 id="prop-easing" data-code-heading>
             <code>
               <span style={{ color: '#E4F0FB' }}>easing</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
@@ -498,7 +498,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="prop-duration">
+          <H3 id="prop-duration" data-code-heading>
             <code>
               <span style={{ color: '#E4F0FB' }}>normalizeKeys</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
@@ -527,7 +527,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="prop-delayDeletion">
+          <H3 id="prop-delayDeletion" data-code-heading>
             <code>
               <span style={{ color: '#E4F0FB' }}>delayDeletion</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
@@ -544,7 +544,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="prop-useAbsolutePositionOnDeletedElements">
+          <H3 id="prop-useAbsolutePositionOnDeletedElements" data-code-heading>
             <code className="whitespace-nowrap">
               <span style={{ color: '#E4F0FB' }}>useAbsolutePositionOnDeletedElements</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
