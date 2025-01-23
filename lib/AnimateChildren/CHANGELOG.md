@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.0.12
+
+### Patch Changes
+
+- 5379275: added props to control delete animation behavior
+
 ## 0.0.11
 
 ### Patch Changes
