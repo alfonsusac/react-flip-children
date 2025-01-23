@@ -74,6 +74,27 @@ export function flatMap<T>(
   return arr
 }
 
+export function flatForEachPreserveKey(
+  children: ReactNode,
+  callback: (child: FlatMapReactNode, index: number) => void,
+) {
+  Children.forEach(children, (child, index) => {
+    if (isFragment(child)) {
+      flatForEachPreserveKey(child.props.children, callback)
+    }
+    callback(child as FlatMapReactNode, index)
+  })
+}
+
+export function flatMapPreserveKey<T>(
+  children: ReactNode,
+  mapFn: (child: FlatMapReactNode, index: number) => T
+) {
+  const arr: T[] = []
+  flatForEachPreserveKey(children, (child, index) => arr.push(mapFn(child, index)))
+  return arr
+}
+
 export type ReactElementFromFlatMap
   = ReactElement<Record<string, any>> & { key: string }
 

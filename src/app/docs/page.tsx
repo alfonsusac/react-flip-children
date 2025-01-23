@@ -473,6 +473,7 @@ const Card = forwardRef((props, ref) => {
               <span style={{ color: '#5DE4C7' }}> number</span>
               <span style={{ color: '#A6ACCD' }}> = 500</span>
             </code>
+            {/* <div className="inline-block text-xs !font-bold text-[#778] p-1 px-2 bg-[#223] ml-2 rounded-md">WIP</div> */}
           </H3>
           <p>
             The duration of the moving animation in milliseconds.
@@ -482,18 +483,79 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="prop-duration">
+          <H3 id="prop-easing">
             <code>
               <span style={{ color: '#E4F0FB' }}>easing</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
               <span style={{ color: '#5DE4C7' }}> string</span>
               <span style={{ color: '#A6ACCD' }}> = {'"ease-in-out"'}</span>
             </code>
+            {/* <div className="inline-block text-xs !font-bold text-[#778] p-1 px-2 bg-[#223] ml-2 rounded-md">WIP</div> */}
           </H3>
           <p>
             The easing of the moving animation.
           </p>
 
+
+
+          <H3 id="prop-duration">
+            <code>
+              <span style={{ color: '#E4F0FB' }}>normalizeKeys</span>
+              <span style={{ color: '#ACD7FF' }}>?:</span>
+              <span style={{ color: '#5DE4C7' }}> boolean</span>
+              <span style={{ color: '#A6ACCD' }}> = {'false'}</span>
+            </code>
+            {/* <div className="inline-block text-xs !font-bold text-[#778] p-1 px-2 bg-[#223] ml-2 rounded-md">WIP</div> */}
+          </H3>
+          <p>
+            Whether or not to normalize keys. If set to <code>true</code>, the component will flatten the children array and check for uniquely defined keys. If set to <code>false</code> (default), the component allows for duplicate keys if its under different fragment.
+          </p>  
+          <p>
+            By default, this configuration is allowed:
+          </p>
+          <CodeBlock code={`
+<AnimateChildren>
+  {arr1.map((el,i) => <div key={i}>{el}</div>)}
+  <>
+    {arr1.map((el,i) => <div key={i}>{el}</div>)}
+  </>
+</AnimateChildren> // ✅ Legal, No errors
+            `} />
+          <p>
+            If set to true, the above configuration will throw an error.
+          </p>
+
+
+
+          <H3 id="prop-delayDeletion">
+            <code>
+              <span style={{ color: '#E4F0FB' }}>delayDeletion</span>
+              <span style={{ color: '#ACD7FF' }}>?:</span>
+              <span style={{ color: '#5DE4C7' }}> number</span>
+              <span style={{ color: '#A6ACCD' }}> = {'500'}</span>
+            </code>
+
+          </H3>
+          <p>
+            The delay before the deletion of the child. This is useful when you want to animate the child before it is removed from the DOM.
+          </p>
+
+          
+
+
+
+          <H3 id="prop-useAbsolutePositionOnDeletedElements">
+            <code className="whitespace-nowrap">
+              <span style={{ color: '#E4F0FB' }}>useAbsolutePositionOnDeletedElements</span>
+              <span style={{ color: '#ACD7FF' }}>?:</span>
+              <span style={{ color: '#5DE4C7' }}> boolean</span>
+              <span style={{ color: '#A6ACCD' }}> = {'true'}</span>
+            </code>
+
+          </H3>
+          <p>
+            Whether or not to use absolute position on deleted elements. If set to <code>true</code>, the component will use absolute position to animate the child. If set to <code>false</code>, the component will use relative position to animate the child.
+          </p>
 
 
         </div>

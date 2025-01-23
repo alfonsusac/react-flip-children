@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/rules-of-hooks */
 "use client"
 
 import { Fragment, memo, PureComponent, useEffect, useRef, useState, type ChangeEvent, type ComponentProps, type MouseEvent, type SVGProps } from "react"
@@ -12,7 +11,7 @@ import { Flipped, Flipper } from "react-flip-toolkit"
 import { AutoAnimate } from "../ui/AutoAnimate"
 import { MagicMotion } from "react-magic-motion"
 import { AnimateChild2 } from "../ui/Reorder3"
-import { AnimateChildren } from "../lib/AnimateChildren"
+import { AnimateChildren } from "../../../lib/AnimateChildren/src"
 
 
 export function ClientTestPage() {
@@ -120,7 +119,7 @@ export function ClientTestPage() {
           <Link href="/" className="opacity-60 hover:opacity-100">
             home
           </Link>{" "}·{" "}
-          <Link href="/test" className="opacity-60 hover:opacity-100">
+          <Link href="/playground" className="opacity-60 hover:opacity-100">
             Reset
           </Link>
         </div>
@@ -264,7 +263,7 @@ export function ClientTestPage() {
         {settings.reorderer === "4" && (
           <div {...parentProps}>
             {settings.separator ? (
-              <AnimateChildren >
+              <AnimateChildren>
                 {firstFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
                 <Separator />
                 {restOfFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
@@ -560,7 +559,7 @@ function useSettings() {
     height: 2,
     grow: false,
     duration: 500,
-    reorderer: "2",
+    reorderer: "4",
     gap: 8,
     stiffness: 200,
     damping: 26,
@@ -574,7 +573,7 @@ function useSettings() {
     disableBlur: false,
     deferElementDeletion: false,
     delayEntryAnimation: false,
-    dropShadow: true,
+    dropShadow: false,
     control: true,
     animation: "none",
     separator: true,
@@ -807,7 +806,7 @@ const KeylessAnimateChildDiv = (
   )
 }
 
-const UnmemoizedAnimateChildDiv = function AnimateChildDiv(
+const UnmemoizedAnimateChildDiv = function UnmemoizedAnimateChildDiv(
   { className, ...props }: ComponentProps<"div">
 ) {
   return (

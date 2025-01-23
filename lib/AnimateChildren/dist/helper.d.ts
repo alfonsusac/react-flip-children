@@ -14,6 +14,8 @@ export declare function isPrimitive(node: ReactNode): node is PrimitiveChild;
 export type AnimationTime = (null | CSSNumberish);
 export declare function flatForEach(children: ReactNode, callback: (child: FlatMapReactNode, index: number) => void, keyPrefix?: string): void;
 export declare function flatMap<T>(children: ReactNode, mapFn: (child: FlatMapReactNode, index: number) => T): T[];
+export declare function flatForEachPreserveKey(children: ReactNode, callback: (child: FlatMapReactNode, index: number) => void): void;
+export declare function flatMapPreserveKey<T>(children: ReactNode, mapFn: (child: FlatMapReactNode, index: number) => T): T[];
 export type ReactElementFromFlatMap = ReactElement<Record<string, any>> & {
     key: string;
 };

@@ -83,7 +83,7 @@ export function Sidebar() {
               <a href={header.id ? `#${ header.id }` : undefined} key={index} className={cn(
                 "animate-appear",
                 "text-sm",
-                "py-1",
+                "py-2",
                 "cursor-pointer",
                 "transition-all",
                 "!no-underline",
@@ -93,10 +93,11 @@ export function Sidebar() {
                 "hover:!text-[#88f]",
                 "outline-none",
                 "outline-transparent",
+                "break-all",
                 header.level === 2 && "pl-0 pt-8 !font-semibold",
-                header.level === 3 && "pl-4 py-1",
-                header.level === 4 && "pl-8",
-                header.level === 5 && "pl-12",
+                header.level === 3 && "pl-4 py-0.5 ",
+                header.level === 4 && "pl-8 text-xs",
+                header.level === 5 && "pl-12 text-xs",
               )}>
                 {header.text}
               </a>
