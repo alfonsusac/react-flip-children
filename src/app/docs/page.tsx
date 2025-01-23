@@ -144,7 +144,7 @@ export default function DocsPage() {
             <p className={cn(
               `!font-medium`,
             )}>
-              v0.0.5
+              v0.0.12
             </p>
 
             <p className={cn(

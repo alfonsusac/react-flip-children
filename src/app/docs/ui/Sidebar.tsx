@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "lazy-cn"
-import { useEffect, useState } from "react"
+import { useEffect, useState, type SVGProps } from "react"
 
 
 type HeaderData = {
@@ -39,13 +39,21 @@ export function Sidebar() {
         "fixed top-4 left-4 z-50 p-2 bg-[#151519]",
         "px-3",
         "rounded-lg",
-        "border border-[#445]",
+        "border border-[#223]",
+        "hover:border-[#445]",
         "text-sm",
         "cursor-pointer select-none",
-        "shadow-[0_2px_3px_0_#223]"
+        "shadow-[0_2px_3px_0_#223]",
+        "flex items-center gap-1",
+        "transition-all",
+        open && "shadow-none",
+        "group",
       )}
         onClick={() => setOpen(!open)}
+        data-open={open ? "" : undefined}
       >
+        <MaterialSymbolsChevronLeftRounded className="w-4 h-4 block opacity-0  transition-all group-data-[open]:opacity-100" />
+        <MaterialSymbolsMenuRounded className="w-4 h-4 block -ml-5 opacity-100 transition-all  group-data-[open]:opacity-0" />
         {
           open ? "Hide" : "Show"
         } Table of Contents
@@ -117,5 +125,20 @@ export function Sidebar() {
         </div>
       </div>
     </>
+  )
+}
+
+
+
+
+function MaterialSymbolsMenuRounded(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="currentColor" d="M4 18q-.425 0-.712-.288T3 17t.288-.712T4 16h16q.425 0 .713.288T21 17t-.288.713T20 18zm0-5q-.425 0-.712-.288T3 12t.288-.712T4 11h16q.425 0 .713.288T21 12t-.288.713T20 13zm0-5q-.425 0-.712-.288T3 7t.288-.712T4 6h16q.425 0 .713.288T21 7t-.288.713T20 8z"></path></svg>
+  )
+}
+
+function MaterialSymbolsChevronLeftRounded(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="currentColor" d="m10.8 12l3.9 3.9q.275.275.275.7t-.275.7t-.7.275t-.7-.275l-4.6-4.6q-.15-.15-.212-.325T8.425 12t.063-.375t.212-.325l4.6-4.6q.275-.275.7-.275t.7.275t.275.7t-.275.7z"></path></svg>
   )
 }
