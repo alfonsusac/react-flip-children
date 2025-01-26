@@ -6,4 +6,6 @@ export declare function AnimateChildren({ children, ...props }: {
     normalizeKeys?: boolean;
     delayDeletion?: number;
     useAbsolutePositionOnDeletedElements?: boolean;
+    stagger?: number;
+    snapshotStrategy?: "getBoundingClientRect" | "offset";
 }): ReactNode;
