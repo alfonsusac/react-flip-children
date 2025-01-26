@@ -1,5 +1,15 @@
 # react-flip-children
 
+## 0.1.0
+
+### Minor Changes
+
+- added stagger animation
+
+### Patch Changes
+
+- added prop to choose rect saving strategy (either use offset or getClientBoundingRect)
+
 ## 0.0.12
 
 ### Patch Changes

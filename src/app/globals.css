@@ -115,7 +115,7 @@ a {
   w-[var(--width)] h-[var(--height)] text-xs tracking-tighter border 
   shadow-[inset_0px_-1px_1px_0px_#5497ef33] rounded-md font-mono 
   flex items-center justify-center cursor-pointer
-  hover:bg-slate-50 bg-white
+  hover:bg-slate-50 bg-white;
 }
 
 .hide-scrollbar {
@@ -126,7 +126,35 @@ a {
   display: none;
 }
 
-.sidebar-scrollbar {
-  scrollbar-width: auto;
-  scrollbar-color: #505068 #151519;
+/* For browsers that support `scrollbar-*` properties */
+@supports (scrollbar-color: auto) {
+  body{
+    scrollbar-width: thin;
+    scrollbar-color: #505068 #151519;
+  }
+  .sidebar-scrollbar {
+    scrollbar-width: auto;
+    scrollbar-color: #505068 #151519;
+  }
+}
+
+/* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
+@supports selector(::-webkit-scrollbar) {
+  body::-webkit-scrollbar {
+    width: 0.5rem;
+    background: #151519;
+  }
+  body::-webkit-scrollbar-thumb {
+    background: #505068;
+    border-radius: 4px;
+  }
+
+  .sidebar-scrollbar::-webkit-scrollbar {
+    width: 0.5rem;
+    background: #151519;
+  }
+  .sidebar-scrollbar::-webkit-scrollbar-thumb {
+    background: #505068;
+    border-radius: 4px;
+  }
 }

@@ -3,7 +3,7 @@ import { cn } from "lazy-cn"
 import { Commissioner, Inter, Lato, Lexend, Source_Sans_3 } from "next/font/google"
 import { CodeBlock } from "./ui/code"
 import { H3, H4 } from "./ui/document"
-import type { SVGProps } from "react"
+import type { ComponentProps, SVGProps } from "react"
 import { Sidebar } from "./ui/Sidebar"
 import Link from "next/link"
 
@@ -144,7 +144,7 @@ export default function DocsPage() {
             <p className={cn(
               `!font-medium`,
             )}>
-              v0.0.12
+              v0.1.0
             </p>
 
             <p className={cn(
@@ -509,7 +509,7 @@ const Card = forwardRef((props, ref) => {
           </H3>
           <p>
             Whether or not to normalize keys. If set to <code>true</code>, the component will flatten the children array and check for uniquely defined keys. If set to <code>false</code> (default), the component allows for duplicate keys if its under different fragment.
-          </p>  
+          </p>
           <p>
             By default, this configuration is allowed:
           </p>
@@ -540,7 +540,7 @@ const Card = forwardRef((props, ref) => {
             The delay before the deletion of the child. This is useful when you want to animate the child before it is removed from the DOM.
           </p>
 
-          
+
 
 
 
@@ -558,7 +558,29 @@ const Card = forwardRef((props, ref) => {
           </p>
 
 
+          <H3 id="prop-stagger" data-code-heading>
+            <code className="whitespace-nowrap">
+              <span style={{ color: '#E4F0FB' }}>stagger</span>
+              <span style={{ color: '#ACD7FF' }}>?:</span>
+              <span style={{ color: '#5DE4C7' }}> number</span>
+            </code>
+
+          </H3>
+          <p>
+            The stagger of the moving animation in milliseconds. The animation delay will be skipped if the animation is interrupted.
+          </p>
+
+
+          <LinkButton href="/docs#" className="inline-block mt-8">
+            Back to top ↑
+          </LinkButton>
+
+
+          <footer className="mt-20 mb-10 text-sm opacity-60">
+            &copy; {new Date().getUTCFullYear() } Alfonsus Ardani. All rights reserved.
+          </footer>
         </div>
+
 
       </div>
 
@@ -587,4 +609,21 @@ function Fa6BrandsXTwitter(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 512 512" {...props}><path fill="currentColor" d="M389.2 48h70.6L305.6 224.2L487 464H345L233.7 318.6L106.5 464H35.8l164.9-188.5L26.8 48h145.6l100.5 132.9zm-24.8 373.8h39.1L151.1 88h-42z"></path></svg>
   )
+}
+
+function LinkButton(
+  { className, ...props }: ComponentProps<"a">
+) {
+  return <a {...props} className={cn(
+    `bg-[#181820] border border-[#445] p-2 px-3 leading-none rounded-lg`,
+    `hover:bg-[#223]`,
+    `text-xs font-medium`,
+    `text-zinc-400`,
+    `!no-underline`,
+    `shadow-[inset_0_-4px_2px_0_#0001]`,
+    `active:shadow-[inset_0_-2px_2px_0_#0003]`,
+    `active:translate-y-0.5`,
+    `transition-all duration-100`,
+    className
+  )} />
 }

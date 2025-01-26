@@ -698,6 +698,7 @@ function InputGroup(
         "[&_label]:text-xs",
         "[&_label]:font-medium",
 
+        "[&_input]:bg-white",
         "[&_input]:w-20",
         "[&_input]:-my-1.5",
         "[&_input]:leading-9",

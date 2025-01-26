@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState, type ReactNode } from "react"
-import { codeToTokens, type ThemedToken } from "shiki"
+import { codeToTokens, type BundledTheme, type StringLiteralUnion, type ThemedToken } from "shiki"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import * as Diff from "diff"
 import * as DiffMatchPatch from "diff-match-patch-es"
+import { cn } from "lazy-cn"
 
 export function MagicCode(
   props: {
     code?: string,
+    theme?: StringLiteralUnion<BundledTheme, string>
   }
 ) {
   const code = props.code?.trim() ?? ""
@@ -15,15 +17,29 @@ export function MagicCode(
 
   const prevRef = useRef<(ThemedToken & { id: string })[]>(null)
 
-  const rendered = tokens?.map((token, index) => token.content !== '\n' ? (
-    <span key={token.id} style={{ display: "inline-block", color: token.color }}>{token.content}</span>
-  ) : <br key={token.id} style={{ display: "inline" }} />) ?? <span className="opacity-0">code</span>
+  const rendered = tokens?.map((token, index) => token.content !== '\n'
+    ? (
+      <span
+        key={token.id}
+        style={{ display: "inline-block", color: token.color }}
+      >{token.content}</span>
+    )
+    : (
+      <br
+        key={token.id}
+        style={{ display: "inline" }}
+        className={cn(
+          "data-[deleting]:hidden"
+        )}
+      />
+    )
+  ) ?? <span className="opacity-0">code</span>
 
   useEffect(() => {
     (async () => {
       const result = await codeToTokens(code ?? "", {
         lang: "tsx",
-        theme: "vesper",
+        theme: props.theme ?? "vesper",
       })
 
       const tokens = result.tokens
@@ -46,9 +62,7 @@ export function MagicCode(
 
   }, [code])
 
-  return <AnimateChildren
-    useAbsolutePositionOnDeletedElements
-  >
+  return <AnimateChildren stagger={10}>
     {rendered}
   </AnimateChildren>
 }
@@ -58,6 +72,30 @@ function diffAlgo3(
   prev: (ThemedToken & { id: string })[],
   next: (ThemedToken & { id?: string, deleted?: boolean, added?: boolean })[],
 ) {
+  // console.log("---- Inputs ----")
+  // console.log("Prev", prev)
+  // console.log("Next", next)
+  // console.log("Prev")
+  prev.forEach((token, index) => {
+    // console.log(index, token.id, token.content)
+  })
+  // console.log("Next")
+  next.forEach((token, index) => {
+    // console.log(index, token.content)
+  })
+  // console.log(0, "PREV", ...prev.reduce((prev, curr, index) => {
+  //   prev.push(index)
+  //   prev.push(curr.content)
+  //   prev.push(curr.id)
+  //   return prev
+  // }, [] as (string | number)[]))
+
+  // console.log(0, "NEXT", ...next.reduce((prev, curr, index) => {
+  //   prev.push(index)
+  //   prev.push(curr.content)
+  //   return prev
+  // }, [] as (string | number)[]))
+  // console.log("---- Inputs End ----")
 
   const prevMap: (ThemedToken & { id: string })[] = []
   prev.forEach((token, index) => {
@@ -74,7 +112,7 @@ function diffAlgo3(
     next.map(t => t.content).join(''),
   )
   DiffMatchPatch.diffCleanupSemanticLossless(testDiff)
-  console.log(testDiff)
+  // console.log(testDiff)
 
   let prevIndex = 0
   let nextIndex = 0
@@ -85,20 +123,26 @@ function diffAlgo3(
 
       if (mode === " ") {
         // nextMap[nextIndex].id = prev[prevIndex].id
-        console.log(0, mode, char, prevIndex, nextIndex, prevMap[prevIndex].id, nextMap[nextIndex].id)
+        // console.log(0, mode, char, prevIndex, nextIndex, prevMap[prevIndex].id, nextMap[nextIndex].id)
         if (nextMap[nextIndex].added === undefined) {
-          nextMap[nextIndex].id = prevMap[prevIndex].id
+          if (nextMap[nextIndex].content === prevMap[prevIndex].content) {
+            nextMap[nextIndex].id = prevMap[prevIndex].id
+          } else {
+            nextMap[nextIndex].id = Math.random().toString(36).substring(7)
+          }
+          nextMap[nextIndex].added = false
+          // console.log(0, mode, char, prevIndex, nextIndex, prevMap[prevIndex].id, nextMap[nextIndex].id, "new")
         }
         nextIndex++
         prevIndex++
       }
       if (mode === "-") {
-        console.log(0, mode, char, prevIndex, undefined, prevMap[prevIndex].id, undefined)
+        // console.log(0, mode, char, prevIndex, undefined, prevMap[prevIndex].id, undefined)
         // nextMap[nextIndex].deleted = true
         prevIndex++
       }
       if (mode === "+") {
-        console.log(0, mode, char, undefined, nextIndex, undefined, nextMap[nextIndex].id)
+        // console.log(0, mode, char, undefined, nextIndex, undefined, nextMap[nextIndex].id)
         if (nextMap[nextIndex].added === undefined) {
           nextMap[nextIndex].added = true
           nextMap[nextIndex].id = Math.random().toString(36).substring(7)
@@ -108,9 +152,26 @@ function diffAlgo3(
     })
   })
 
-  next.forEach((token, index) => {
-    console.log(1, `D:${ token.deleted }`, `A:${ token.added }`, `id:${ token.id }`, token.content)
+  const keys = new Set<string>()
+
+  next.forEach((token) => {
+    if (keys.has(token.id!)) {
+      // console.log("DUPLICATE", token.id, token.content)
+      // Generate new token if prev token is split into multiple tokens in new - for some reason
+      token.id = Math.random().toString(36).substring(7)
+    }
+    keys.add(token.id!)
+    // console.log(1, `D:${ token.deleted }`, `A:${ token.added }`, `id:${ token.id }`, token.content)
   })
+
+  // console.log(...next.reduce((prev, curr, index) => {
+  //   prev.push(index)
+  //   prev.push(curr.content)
+  //   prev.push(curr.id!)
+  //   return prev
+  // }, [] as (string | number)[]))
+
+
 
   return next as (ThemedToken & { id: string })[]
 

@@ -45,6 +45,8 @@ export function AnimateChildren(
     normalizeKeys?: boolean
     delayDeletion?: number
     useAbsolutePositionOnDeletedElements?: boolean
+    stagger?: number
+    snapshotStrategy?: "getBoundingClientRect" | "offset"
   }
 ) {
   const opts = {
@@ -53,6 +55,9 @@ export function AnimateChildren(
     normalizeKeys: props.normalizeKeys ?? false,
     delayDeletion: props.delayDeletion ?? 500,
     useAbsolutePositionOnDeletedElements: props.useAbsolutePositionOnDeletedElements ?? true,
+    stagger: props.stagger ?? 0,
+    // snapshotStrategy: props.snapshotStrategy ?? "offset"
+    snapshotStrategy: props.snapshotStrategy ?? "offset"
   }
 
 
@@ -65,10 +70,21 @@ export function AnimateChildren(
       const node = entry.ref.current
       if (!node) return
       // entry.rect = node.getBoundingClientRect()
-      entry.rect = {
-        x: node.offsetLeft,
-        y: node.offsetTop
+
+      if (opts.snapshotStrategy === "getBoundingClientRect" && parent.rect) {
+        const clientRect = node.getBoundingClientRect()
+        entry.rect = {
+          x: clientRect.x - parent.rect.x,
+          y: clientRect.y - parent.rect.y
+        }
+        console.log("saved via getBoundingClientRect")
+      } else {
+        entry.rect = {
+          x: node.offsetLeft,
+          y: node.offsetTop
+        }
       }
+
       entry.cssAnimationTimes = node.getAnimations().filter(isCSSAnimation).map(a => a.currentTime)
       // Only save CSSAnimation times because CSSTransition can't be persisted
     },
@@ -86,6 +102,7 @@ export function AnimateChildren(
       : flatMap<ValidNode>
 
     let keylessCount = 0
+
 
     // Flat iterate through every children to process incoming new elements
     const newRender = mapFn(children,
@@ -135,7 +152,13 @@ export function AnimateChildren(
         if (!entry?.ref.current) return
         const node = entry.ref.current
 
-        parent.node ??= node.parentElement ?? parent.node
+        parent.node ??= (() => {
+          const tempparent = node.parentElement ?? parent.node
+          if (tempparent) {
+            parent.saveNode(tempparent)
+          }
+          return tempparent
+        })()
         // Cache parent node
 
         fn.saveChildRectAndAnimation(entry)
@@ -212,6 +235,11 @@ export function AnimateChildren(
     // Therefore, animations are run in the next frame using requestAnimationFrame.
     const animationQueue = new AnimationQueue()
 
+    let animCount = 0
+    // This is to apply staggered animation by apply longer delay multipled by the count
+    // Problem: delay is re-added when animations are stacked
+    // Solution: check first if there are existing animation
+
     rendered.forEach(
       child => {
         // Same as before, we can only animate valid elements with ref.
@@ -223,23 +251,56 @@ export function AnimateChildren(
         if (!entry?.ref.current) return
         const node = entry.ref.current
 
+        let hasPrevAnimation = false
+        // To prevent adding extra delay for staggered animation.
+
         // Reconcile the css animation times of the current node
         //   We assumed that the css animation times are in the same order before and after setRendered. (before and after reflow)
         node.getAnimations()
-          .filter(isCSSAnimation)
+          .map(a => {
+
+            return a
+          })
+          .filter((a) => {
+            if (opts.stagger && a.id.startsWith("__react-flip-children-move-animation")) {
+              // console.log("Found existing animation")
+              // console.log("Start:", a.startTime, "Current:", a.currentTime, "Delay:", a.id.split('+delay=')[1], "Duration:", a.effect?.getComputedTiming().duration)
+              const delay = Number(a.id.split('+delay=')[1])
+              const currentTime = Number(a.currentTime)
+              if (delay > currentTime) {
+                a.currentTime = delay
+              }
+              hasPrevAnimation = true
+              // To prevent adding extra delay for staggered animation.
+            }
+
+            if (isCSSAnimation(a))
+              return true
+          })
           .forEach((animation, index) => animation.currentTime = entry.cssAnimationTimes?.[index] ?? 0)
 
         const prev = entry.rect
         if (!prev) return // Can't animate if rect is not saved
 
         // const curr = node.getBoundingClientRect()
-        const curr = {
-          x: node.offsetLeft,
-          y: node.offsetTop
+        let curr: { x: number, y: number }
+        if (opts.snapshotStrategy === "getBoundingClientRect" && parent.rect) {
+          const clientRect = node.getBoundingClientRect()
+          curr = {
+            x: clientRect.x - parent.rect.x,
+            y: clientRect.y - parent.rect.y,
+          }
+        } else {
+          curr = {
+            x: node.offsetLeft,
+            y: node.offsetTop
+          }
         }
+
         const deltaY = prev.y - curr.y
         const deltaX = prev.x - curr.x
         if (!deltaY && !deltaX) return
+        const delay = !hasPrevAnimation ? animCount++ * opts.stagger : 0
         animationQueue.add({
           node,
           keyframes: [
@@ -249,8 +310,10 @@ export function AnimateChildren(
           options: {
             duration: opts.duration,
             easing: opts.easing,
+            delay: delay,
             fill: "both",
             composite: "add",
+            id: `__react-flip-children-move-animation+delay=${ delay }`
           },
           cancelOnFinish: true
         })

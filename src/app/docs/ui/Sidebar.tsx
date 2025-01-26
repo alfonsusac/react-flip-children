@@ -59,7 +59,7 @@ export function Sidebar() {
         } Table of Contents
       </div>
       <div className={cn(
-        "w-52 shrink-0 p-2",
+        "w-52 shrink-0",
         "bg-[#151519]",
 
         "w-80",
@@ -68,28 +68,23 @@ export function Sidebar() {
         "top-0",
         "left-0",
         "bottom-0",
-        "p-8",
+        // "p-8",
         "shadow-[0_0_40px_0_#223]",
-
         "transition-all",
-
         open ? "left-0" : "-left-80",
-
-        "pt-12",
-
+        // "pt-12",
+        "flex flex-col",
       )}
       >
-
         <div
           tabIndex={0}
           className={cn(
-            "flex flex-col  min-h-0 max-h-[calc(100vh)] overflow-auto",
-            "-mx-8",
-            "px-8",
-            "-mt-12",
-            "py-12",
-
-            "pt-16",
+            "flex flex-col  overflow-auto",
+            // "-mx-8",
+            "px-4",
+            "mt-12",
+            "pt-4",
+            "pb-20",
 
             "sidebar-scrollbar",
           )}>
@@ -100,7 +95,7 @@ export function Sidebar() {
                 "text-sm",
                 "py-2",
                 "cursor-pointer",
-                "transition-all",
+                // "transition-all",
                 "!no-underline",
                 // "!text-[#445]",
                 // "hover:!text-[#aab]",
@@ -109,14 +104,25 @@ export function Sidebar() {
                 "outline-none",
                 "outline-transparent",
                 "break-all",
-                header.level === 2 && "pl-0 py-3 pt-6 !font-semibold",
-                header.level === 3 && "pl-4 py-1 ",
-                header.level === 4 && "pl-8 py-1 text-xs",
-                header.level === 5 && "pl-12 py-1 text-xs",
+
+                "hover:bg-[#223]",
+                "rounded-md",
+
+                "relative group",
+
+                header.level === 2 && "pl-3  py-2 mt-3 !font-medium",
+                header.level === 3 && "pl-8  py-1 ",
+                header.level === 4 && "pl-12 py-1 text-xs",
+                header.level === 5 && "pl-16 py-1 text-xs",
               )}>
+                {header.level !== 2 && (
+                  <div className="absolute left-4 w-0.5 top-0 bottom-0 bg-[#252540]">
+                    <div className="absolute left-0 w-0.5 top-1 bottom-1 group-hover:bg-[#44a]" />
+                  </div>
+                )}
                 {
                   header.code ?
-                    <code className="text-[#ccd]">{header.text?.split(':')[0]}</code>
+                    <code className="text-[#ccd] group-hover:bg-[#334] group-hover:text-[#88f]">{header.text?.split(':')[0]}</code>
                     : header.text
                 }
               </a>
