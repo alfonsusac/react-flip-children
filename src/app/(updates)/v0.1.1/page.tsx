@@ -43,7 +43,7 @@ export default function Version010Page() {
         >
           Back to Home Page
         </LinkButton>
-        <h1 className="text-lg font-semibold text-[#667] leading-none">React Flip Children Version 0.1.0</h1>
+        <h1 className="text-lg font-semibold text-[#667] leading-none">React Flip Children Version 0.1.1</h1>
         <h2 className="text-5xl font-semibold text-[#bbc] leading-none">Stagger Animation</h2>
       </header>
       <section className="max-w-[50rem] mx-auto w-full flex gap-4">
