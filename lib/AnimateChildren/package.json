@@ -1,6 +1,6 @@
 {
   "name": "react-flip-children",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple react component to animate children",
   "keywords": [
     "react",
