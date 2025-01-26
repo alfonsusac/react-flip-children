@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.1.2
+
+### Patch Changes
+
+- fix build error
+
 ## 0.1.0
 
 ### Minor Changes
