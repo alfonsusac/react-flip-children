@@ -4,7 +4,7 @@ import { Button } from "./homeui/button"
 import type { SVGProps } from "react"
 import Link from "next/link"
 
-const titleFont = Kanit({
+const kanit = Kanit({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   subsets: ["latin"]
 })
@@ -12,13 +12,13 @@ const titleFont = Kanit({
 
 export default function HomePage() {
   return (
-    <div className={`bg-[#FEF7E3] min-h-screen flex flex-col p-8 items-center *:w-full *:max-w-screen-sm text-[#147457] ${ titleFont.className }`}>
+    <div className={`bg-[#FEF7E3] min-h-screen flex flex-col p-8 items-center *:w-full *:max-w-screen-sm text-[#147457] ${ kanit.className }`}>
       <div className="pt-20" />
       <header className="flex flex-col items-center gap-2">
         <div className="text-center text-lg font-bold bg-[#f48052] !w-[unset] rounded-lg text-white px-4">
           v0.0.5 pre-release
         </div>
-        <h1 className={`${ titleFont.className } text-[#147457] text-center text-6xl sm:text-7xl font-extrabold tracking-tight leading-none`}>
+        <h1 className={`text-[#147457] text-center text-6xl sm:text-7xl font-extrabold tracking-tight leading-none`}>
           Animate Arrays<br /> with Ease
         </h1>
         <div className="text-center text-2xl my-1 font-bold text-[#147457bb]">Add, remove, and reorder array elements smoothly</div>
@@ -36,15 +36,15 @@ export default function HomePage() {
         </button>
       </div>
 
-      
+
 
       <div className="pt-32" />
       <h2 className="text-center font-extrabold text-3xl">Usage</h2>
       <div className="pt-4" />
       <TestPage />
 
-      
-      
+
+
       <div className="pt-40" />
       <h2 className="text-center font-extrabold text-3xl my-4">How it works</h2>
       <div className="text-center font-bold text-xl text-[#147457bb]">

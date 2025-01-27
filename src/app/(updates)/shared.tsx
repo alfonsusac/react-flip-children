@@ -31,3 +31,123 @@ export function useArrayDemo() {
 // type ArrayIndexes<T extends any[]> = Omit<T, null>
 
 // type E = ArrayIndexes<["a", "b", "c"]>
+
+export function useArrayArticleDemo() {
+  const lastIdRef = useRef(10)
+
+  const [arr, setArr] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+
+  const shuffle = () => setArr(prev => prev.toSorted(() => Math.random() - 0.5))
+  const add = () => {
+    const newArr = [...arr]
+    newArr.splice(Math.floor(Math.random() * arr.length), 0, ++lastIdRef.current)
+    setArr(newArr)
+  }
+  const remove = (key: number) => setArr(prev => prev.filter(e => e !== key))
+  const removeFn = (key: number) => () => remove(key)
+
+  const reverse = () => setArr(prev => prev.toReversed())
+
+  const moveUp = (key: number) => {
+    const index = arr.indexOf(key)
+    if (index === 0) return
+    const newArr = [...arr]
+    newArr[index] = arr[index - 1]
+    newArr[index - 1] = key
+    setArr(newArr)
+  }
+
+  const moveDown = (key: number) => {
+    const index = arr.indexOf(key)
+    if (index === arr.length - 1) return
+    const newArr = [...arr]
+    newArr[index] = arr[index + 1]
+    newArr[index + 1] = key
+    setArr(newArr)
+  }
+
+  return {
+    arr: arr.map(i => {
+      return {
+        id: i,
+        ...exampleArticles[i % exampleArticles.length]
+      }
+    }),
+    shuffle,
+    add,
+    remove,
+    removeFn,
+    reverse,
+    moveUp, 
+    moveDown
+  }
+
+}
+
+export const exampleArticles: {
+  title: string,
+  date: string,
+  author: string,
+}[] = [
+    {
+      title: "useSyncExternalStore - The underrated React API",
+      date: "September 6, 2022",
+      author: "Sébastien Lorber",
+    },
+    {
+      title: "Records & Tuples for React",
+      date: "July 31, 2020",
+      author: "Sébastien Lorber",
+    },
+    {
+      title: "Using Expo in Gatsby",
+      date: "May 11, 2020",
+      author: "Sébastien Lorber",
+    },
+    {
+      title: "Atomic CSS-in-JS",
+      date: "April 27, 2020",
+      author: "Sébastien Lorber",
+    },
+    {
+      title: "Handling API request race conditions in React",
+      date: "August 30, 2019",
+      author: "Sébastien Lorber",
+    },
+    {
+      title: "Next-level frosted glass with backdrop-filter",
+      date: "December 2nd, 2024",
+      author: "Joshua Comeau"
+    },
+    {
+      title: "A Framework for Evaluating Browser Support",
+      date: "November 26th, 2024",
+      author: "Joshua Comeau"
+    },
+    {
+      title: "A Friendly Introduction to Container Queries",
+      date: "November 4th, 2024",
+      author: "Joshua Comeau"
+    },
+    {
+      title: "How I Built My Blog",
+      date: "September 24th, 2024",
+      author: "Joshua Comeau"
+    },
+    {
+      title: "The Undeniable Utility Of CSS :has",
+      date: "September 9th, 2024",
+      author: "Joshua Comeau"
+    },
+    {
+      title: "Making a Blog with Fumadocs",
+      date: "December 15th, 2024",
+      author: "Fuma"
+    },
+    {
+      title: "Fumadocs v14, Thu Sep 19 2024",
+      date: "September 19th, 2024",
+      author: "Fuma"
+    },
+  ]

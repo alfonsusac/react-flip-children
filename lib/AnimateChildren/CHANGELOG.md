@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.1.3
+
+### Patch Changes
+
+- change default of `useAbsolutelyPositionedForDeletedElements` into false
+
 ## 0.1.2
 
 ### Patch Changes

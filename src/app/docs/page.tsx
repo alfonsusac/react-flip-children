@@ -6,51 +6,38 @@ import { H3, H4 } from "./ui/document"
 import type { ComponentProps, SVGProps } from "react"
 import { Sidebar } from "./ui/Sidebar"
 import Link from "next/link"
-
-const title = Inter({
-  variable: '--font-title',
-  subsets: ['latin'],
-})
+import { Footer } from "../ui/Footer"
 
 
-const sans = Inter({
-  variable: '--font-body',
-  subsets: ['latin'],
-})
 
 export default function DocsPage() {
   return (
     <article className={cn(
       `bg-[#151519] min-h-screen p-4 docs-article`,
-      `font-[family-name:_var(--font-body)]`,
-
-      `${ title.variable }`,
-      `${ sans.variable }`,
+      `font-[family-name:_var(--inter)]`,
 
       `text-[#99a]`,
 
       `pt-20`,
 
-      "[&_h2]:!mt-28 [&_h2]:!-mb-4",
+      "[&_h2]:!pt-36 [&_h2]:!mb-0",
       `[&_h2]:!text-[#282838]`,
       `[&_h2]:!font-bold`,
       `[&_h2]:tracking-tighter`,
       "[&_h2]:!text-5xl",
 
       `[&_h3]:text-[#dde]`,
-      `[&_h3]:font-[family-name:var(--font-title)]`,
+      `[&_h3]:font-[family-name:var(--inter)]`,
       `[&_h3]:text-2xl`,
-      `[&_h3]:my-4`,
-      // `[&_h3]:mt-12`,
+      `[&_h3]:mb-4`,
       `[&_h3]:font-semibold`,
       `[&_h3]:tracking-tight`,
       `[&_h3]:pt-16`,
-      // `[&_h3]:-mt-4`,
       `[&_h3]:block`,
 
 
       `[&_h4]:text-[#cce]`,
-      `[&_h4]:font-[family-name:var(--font-title)]`,
+      `[&_h4]:font-[family-name:var(--inter)]`,
       `[&_h4]:text-xl`,
       `[&_h4]:my-4`,
       `[&_h4]:mt-12`,
@@ -58,12 +45,11 @@ export default function DocsPage() {
       `[&_h4]:tracking-tight`,
 
       `[&_h5]:text-[#aab]`,
-      `[&_h5]:font-[family-name:var(--font-title)]`,
+      `[&_h5]:font-[family-name:var(--inter)]`,
       `[&_h5]:text-sm`,
       `[&_h5]:my-2`,
       `[&_h5]:mt-6`,
       `[&_h5]:font-bold`,
-      // `[&_h5]:tracking-tight`,
 
       `[&_p]:my-2`,
       `[&_p+p]:my-4`,
@@ -97,11 +83,6 @@ export default function DocsPage() {
 
       `[&_a]:underline`,
       `[&_a]:text-[#bbc]`,
-
-      // `flex flex-row`,
-      // `items-stretch`,
-      // `justify-center`,
-      // `gap-2`,
 
       `relative`,
     )}>
@@ -144,7 +125,7 @@ export default function DocsPage() {
             <p className={cn(
               `!font-medium`,
             )}>
-              v0.1.1
+              v0.1.3
             </p>
 
             <p className={cn(
@@ -395,19 +376,31 @@ const Card = forwardRef((props, ref) => {
 
 
 
+          
 
 
 
-          <h2 id="api-reference">
+
+
+          <h2 id="api-integration">
             2. Integration
           </h2>
 
-          <p className="pt-8">Integration with other UI libraries are work in progress!</p>
+
+          <H3 id="shadcn-ui">shadcn/ui</H3>
+          {/* No extra config is needed for shadcn/ui since their component can accept refs and tailwind transition class utilities */}
+          <p>
+            shadcn/ui is a popular React component library that provides a set of components and utilities for building user interfaces. React Flip Children can be integrated with shadcn/ui with minimal effort.
+          </p>
+          <LinkButton href="/shadcn-ui" className="inline-block">
+            shadcn/ui Integration Guide {'->'}
+          </LinkButton>
 
 
 
 
 
+          
 
 
 
@@ -549,12 +542,16 @@ const Card = forwardRef((props, ref) => {
               <span style={{ color: '#E4F0FB' }}>useAbsolutePositionOnDeletedElements</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
               <span style={{ color: '#5DE4C7' }}> boolean</span>
-              <span style={{ color: '#A6ACCD' }}> = {'true'}</span>
+              <span style={{ color: '#A6ACCD' }}> = {'false'}</span>
             </code>
 
           </H3>
           <p>
-            Whether or not to use absolute position on deleted elements. If set to <code>true</code>, the component will use absolute position to animate the child. If set to <code>false</code>, the component will use relative position to animate the child.
+            Whether or not to use absolute position on deleted elements. If set to <code>true</code>, the component will use absolute position to animate the deleted child.
+          </p>
+          <p>
+            <b>Recommended:</b><br />
+            Set to true if the width of the child is fixed.
           </p>
 
 
@@ -571,14 +568,32 @@ const Card = forwardRef((props, ref) => {
           </p>
 
 
-          <LinkButton href="/docs#" className="inline-block mt-8">
+          <H3 id="prop-snapshotStrategy" data-code-heading>
+            <code className="whitespace-nowrap">
+              <span style={{ color: '#E4F0FB' }}>snapshotStrategy</span>
+              <span style={{ color: '#ACD7FF' }}>?:</span>
+              <span style={{ color: '#5DE4C7' }}> {'"getBoundingClientRect" | "offset"'}</span>
+              <span style={{ color: '#A6ACCD' }}> = {'offset'}</span>
+            </code>
+          </H3>
+          <p>
+            The strategy to use when taking a snapshot of the child&apos;s position. The default is <code>offset</code>, which uses the <code>offsetLeft</code> and <code>offsetTop</code> property of the child. If set to <code>getBoundingClientRect</code>, the component will use the <code>getBoundingClientRect</code> method to take a snapshot of the child&apos;s position.
+          </p>
+
+          
+
+
+
+
+
+
+
+          <LinkButton href="/docs#" className="inline-block mt-40">
             Back to top ↑
           </LinkButton>
 
 
-          <footer className="mt-20 mb-10 text-sm opacity-60">
-            &copy; {new Date().getUTCFullYear() } Alfonsus Ardani. All rights reserved.
-          </footer>
+          <Footer />
         </div>
 
 

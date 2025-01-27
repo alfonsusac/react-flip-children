@@ -108,3 +108,21 @@ export function Button2({ className, onMouseDown, ...props }: ComponentProps<"bu
 
 
 
+
+
+export function LinkButton(
+  { className, ...props }: ComponentProps<"a">
+) {
+  return <a {...props} className={cn(
+    `bg-[#181820] border border-[#445] p-2 px-3 leading-none rounded-lg`,
+    `hover:bg-[#223]`,
+    `text-xs font-medium`,
+    `text-zinc-400`,
+    `!no-underline`,
+    `shadow-[inset_0_-4px_2px_0_#0001]`,
+    `active:shadow-[inset_0_-2px_2px_0_#0003]`,
+    `active:translate-y-0.5`,
+    `transition-all duration-100`,
+    className
+  )} />
+}

@@ -54,7 +54,7 @@ export function AnimateChildren(
     duration: props.duration ?? 500,
     normalizeKeys: props.normalizeKeys ?? false,
     delayDeletion: props.delayDeletion ?? 500,
-    useAbsolutePositionOnDeletedElements: props.useAbsolutePositionOnDeletedElements ?? true,
+    useAbsolutePositionOnDeletedElements: props.useAbsolutePositionOnDeletedElements ?? false,
     stagger: props.stagger ?? 0,
     // snapshotStrategy: props.snapshotStrategy ?? "offset"
     snapshotStrategy: props.snapshotStrategy ?? "offset"

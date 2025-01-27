@@ -7,10 +7,7 @@ import { cn } from "lazy-cn"
 import { AnimateChildren } from "../../../../lib/AnimateChildren/src"
 import Link from "next/link"
 
-const geistmono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--geist-mono",
-})
+
 
 export default function UpdatePage() {
 
@@ -71,7 +68,7 @@ export default function UpdatePage() {
         </div>
 
         <div className={cn(
-          `${ geistmono.className } font-[family-name:var(--geist-mono)]`,
+          `font-[family-name:var(--geist-mono)]`,
           `font-semibold whitespace-pre`,
           `text-sm leading-relaxed`,
           `*:will-change-transform`,

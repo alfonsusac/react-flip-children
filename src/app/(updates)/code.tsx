@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useRef, useState, type ReactNode } from "react"
 import { codeToTokens, type BundledTheme, type StringLiteralUnion, type ThemedToken } from "shiki"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
@@ -9,6 +11,7 @@ export function MagicCode(
   props: {
     code?: string,
     theme?: StringLiteralUnion<BundledTheme, string>
+    stagger?: number
   }
 ) {
   const code = props.code?.trim() ?? ""
@@ -60,9 +63,9 @@ export function MagicCode(
       prevRef.current = output
     })()
 
-  }, [code])
+  }, [code, props.theme])
 
-  return <AnimateChildren stagger={10}>
+  return <AnimateChildren stagger={props.stagger}>
     {rendered}
   </AnimateChildren>
 }

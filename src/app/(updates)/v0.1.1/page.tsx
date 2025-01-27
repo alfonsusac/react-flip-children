@@ -7,11 +7,6 @@ import { Geist_Mono } from "next/font/google"
 import { AnimateChildren } from "../../../../lib/AnimateChildren/src"
 import { useArrayDemo } from "../shared"
 
-const geistmono = Geist_Mono({
-  subsets: ["latin"],
-  variable: "--geist-mono",
-})
-
 export default function Version010Page() {
 
   const {
@@ -54,7 +49,7 @@ export default function Version010Page() {
             <Tab onClick={goToTab(3)} data-selected={tab === 3 ? "" : undefined}>3.tsx</Tab>
           </div>
           <div className={cn(
-            `${ geistmono.className } font-[family-name:var(--geist-mono)]`,
+            `font-[family-name:var(--geist-mono)]`,
             `font-semibold whitespace-pre`,
             `text-sm leading-relaxed`,
             `*:will-change-transform`,
