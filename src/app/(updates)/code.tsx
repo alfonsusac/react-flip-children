@@ -65,7 +65,10 @@ export function MagicCode(
 
   }, [code, props.theme])
 
-  return <AnimateChildren stagger={props.stagger}>
+  return <AnimateChildren
+    useAbsolutePositionOnDeletedElements
+    stagger={props.stagger}
+  >
     {rendered}
   </AnimateChildren>
 }
