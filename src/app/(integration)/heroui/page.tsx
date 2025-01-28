@@ -9,11 +9,24 @@ import { AnimateChildren } from "../../../../lib/AnimateChildren/src"
 import { useArrayArticleDemo } from "@/app/(updates)/shared"
 import { Card, CardBody, CardFooter, HeroUIProvider, Image } from "@heroui/react"
 import { MagicCode } from "@/app/(updates)/code"
-import { Fira_Code } from "next/font/google"
+import { Fira_Code, Space_Grotesk, Space_Mono } from "next/font/google"
+import { AButton } from "../shadcn-ui/button"
 
 const fira = Fira_Code({
   subsets: ["latin"],
   variable: "--fira",
+})
+
+const spacemono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--space-mono",
+  weight: ['400', '700']
+})
+
+const spacegrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--space-grotesk",
+  weight: ['400', '700']
 })
 
 const codes = {
@@ -207,13 +220,11 @@ export default function HeroUIDemo() {
               "data-[deleting]:*:opacity-0",
               "data-[deleting]:*:delay-0",
               fira.className,
-              "font-[family-name:var(--fira)]",
-
               "pb-4",
             )}>
               <MagicCode
                 code={codes[tab]}
-                theme="vesper"
+                theme="github-dark"
                 stagger={0} />
             </pre>
 
@@ -253,6 +264,31 @@ export default function HeroUIDemo() {
             </div>
           </div>
         </section>
+
+
+        <section className="h-80 mt-16 !-mx-4 py-8 overflow-clip p-4">
+          <div className="max-w-[60rem] mx-auto flex gap-4 items-center h-full">
+
+            <div className="flex-1 text-white">
+              <div className="text-3xl sm:text-5xl tracking text-pretty mt-2 font-semibold tracking-tighter">
+                Animate Children with Ease.
+              </div>
+              <pre className={cn(
+                "block rounded-md text-lg sm:text-2xl -tracking-widest mt-2",
+              )}>
+                npm i react-flip-children
+              </pre>
+              <LinkButton href="/docs#overview" className="inline-block mt-6 text-base px-4 bg-[#181826] border-[#272730]">
+                Get Started {'->'}
+              </LinkButton>
+            </div>
+          </div>
+        </section>
+
+        <footer className="py-20 text-sm text-center opacity-60">
+          &copy; {new Date().getUTCFullYear()} Alfonsus Ardani. All rights reserved.
+        </footer>
+
 
       </article>
     </HeroUIProvider>
@@ -371,7 +407,7 @@ function HeaderContent() {
     <>
       <LinkButton
         href="/docs#heroui"
-        className="bg-[#27272a] border-[#52525b33] text-[#d4d4d8] hover:bg-[#3f3f46] inline-block mb-2 md:mb-12"
+        className="bg-[#181826] border-[#272730] text-[#d4d4d8] inline-block mb-2 md:mb-12"
       >{'<-'} Back to Docs</LinkButton><br />
 
       <div className="w-52 h-52 block absolute right-0 bottom-0 text-slate-200">
