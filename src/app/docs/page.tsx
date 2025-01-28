@@ -397,10 +397,9 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="heroui">heroUI</H3>
-          {/* provide a description for heroUI and how it can be integrated easily */}
+          <H3 id="heroui">HeroUI</H3>
           <p>
-            heroUI is a popular React component library that provides a set of components and utilities for building user interfaces. React Flip Children can be integrated with heroUI with minimal effort.
+            HeroUI is a popular React component library that provides a set of components and utilities for building user interfaces. React Flip Children can be integrated with HeroUI with minimal effort.
           </p>
           <LinkButton href="/heroui" className="inline-block">
             heroUI Integration Guide {'->'}
