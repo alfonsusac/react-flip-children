@@ -23,14 +23,36 @@ export function useArrayDemo() {
 }
 
 
-// export function useTab<T extends string[]>(title: T) {
-//   const [tab, setTab] = useState<1 | 2 | 3>(1)
-//   const goToTab = (tab: 1 | 2 | 3) => () => setTab(tab)
+// export function useTab<const T extends string[]>(...titles: T) {
+//   const [tab, setTab] = useState<T[number]>(0)
+//   const goToTab = (tab: keyof T) => () => setTab(tab)
+//   return {
+//     goToTab
+//   }
 // }
 
-// type ArrayIndexes<T extends any[]> = Omit<T, null>
+// const test = useTab("tab1", "tab2", "tab3")
 
-// type E = ArrayIndexes<["a", "b", "c"]>
+// test.goToTab("tab1")
+
+
+
+
+// type ArrayIndexes<T extends Array<any>> = T
+
+
+// type Indices<T extends readonly any[]> = Exclude<Partial<T>["length"], T["length"]>
+
+// type X = Indices<["a", 123, "c"]>
+// //   ^?
+
+// const e = useTab(
+//   "tab1",
+//   "tab2",
+//   "tab3",
+// )
+
+
 
 export function useArrayArticleDemo() {
   const lastIdRef = useRef(10)

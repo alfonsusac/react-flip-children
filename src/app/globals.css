@@ -158,3 +158,17 @@ a {
     border-radius: 4px;
   }
 }
+
+.magic-move-pre > * {
+  text-rendering: geometricPrecision;
+}
+
+.heroui-bg {
+  background: 
+    conic-gradient(from 0.5turn at 100% 0%, #000022, #00002200, 10deg, #00002200),
+    conic-gradient(from 0.5turn at 0% 0%, #00002200, 350deg, #00002200, #000022);
+  backdrop-filter: blur(0.4px);
+  border-radius: 6px;
+  box-shadow: inset 1px 1px 1px 0 #fff2, 1px 1px 1px 0 #000;
+  /* border: 1px solid rgba(255, 255, 255, 0.1); */
+}

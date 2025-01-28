@@ -290,13 +290,13 @@ const Card = forwardRef((props, ref) => {
           <H3 id="demo">Demo</H3>
           <ul>
             <li>
-              <Link href="/">Simple Demo</Link>
+              <LinkButton href="/">Simple Demo {'->'}</LinkButton>
             </li>
             <li>
-              <Link href="/test">Playground</Link>
+              <LinkButton href="/test">Playground  {'->'}</LinkButton>
             </li>
             <li>
-              <Link href="/test-stress">Stress Test</Link>
+              <LinkButton href="/test-stress">Stress Test  {'->'}</LinkButton>
             </li>
           </ul>
 
@@ -388,12 +388,22 @@ const Card = forwardRef((props, ref) => {
 
 
           <H3 id="shadcn-ui">shadcn/ui</H3>
-          {/* No extra config is needed for shadcn/ui since their component can accept refs and tailwind transition class utilities */}
           <p>
             shadcn/ui is a popular React component library that provides a set of components and utilities for building user interfaces. React Flip Children can be integrated with shadcn/ui with minimal effort.
           </p>
           <LinkButton href="/shadcn-ui" className="inline-block">
             shadcn/ui Integration Guide {'->'}
+          </LinkButton>
+
+
+
+          <H3 id="heroui">heroUI</H3>
+          {/* provide a description for heroUI and how it can be integrated easily */}
+          <p>
+            heroUI is a popular React component library that provides a set of components and utilities for building user interfaces. React Flip Children can be integrated with heroUI with minimal effort.
+          </p>
+          <LinkButton href="/heroui" className="inline-block">
+            heroUI Integration Guide {'->'}
           </LinkButton>
 
 

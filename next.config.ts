@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   /* config options here */
   eslint: {
     dirs: ["src"],
+  },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'picsum.photos',
+      },
+    ]
   }
 };
 

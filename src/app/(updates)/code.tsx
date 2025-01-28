@@ -67,6 +67,7 @@ export function MagicCode(
 
   return <AnimateChildren
     useAbsolutePositionOnDeletedElements
+    delayDeletion={1000}
     stagger={props.stagger}
   >
     {rendered}

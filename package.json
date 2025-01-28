@@ -14,6 +14,9 @@
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",
+    "@heroui/button": "^2.2.10",
+    "@heroui/image": "^2.2.6",
+    "@heroui/react": "^2.6.14",
     "@types/diff": "^6.0.0",
     "@types/diff-match-patch": "^1.0.36",
     "@types/react-is": "^19.0.0",
@@ -22,6 +25,7 @@
     "diff-match-patch": "^1.0.5",
     "diff-match-patch-es": "^1.0.1",
     "fast-diff": "^1.3.0",
+    "framer-motion": "^12.0.6",
     "json-diff": "^1.0.6",
     "lazy-cn": "^1.0.0",
     "motion": "^11.15.0",
