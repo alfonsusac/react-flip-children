@@ -106,8 +106,8 @@ export default function DocsPage() {
 
           <header className={cn(
             `text-[#445]`,
-            `[&_a]:text-[#445]`,
-            `hover:[&_a]:text-[#ccd]`,
+            `[&_a]:!text-[#445]`,
+            `hover:[&_a]:!text-[#ccd]`,
             `[&_a]:transition-colors`,
             `[&_a]:cursor-pointer`,
           )}>
@@ -115,10 +115,10 @@ export default function DocsPage() {
               <a target="_blank" href="https://github.com/alfonsusac/react-flip-array">
                 <CibGithub />
               </a>
-              <a target="_blank" href="">
+              <a target="_blank" href="https://www.npmjs.com/package/react-flip-children?activeTab=readme">
                 <CibNpm />
               </a>
-              <a target="_blank" href="">
+              <a target="_blank" href="https://x.com/alfonsusac">
                 <Fa6BrandsXTwitter />
               </a>
             </div>
@@ -650,7 +650,7 @@ function LinkButton(
 ) {
   return <a {...props} className={cn(
     `bg-[#181820] border border-[#445] p-2 px-3 leading-none rounded-lg`,
-    `hover:bg-[#223]`,
+    `[@media(pointer:fine)]:hover:bg-[#223]`,
     `text-xs font-medium`,
     `text-zinc-400`,
     `!no-underline`,

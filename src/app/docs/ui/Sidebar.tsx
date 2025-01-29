@@ -16,10 +16,30 @@ export function Sidebar() {
 
   const [headers, setHeaders] = useState<HeaderData[]>([])
 
+  const [visible, setVisible] = useState<string | null>()
+
   useEffect(() => {
     const headers = document.querySelectorAll("h2, h3, h4, h5, h6")
     const newHeaders: HeaderData[] = []
+    const observers: IntersectionObserver[] = []
     headers.forEach(header => {
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            console.log("Test", header.id)
+            setVisible(header.id)
+          }
+        })
+      }, {
+        root: null,
+        rootMargin: "0% 0% -50% 0%",
+        threshold: 1,
+      })
+
+      observer.observe(header)
+      observers.push(observer)
+
+
       newHeaders.push({
         id: header.id,
         text: header.textContent?.trimStart().trimEnd().replace(/#/g, "") || null,
@@ -28,6 +48,10 @@ export function Sidebar() {
       })
     })
     setHeaders(newHeaders)
+
+    return () => {
+      observers.forEach(observer => observer.disconnect())
+    }
   }, [])
 
   const [open, setOpen] = useState(false)
@@ -100,15 +124,13 @@ export function Sidebar() {
                 }}
                 href={header.id ? `#${ header.id }` : undefined}
                 key={index}
+                data-visible={visible === header.id ? "" : undefined}
                 className={cn(
                   "animate-appear",
                   "text-sm",
                   "py-2",
                   "cursor-pointer",
-                  // "transition-all",
                   "!no-underline",
-                  // "!text-[#445]",
-                  // "hover:!text-[#aab]",
                   "!text-[#ccd]",
                   "hover:!text-[#88f]",
                   "outline-none",
@@ -119,7 +141,8 @@ export function Sidebar() {
                   "rounded-md",
 
                   "relative group",
-
+                  "data-[visible]:!text-[#88f]",
+                  
                   header.level === 2 && "pl-3  py-2 mt-3 !font-medium",
                   header.level === 3 && "pl-8  py-1 ",
                   header.level === 4 && "pl-12 py-1 text-xs",
@@ -127,7 +150,7 @@ export function Sidebar() {
                 )}>
                 {header.level !== 2 && (
                   <div className="absolute left-4 w-0.5 top-0 bottom-0 bg-[#252540]">
-                    <div className="absolute left-0 w-0.5 top-1 bottom-1 group-hover:bg-[#44a]" />
+                    <div className="absolute left-0 w-0.5 top-1 bottom-1 group-data-[visible]:bg-[#44a]" />
                   </div>
                 )}
                 {
