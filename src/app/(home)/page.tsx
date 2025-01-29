@@ -4,6 +4,7 @@ import { Button } from "./homeui/button"
 import type { SVGProps } from "react"
 import Link from "next/link"
 import { RootBackground } from "../ui/Background"
+import { getPublishedVersion } from "../lib/npm"
 
 const kanit = Kanit({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -11,32 +12,37 @@ const kanit = Kanit({
 })
 
 
-export default function HomePage() {
-  
+export default async function HomePage() {
+
   return (
-    <div className={`bg-[#FEF7E3] min-h-screen flex flex-col p-8 items-center *:w-full *:max-w-screen-sm text-[#147457] ${ kanit.className }`}>
+    <div className={`bg-[#FEF7E3] min-h-screen flex flex-col p-6 sm:p-8 items-center *:w-full *:max-w-screen-sm text-[#147457] ${ kanit.className }`}>
       <RootBackground color="#FEF7E3" />
-      <div className="pt-20" />
+      <div className="sm:pt-20" />
       <header className="flex flex-col items-center gap-2">
         <div className="text-center text-lg font-bold bg-[#f48052] !w-[unset] rounded-lg text-white px-4">
-          v0.0.5 pre-release
+          v{await getPublishedVersion()} pre-release
         </div>
-        <h1 className={`text-[#147457] text-center text-6xl sm:text-7xl font-extrabold tracking-tight leading-none`}>
-          Animate Arrays<br /> with Ease
+        <h1 className={`text-[#147457] text-center text-5xl sm:text-7xl font-extrabold tracking-tight leading-none`}>
+          Animate Children<br /> with Ease
         </h1>
-        <div className="text-center text-2xl my-1 font-bold text-[#147457bb]">Add, remove, and reorder array elements smoothly</div>
+        <div className="text-center text-xl sm:text-2xl my-1 font-bold text-[#147457bb] leading-tight">Add, remove, and reorder child elements smoothly</div>
       </header>
       <div className="pt-10" />
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-2 justify-center flex-col sm:flex-row">
         <PackageName />
-        <Link href={"/docs"} className="pt-2 bg-[#9C8660] text-white px-6 font-bold rounded-lg
-          border-[#8a7141] border shadow-[inset_0_-2px_3px_0_#0003]
+
+        <div className="flex">
+
+          <Link href={"/docs"} className="pt-2 bg-[#9C8660] text-white px-6 font-bold rounded-lg
+          border-[#8a7141] border shadow-[inset_0_-2px_3px_0_#0003] h-11
         ">
-          Docs
-        </Link>
-        <button className="mx-4 w-8 aspect-square text-[#9C8660] hover:brightness-125 cursor-pointer">
-          <MdiGithub className="w-full h-full" />
-        </button>
+            Docs
+          </Link>
+          <button className="mx-4 w-8 aspect-square text-[#9C8660] hover:brightness-125 cursor-pointer shrink-0">
+            <MdiGithub className="w-full h-full" />
+          </button>
+        </div>
+
       </div>
 
 

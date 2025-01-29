@@ -26,7 +26,6 @@ export function Sidebar() {
       const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
-            console.log("Test", header.id)
             setVisible(header.id)
           }
         })

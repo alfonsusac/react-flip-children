@@ -1,6 +1,7 @@
 import { ReorderArray } from "@/app/ui/Reorder"
 import { AnimateChild } from "@/app/ui/Reorder2"
 import { useRef, useState, type SVGProps } from "react"
+import { AnimateChildren } from "../../../../lib/AnimateChildren/src"
 
 export const appExample = {
   code: `
@@ -39,13 +40,12 @@ function AppsExample() {
 
       <div className="h-10" />
       <div className="rounded-md grid grid-cols-5 sm:grid-cols-6 gap-4 sm:gap-6">
-        <AnimateChild
-          duration={300}
+        <AnimateChildren
           easing="ease-in-out"
-          resetAnimation={false}
+          delayDeletion={250}
         >
           {arr.map((item, index) => (
-            <div key={item} className="text-center relative group"
+            <div key={item} className="text-center relative group data-[adding]:opacity-0 opacity-100 data-[deleting]:opacity-0 transition-all"
               style={{ zIndex: item }}
             >
               <div onClick={() => remove(item)} className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-white z-20 flex items-center justify-center transition-all opacity-0 group-hover:opacity-100 cursor-pointer">
@@ -65,7 +65,7 @@ function AppsExample() {
           <div key="add" onClick={add} className="rounded-2xl flex items-center justify-center p-3 bg-black/10 font-extrabold text-8xl leading-[0] grow aspect-square w-full overflow-hidden relative hover:bg-black/15 cursor-pointer">
             <MaterialSymbolsAddRounded className="text-white" />
           </div>
-        </AnimateChild>
+        </AnimateChildren>
       </div>
     </>
   )

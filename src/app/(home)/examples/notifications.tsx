@@ -45,7 +45,7 @@ function TodoExample() {
               "data-[adding]:opacity-0",
               "data-[deleting]:opacity-0",
             )}>
-              <div className="w-10 h-10 bg-full rounded-2xl bg-black flex items-center justify-center"
+              <div className="w-10 h-10 bg-full rounded-2xl bg-black flex items-center justify-center shrink-0"
                 style={{ backgroundColor: colors2[item % colors2.length] }}
               >
                 {notifications[item % notifications.length].icon({ className: "w-6 h-6 text-white" })}
