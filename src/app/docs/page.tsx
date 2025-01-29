@@ -5,87 +5,97 @@ import { CodeBlock } from "./ui/code"
 import { H3, H4 } from "./ui/document"
 import type { ComponentProps, SVGProps } from "react"
 import { Sidebar } from "./ui/Sidebar"
-import Link from "next/link"
 import { Footer } from "../ui/Footer"
+import { RootBackground } from "../ui/Background"
 
 
 
 export default function DocsPage() {
   return (
-    <article className={cn(
-      `bg-[#151519] min-h-screen p-4 docs-article`,
-      `font-[family-name:_var(--inter)]`,
+    <article
+      className={cn(
+        `min-h-screen p-4 docs-article`,
+        `font-[family-name:_var(--inter)]`,
 
-      `text-[#99a]`,
+        `bg-[#151519]`,
 
-      `pt-20`,
+        `text-[#99a]`,
 
-      "[&_h2]:!pt-36 [&_h2]:!mb-0",
-      `[&_h2]:!text-[#282838]`,
-      `[&_h2]:!font-bold`,
-      `[&_h2]:tracking-tighter`,
-      "[&_h2]:!text-5xl",
+        `pt-20`,
 
-      `[&_h3]:text-[#dde]`,
-      `[&_h3]:font-[family-name:var(--inter)]`,
-      `[&_h3]:text-2xl`,
-      `[&_h3]:mb-4`,
-      `[&_h3]:font-semibold`,
-      `[&_h3]:tracking-tight`,
-      `[&_h3]:pt-16`,
-      `[&_h3]:block`,
+        "[&_h2]:!pt-36 [&_h2]:!mb-0",
+        `[&_h2]:!text-[#556]`,
+        `[&_h2]:!font-bold`,
+        `[&_h2]:tracking-tighter`,
+        "[&_h2]:!text-5xl",
+
+        `[&_h3]:text-[#dde]`,
+        `[&_h3]:font-[family-name:var(--inter)]`,
+        `[&_h3]:text-2xl`,
+        `[&_h3]:mb-4`,
+        `[&_h3]:font-semibold`,
+        `[&_h3]:tracking-tight`,
+        `[&_h3]:pt-16`,
+        `[&_h3]:block`,
 
 
-      `[&_h4]:text-[#cce]`,
-      `[&_h4]:font-[family-name:var(--inter)]`,
-      `[&_h4]:text-xl`,
-      `[&_h4]:my-4`,
-      `[&_h4]:mt-12`,
-      `[&_h4]:font-semibold`,
-      `[&_h4]:tracking-tight`,
+        `[&_h4]:text-[#cce]`,
+        `[&_h4]:font-[family-name:var(--inter)]`,
+        `[&_h4]:text-xl`,
+        `[&_h4]:my-4`,
+        `[&_h4]:mt-12`,
+        `[&_h4]:font-semibold`,
+        `[&_h4]:tracking-tight`,
 
-      `[&_h5]:text-[#aab]`,
-      `[&_h5]:font-[family-name:var(--inter)]`,
-      `[&_h5]:text-sm`,
-      `[&_h5]:my-2`,
-      `[&_h5]:mt-6`,
-      `[&_h5]:font-bold`,
+        `[&_h5]:text-[#aab]`,
+        `[&_h5]:font-[family-name:var(--inter)]`,
+        `[&_h5]:text-sm`,
+        `[&_h5]:my-2`,
+        `[&_h5]:mt-6`,
+        `[&_h5]:font-bold`,
 
-      `[&_p]:my-2`,
-      `[&_p+p]:my-4`,
-      `[&_p]:leading-loose`,
-      `[&_p]:font-normal`,
-      `[&_p]:text-[0.95rem]`,
+        `[&_p]:my-2`,
+        `[&_p+p]:my-4`,
+        `[&_p]:leading-loose`,
+        `[&_p]:font-normal`,
+        `[&_p]:text-[0.95rem]`,
 
-      `[&_li]:my-3`,
-      `[&_li]:leading-loose`,
-      `[&_li]:font-normal`,
-      `[&_li]:text-[0.95rem]`,
-      `[&_li]:list-disc`,
-      `[&_li]:pl-1`,
-      `[&_li]:ml-6`,
+        `[&_li]:my-3`,
+        `[&_li]:leading-loose`,
+        `[&_li]:font-normal`,
+        `[&_li]:text-[0.95rem]`,
+        `[&_li]:list-disc`,
+        `[&_li]:pl-1`,
+        `[&_li]:ml-6`,
 
-      `[&_pre]:bg-[#111]`,
-      `[&_pre]:text-sm`,
-      `[&_pre]:p-3`,
-      `[&_pre]:px-4`,
-      `[&_pre]:rounded-md`,
+        `[&_pre]:bg-[#151519]`,
+        `[&_pre]:text-sm`,
+        `[&_pre]:py-4`,
+        `[&_pre]:px-4`,
+        // `[&_pre]:-mx-4`,
+        // `[@media(min-width:30rem)]:px-4`,
+        `[&_pre]:-mx-4`,
+        `[@media(min-width:30rem)]:[&_pre]:-mx-0`,
+        `[&_pre]:rounded-md`,
+        `[&_pre]:overflow-auto`,
 
-      `[&_code]:bg-[#223]`,
-      `[&_code]:text-[0.8em]`,
-      `[&_code]:p-0.5`,
-      `[&_code]:px-1.5`,
-      `[&_code]:rounded-md`,
+        `[&_code]:bg-[#223]`,
+        `[&_code]:text-[0.8em]`,
+        `[&_code]:py-0.5`,
+        `[&_code]:px-1.5`,
+        `[&_code]:rounded-md`,
+        `[&_code]:break-words`,
 
-      `[&_pre>code]:bg-transparent`,
-      `[&_pre>code]:p-0`,
-      `[&_pre>code]:text-sm`,
+        `[&_pre>code]:bg-transparent`,
+        `[&_pre>code]:p-0`,
+        `[&_pre>code]:text-sm`,
 
-      `[&_a]:underline`,
-      `[&_a]:text-[#bbc]`,
+        `[&_a]:underline`,
+        `[&_a]:text-[#bbc]`,
 
-      `relative`,
-    )}>
+        `relative`,
+      )}>
+      <RootBackground color="#151519" />
 
       <div className="flex mx-auto max-w-[30rem]">
 
@@ -211,7 +221,7 @@ npm install react-flip-children
 
           <CodeBlock code={`
 import React, { useState } from 'react';
-import { AnimateChildren } from 'animate-children';
+import { AnimateChildren } from 'react-flip-children';
 
 export default function App() {
   const [items, setItems] = useState([1, 2, 3]);
@@ -376,7 +386,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          
+
 
 
 
@@ -409,7 +419,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          
+
 
 
 
@@ -547,7 +557,7 @@ const Card = forwardRef((props, ref) => {
 
 
           <H3 id="prop-useAbsolutePositionOnDeletedElements" data-code-heading>
-            <code className="whitespace-nowrap">
+            <code className="">
               <span style={{ color: '#E4F0FB' }}>useAbsolutePositionOnDeletedElements</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
               <span style={{ color: '#5DE4C7' }}> boolean</span>
@@ -565,7 +575,7 @@ const Card = forwardRef((props, ref) => {
 
 
           <H3 id="prop-stagger" data-code-heading>
-            <code className="whitespace-nowrap">
+            <code>
               <span style={{ color: '#E4F0FB' }}>stagger</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
               <span style={{ color: '#5DE4C7' }}> number</span>
@@ -578,18 +588,18 @@ const Card = forwardRef((props, ref) => {
 
 
           <H3 id="prop-snapshotStrategy" data-code-heading>
-            <code className="whitespace-nowrap">
+            <code>
               <span style={{ color: '#E4F0FB' }}>snapshotStrategy</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
               <span style={{ color: '#5DE4C7' }}> {'"getBoundingClientRect" | "offset"'}</span>
-              <span style={{ color: '#A6ACCD' }}> = {'offset'}</span>
+              <span style={{ color: '#A6ACCD' }}> = {'"offset"'}</span>
             </code>
           </H3>
           <p>
             The strategy to use when taking a snapshot of the child&apos;s position. The default is <code>offset</code>, which uses the <code>offsetLeft</code> and <code>offsetTop</code> property of the child. If set to <code>getBoundingClientRect</code>, the component will use the <code>getBoundingClientRect</code> method to take a snapshot of the child&apos;s position.
           </p>
 
-          
+
 
 
 

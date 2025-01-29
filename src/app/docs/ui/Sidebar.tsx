@@ -1,7 +1,7 @@
 "use client"
 
 import { cn } from "lazy-cn"
-import { useEffect, useState, type SVGProps } from "react"
+import { useEffect, useRef, useState, type SVGProps } from "react"
 
 
 type HeaderData = {
@@ -40,14 +40,16 @@ export function Sidebar() {
         "px-3",
         "rounded-lg",
         "border border-[#223]",
-        "hover:border-[#445]",
+        "[@media(pointer:fine)]:hover:border-[#445]",
+        "active:border-[#445]",
         "text-sm",
         "cursor-pointer select-none",
-        "shadow-[0_2px_3px_0_#223]",
+        "shadow-[0_0px_5px_0_#334]",
         "flex items-center gap-1",
         "transition-all",
         open && "shadow-none",
         "group",
+        "touch-none",
       )}
         onClick={() => setOpen(!open)}
         data-open={open ? "" : undefined}
@@ -67,7 +69,7 @@ export function Sidebar() {
         "z-40",
         "top-0",
         "left-0",
-        "bottom-0",
+        "-bottom-2 rounded-br-xl",
         // "p-8",
         "shadow-[0_0_40px_0_#223]",
         "transition-all",
@@ -77,7 +79,6 @@ export function Sidebar() {
       )}
       >
         <div
-          tabIndex={0}
           className={cn(
             "flex flex-col  overflow-auto",
             // "-mx-8",
@@ -90,31 +91,40 @@ export function Sidebar() {
           )}>
           {
             headers.map((header, index) => (
-              <a href={header.id ? `#${ header.id }` : undefined} key={index} className={cn(
-                "animate-appear",
-                "text-sm",
-                "py-2",
-                "cursor-pointer",
-                // "transition-all",
-                "!no-underline",
-                // "!text-[#445]",
-                // "hover:!text-[#aab]",
-                "!text-[#ccd]",
-                "hover:!text-[#88f]",
-                "outline-none",
-                "outline-transparent",
-                "break-all",
+              <a
+                onClick={() => {
+                  // check screen width
+                  if (window.innerWidth < 1200) {
+                    setOpen(false)
+                  }
+                }}
+                href={header.id ? `#${ header.id }` : undefined}
+                key={index}
+                className={cn(
+                  "animate-appear",
+                  "text-sm",
+                  "py-2",
+                  "cursor-pointer",
+                  // "transition-all",
+                  "!no-underline",
+                  // "!text-[#445]",
+                  // "hover:!text-[#aab]",
+                  "!text-[#ccd]",
+                  "hover:!text-[#88f]",
+                  "outline-none",
+                  "outline-transparent",
+                  "break-all",
 
-                "hover:bg-[#223]",
-                "rounded-md",
+                  "hover:bg-[#223]",
+                  "rounded-md",
 
-                "relative group",
+                  "relative group",
 
-                header.level === 2 && "pl-3  py-2 mt-3 !font-medium",
-                header.level === 3 && "pl-8  py-1 ",
-                header.level === 4 && "pl-12 py-1 text-xs",
-                header.level === 5 && "pl-16 py-1 text-xs",
-              )}>
+                  header.level === 2 && "pl-3  py-2 mt-3 !font-medium",
+                  header.level === 3 && "pl-8  py-1 ",
+                  header.level === 4 && "pl-12 py-1 text-xs",
+                  header.level === 5 && "pl-16 py-1 text-xs",
+                )}>
                 {header.level !== 2 && (
                   <div className="absolute left-4 w-0.5 top-0 bottom-0 bg-[#252540]">
                     <div className="absolute left-0 w-0.5 top-1 bottom-1 group-hover:bg-[#44a]" />

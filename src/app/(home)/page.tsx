@@ -3,6 +3,7 @@ import { PackageName, TestPage } from "./client"
 import { Button } from "./homeui/button"
 import type { SVGProps } from "react"
 import Link from "next/link"
+import { RootBackground } from "../ui/Background"
 
 const kanit = Kanit({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -11,8 +12,10 @@ const kanit = Kanit({
 
 
 export default function HomePage() {
+  
   return (
     <div className={`bg-[#FEF7E3] min-h-screen flex flex-col p-8 items-center *:w-full *:max-w-screen-sm text-[#147457] ${ kanit.className }`}>
+      <RootBackground color="#FEF7E3" />
       <div className="pt-20" />
       <header className="flex flex-col items-center gap-2">
         <div className="text-center text-lg font-bold bg-[#f48052] !w-[unset] rounded-lg text-white px-4">

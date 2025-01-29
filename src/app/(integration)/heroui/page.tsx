@@ -185,7 +185,7 @@ export default function HeroUIDemo() {
   return (
     <HeroUIProvider>
       <article className={cn(
-        "min-h-screen bg-black text-[#ECEDEE] p-4 *:mx-auto",
+        "min-h-screen bg-black text-[#ECEDEE] p-4 *:mx-auto overflow-auto",
         "font-[family-name:var(--inter)]",
         "dark",
         "heroui-bg",
