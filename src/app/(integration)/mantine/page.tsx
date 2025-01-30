@@ -3,7 +3,7 @@
 import { LinkButton } from "@/app/ui/Button"
 import { useTabs } from "@/app/ui/Tabs"
 import { cn } from "lazy-cn"
-import { useState, type ComponentProps, type SVGProps } from "react"
+import { useRef, useState, type ComponentProps, type SVGProps } from "react"
 import { AnimateChildren } from "../../../../lib/AnimateChildren/src"
 import { useArrayArticleDemo, useGenericArrayDemo } from "@/app/(updates)/shared"
 import { MagicCode } from "@/app/(updates)/code"
@@ -175,8 +175,7 @@ export default function HeroUIDemo() {
     removeFn,
     moveUp,
     moveDown,
-    reverse,
-    shuffle,
+    setArr,
   } = useGenericArrayDemo(data.products, 50)
 
   const {
@@ -186,6 +185,16 @@ export default function HeroUIDemo() {
   } = useTabs(1, 2, 3)
 
   const [search, setSearch] = useState('')
+
+  const [sortMode, setSortMode] = useState<
+    | 'none'
+    | 'nameAsc'
+    | 'nameDesc'
+    | 'priceAsc'
+    | 'priceDesc'
+  >('none')
+
+  const staggerRef = useRef(30)
 
   return (
     <MantineProvider>
@@ -237,8 +246,38 @@ export default function HeroUIDemo() {
 
           </div >
           <div className="flex-1">
-            <div className="mb-4 flex gap-1 flex-wrap">
+            <div className="mb-4 flex gap-1 flex-wrap sticky top-0 z-[9999] pt-2">
               <Button radius="sm" onClick={add}>Add</Button>
+              <Button
+                onClick={() => {
+                  staggerRef.current = 0
+                  setSortMode(({
+                    'none': 'nameAsc',
+                    'nameAsc': 'nameDesc',
+                    'nameDesc': 'priceAsc',
+                    'priceAsc': 'priceDesc',
+                    'priceDesc': 'none',
+                  } as const)[sortMode])
+                  setTimeout(() => {
+                    staggerRef.current = 30
+                  })
+                }}
+                leftSection={{
+                  'none': <TablerArrowsSort className="text-lg" />,
+                  'nameAsc': <TablerSortAscendingLetters className="text-lg" />,
+                  'nameDesc': <TablerSortDescendingLetters className="text-lg" />,
+                  'priceAsc': <TablerSortAscendingNumbers className="text-lg" />,
+                  'priceDesc': <TablerSortDescendingNumbers className="text-lg" />,
+                }[sortMode]}
+              >{
+                  {
+                    'none': "Sort",
+                    'nameAsc': "Sort by Name",
+                    'nameDesc': "Sort by Name",
+                    'priceAsc': "Sort by Price",
+                    'priceDesc': "Sort by Price",
+                  }[sortMode]
+                }</Button>
               <TextInput
                 leftSectionPointerEvents="none"
                 leftSection={<TablerSearch />}
@@ -251,13 +290,28 @@ export default function HeroUIDemo() {
               <AnimateChildren
                 delayDeletion={150}
                 easing="ease-in-out"
-                stagger={20}
+                stagger={staggerRef.current}
               >
                 {arr.filter(
                   el => el.title.toLowerCase().includes(search.toLowerCase())
+                ).sort(
+                  (a, b) => {
+                    if (sortMode === 'nameAsc') {
+                      return a.title.localeCompare(b.title)
+                    } else if (sortMode === 'nameDesc') {
+                      return b.title.localeCompare(a.title)
+                    } else if (sortMode === 'priceAsc') {
+                      return a.price - b.price
+                    } else if (sortMode === 'priceDesc') {
+                      return b.price - a.price
+                    } else {
+                      return 0
+                    }
+                  }
                 ).map((el, index) =>
                   <CartItemCard
                     key={el.id}
+                    enableMove={sortMode === 'none'}
                     item={{
                       id: el.id,
                       image: el.thumbnail,
@@ -305,8 +359,8 @@ export default function HeroUIDemo() {
 
 }
 
-function CartItemCard<T>({
-  item, onDelete, onMoveUp, onMoveDown, ...props
+function CartItemCard({
+  item, onDelete, onMoveUp, onMoveDown, enableMove, ...props
 }: ComponentProps<typeof Card>
   & {
     item: {
@@ -315,6 +369,7 @@ function CartItemCard<T>({
       title: string,
       price: number,
     },
+    enableMove: boolean,
     onDelete?: () => void,
     onMoveUp?: () => void,
     onMoveDown?: () => void,
@@ -349,13 +404,19 @@ function CartItemCard<T>({
           </Box>
         </Box>
         <Group className="self-end" gap={0} wrap="nowrap">
-          <Button px={12} onClick={onMoveUp} size="xs" variant="subtle">
-            <TablerArrowUp className="text-xl" />
-          </Button>
-          <Button px={12} onClick={onMoveDown} size="xs" variant="subtle">
-            <TablerArrowDown className="text-xl" />
-          </Button>
-          <Button px={12} onClick={onDelete} size="xs" variant="subtle" color="red">
+          {
+            enableMove && (
+              <>
+                <Button px={12} mx={-4} radius="xl" onClick={onMoveUp} size="xs" variant="subtle">
+                  <TablerArrowUp className="text-xl" />
+                </Button>
+                <Button px={12} mx={-4} radius="xl" onClick={onMoveDown} size="xs" variant="subtle">
+                  <TablerArrowDown className="text-xl" />
+                </Button>
+              </>
+            )
+          }
+          <Button px={12} mx={-4} radius="xl" onClick={onDelete} size="xs" variant="subtle" color="red">
             <TablerTrash className="text-xl" />
           </Button>
         </Group>
@@ -473,7 +534,35 @@ function TablerSearch(props: SVGProps<SVGSVGElement>) {
 }
 
 
+function TablerSortAscendingLetters(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10V5c0-1.38.62-2 2-2s2 .62 2 2v5m0-3h-4m4 14h-4l4-7h-4M4 15l3 3l3-3M7 6v12"></path></svg>
+  )
+}
 
+function TablerSortAscendingNumbers(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="m4 15l3 3l3-3M7 6v12M17 3a2 2 0 0 1 2 2v3a2 2 0 1 1-4 0V5a2 2 0 0 1 2-2m-2 13a2 2 0 1 0 4 0a2 2 0 1 0-4 0"></path><path d="M19 16v3a2 2 0 0 1-2 2h-1.5"></path></g></svg>
+  )
+}
+
+function TablerSortDescendingLetters(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 21v-5c0-1.38.62-2 2-2s2 .62 2 2v5m0-3h-4m4-8h-4l4-7h-4M4 15l3 3l3-3M7 6v12"></path></svg>
+  )
+}
+
+function TablerSortDescendingNumbers(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="m4 15l3 3l3-3M7 6v12m10-4a2 2 0 0 1 2 2v3a2 2 0 1 1-4 0v-3a2 2 0 0 1 2-2m-2-9a2 2 0 1 0 4 0a2 2 0 1 0-4 0"></path><path d="M19 5v3a2 2 0 0 1-2 2h-1.5"></path></g></svg>
+  )
+}
+
+function TablerArrowsSort(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m3 9l4-4l4 4M7 5v14m14-4l-4 4l-4-4m4 4V5"></path></svg>
+  )
+}
 
 
 const data = {

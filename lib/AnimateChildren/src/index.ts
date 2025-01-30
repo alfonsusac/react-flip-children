@@ -31,6 +31,7 @@ type SavedChildData = {
   timeout?: NodeJS.Timeout,
   rect?: Pick<DOMRect, "x" | "y">,
   cssAnimationTimes?: AnimationTime[],
+  order?: number
 }
 
 
@@ -77,7 +78,6 @@ export function AnimateChildren(
           x: clientRect.x - parent.rect.x,
           y: clientRect.y - parent.rect.y
         }
-        console.log("saved via getBoundingClientRect")
       } else {
         entry.rect = {
           x: node.offsetLeft,
@@ -142,6 +142,9 @@ export function AnimateChildren(
       }
     )
 
+    let existingElementCount = 0
+    // For stagger: to save the order of the elements in previous order
+
     // Iterate through rendered children to mark deleted elements
     rendered.forEach(
       (child, index) => {
@@ -170,7 +173,10 @@ export function AnimateChildren(
         if (opts.delayDeletion === 0) return
         // If delayDeletion is 0, we don't need to animate deletion.  We can delete it immediately.
 
-        if (keys.has(child.key)) return
+        if (keys.has(child.key)) {
+          entry.order = existingElementCount++
+          return
+        }
         // Filter only the deleted keys
 
         const props = createProp()
@@ -235,7 +241,7 @@ export function AnimateChildren(
     // Therefore, animations are run in the next frame using requestAnimationFrame.
     const animationQueue = new AnimationQueue()
 
-    let animCount = 0
+    // let animCount = 0 // TODO: Might delete later
     // This is to apply staggered animation by apply longer delay multipled by the count
     // Problem: delay is re-added when animations are stacked
     // Solution: check first if there are existing animation
@@ -263,8 +269,6 @@ export function AnimateChildren(
           })
           .filter((a) => {
             if (opts.stagger && a.id.startsWith("__react-flip-children-move-animation")) {
-              // console.log("Found existing animation")
-              // console.log("Start:", a.startTime, "Current:", a.currentTime, "Delay:", a.id.split('+delay=')[1], "Duration:", a.effect?.getComputedTiming().duration)
               const delay = Number(a.id.split('+delay=')[1])
               const currentTime = Number(a.currentTime)
               if (delay > currentTime) {
@@ -272,6 +276,7 @@ export function AnimateChildren(
               }
               hasPrevAnimation = true
               // To prevent adding extra delay for staggered animation.
+              // If there are existing animations, we don't need to add extra delay.
             }
 
             if (isCSSAnimation(a))
@@ -281,6 +286,7 @@ export function AnimateChildren(
 
         const prev = entry.rect
         if (!prev) return // Can't animate if rect is not saved
+        if (opts.duration === 0) return // Can't animate if duration is 0
 
         // const curr = node.getBoundingClientRect()
         let curr: { x: number, y: number }
@@ -300,7 +306,7 @@ export function AnimateChildren(
         const deltaY = prev.y - curr.y
         const deltaX = prev.x - curr.x
         if (!deltaY && !deltaX) return
-        const delay = !hasPrevAnimation ? animCount++ * opts.stagger : 0
+        const delay = !hasPrevAnimation ? (entry.order ?? 0) * opts.stagger : 0
         animationQueue.add({
           node,
           keyframes: [

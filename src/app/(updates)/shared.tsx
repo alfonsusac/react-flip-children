@@ -226,7 +226,8 @@ export function useGenericArrayDemo<T>(
     removeFn,
     reverse,
     moveUp,
-    moveDown
+    moveDown,
+    setArr,
   }
 
 }
