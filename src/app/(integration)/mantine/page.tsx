@@ -324,7 +324,7 @@ function CartItemCard<T>({
       withBorder
       key={item.id}
       style={{ zIndex: item.id }}
-      radius="lg"
+      radius="md"
       shadow="sm"
       className={cn(
         "group relative",
@@ -436,7 +436,7 @@ function MantineText(props: ComponentProps<"svg">) {
 }
 
 
-export function TablerBrandMantine(props: SVGProps<SVGSVGElement>) {
+function TablerBrandMantine(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0"></path><path d="M11 16a4.97 4.97 0 0 0 2-4a5.01 5.01 0 0 0-2-4m3 1h-2m2 6h-2m-2-3h.01"></path></g></svg>
   )
@@ -445,14 +445,14 @@ export function TablerBrandMantine(props: SVGProps<SVGSVGElement>) {
 
 
 
-export function TablerArrowUp(props: SVGProps<SVGSVGElement>) {
+function TablerArrowUp(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14m6-8l-6-6m-6 6l6-6"></path></svg>
   )
 }
 
 
-export function TablerArrowDown(props: SVGProps<SVGSVGElement>) {
+function TablerArrowDown(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14m6-6l-6 6m-6-6l6 6"></path></svg>
   )
@@ -466,7 +466,7 @@ function TablerTrash(props: SVGProps<SVGSVGElement>) {
 }
 
 
-export function TablerSearch(props: SVGProps<SVGSVGElement>) {
+function TablerSearch(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0-14 0m18 11l-6-6"></path></svg>
   )
