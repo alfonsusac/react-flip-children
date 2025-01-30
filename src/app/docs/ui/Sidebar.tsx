@@ -94,9 +94,8 @@ export function Sidebar() {
         "left-0",
         "-bottom-2 rounded-br-xl",
         // "p-8",
-        "shadow-[0_0_40px_0_#223]",
         "transition-all",
-        open ? "left-0" : "-left-80",
+        open ? "left-0 shadow-[0_0_40px_0_#223]" : "-left-80",
         // "pt-12",
         "flex flex-col",
       )}
@@ -134,16 +133,18 @@ export function Sidebar() {
                   "hover:!text-[#88f]",
                   "outline-none",
                   "outline-transparent",
-                  "break-all",
 
                   "hover:bg-[#223]",
                   "rounded-md",
 
                   "relative group",
                   "data-[visible]:!text-[#88f]",
-                  
+
+                  "truncate",
+                  "shrink-0",
+
                   header.level === 2 && "pl-3  py-2 mt-3 !font-medium",
-                  header.level === 3 && "pl-8  py-1 ",
+                  header.level === 3 && "pl-7  py-1 ",
                   header.level === 4 && "pl-12 py-1 text-xs",
                   header.level === 5 && "pl-16 py-1 text-xs",
                 )}>

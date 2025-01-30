@@ -8,6 +8,7 @@ import { cn } from "lazy-cn";
 import { exampleArticles, useArrayArticleDemo, useArrayDemo } from "@/app/(updates)/shared";
 import { AButton, Button } from "./button";
 import { LinkButton } from "@/app/ui/Button";
+import { RootBackground } from "@/app/ui/Background";
 
 export default function ShadCNDemo() {
 
@@ -69,6 +70,8 @@ import { cn } from "lazy-cn";
       "min-h-screen bg-slate-50  text-[#09090b] p-4 *:mx-auto",
       "font-[family-name:var(--inter)]"
     )}>
+      <RootBackground color="#f8fafc" />
+
       <header className="pt-4 md:pt-8 mb-8 md:mb-20 relative max-w-[38rem]">
 
         <LinkButton

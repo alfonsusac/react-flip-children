@@ -14,7 +14,7 @@ export function MagicCode(
     stagger?: number
   }
 ) {
-  const code = props.code?.trim() ?? ""
+  const code = `${props.code?.trim() ?? ""}`
 
   const [tokens, setTokens] = useState<(ThemedToken & { id: string })[]>()
 
@@ -36,7 +36,7 @@ export function MagicCode(
         )}
       />
     )
-  ) ?? <span className="opacity-0">code</span>
+  ) ?? <span>code</span>
 
   useEffect(() => {
     (async () => {
@@ -64,6 +64,8 @@ export function MagicCode(
     })()
 
   }, [code, props.theme])
+
+  // return rendered
 
   return <AnimateChildren
     useAbsolutePositionOnDeletedElements

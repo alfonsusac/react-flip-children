@@ -11,6 +11,7 @@ import { Card, CardBody, CardFooter, HeroUIProvider, Image } from "@heroui/react
 import { MagicCode } from "@/app/(updates)/code"
 import { Fira_Code, Space_Grotesk, Space_Mono } from "next/font/google"
 import { AButton } from "../shadcn-ui/button"
+import { RootBackground } from "@/app/ui/Background"
 
 const fira = Fira_Code({
   subsets: ["latin"],
@@ -191,6 +192,7 @@ export default function HeroUIDemo() {
         "heroui-bg",
         "selection:bg-white/10"
       )}>
+        <RootBackground color="black" />
 
 
         <header className="max-w-[38rem] pt-4 md:pt-8 mb-8 md:mb-20 relative">

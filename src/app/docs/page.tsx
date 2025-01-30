@@ -303,7 +303,7 @@ const Card = forwardRef((props, ref) => {
               <LinkButton href="/">Simple Demo {'->'}</LinkButton>
             </li>
             <li>
-              <LinkButton href="/test">Playground  {'->'}</LinkButton>
+              <LinkButton href="/playground">Playground  {'->'}</LinkButton>
             </li>
             <li>
               <LinkButton href="/test-stress">Stress Test  {'->'}</LinkButton>
@@ -399,7 +399,7 @@ const Card = forwardRef((props, ref) => {
 
           <H3 id="shadcn-ui">shadcn/ui</H3>
           <p>
-            shadcn/ui is a popular React component library that provides a set of components and utilities for building user interfaces. React Flip Children can be integrated with shadcn/ui with minimal effort.
+            React Flip Children can be integrated with shadcn/ui with minimal effort.
           </p>
           <LinkButton href="/shadcn-ui" className="inline-block">
             shadcn/ui Integration Guide {'->'}
@@ -409,11 +409,18 @@ const Card = forwardRef((props, ref) => {
 
           <H3 id="heroui">HeroUI</H3>
           <p>
-            HeroUI is a popular React component library that provides a set of components and utilities for building user interfaces. React Flip Children can be integrated with HeroUI with minimal effort.
+            React Flip Children can be integrated with HeroUI with minimal effort.
           </p>
           <LinkButton href="/heroui" className="inline-block">
-            heroUI Integration Guide {'->'}
+            HeroUI Integration Guide {'->'}
           </LinkButton>
+
+          
+          
+          <H3 id="tailwind">Mantine</H3>
+          
+
+
 
 
 
@@ -448,14 +455,14 @@ const Card = forwardRef((props, ref) => {
             The children to animate. This can be any valid <code style={{ color: '#5DE4C7' }}>ReactNode</code>, but only valid children will be animated. Others may be rendered but not animated, or omitted entirely.
           </p>
 
-          <h5>Omitted Nodes</h5>
+          <h5 id="omitted-nodes">Omitted Nodes</h5>
           <p>
             <code style={{ color: '#A6ACCD' }}>null</code>
             , <code style={{ color: '#A6ACCD' }}>undefined</code>
             , and <code style={{ color: '#A6ACCD' }} >boolean</code> values will be omitted.
           </p>
 
-          <h5>Rendered but Not Animated</h5>
+          <h5 id="not-animated">Rendered but Not Animated</h5>
           <p>
             <code style={{ color: '#A6ACCD' }}>string</code>
             , <code style={{ color: '#A6ACCD' }}>number</code>
@@ -463,7 +470,7 @@ const Card = forwardRef((props, ref) => {
             , <code style={{ color: '#A6ACCD' }}>ReactPortal</code>, and invalid Elements will be rendered but not animated.
           </p>
 
-          <h5>Animatable Elements</h5>
+          <h5 id="animatable-elements">Animatable Elements</h5>
           <p>
             Only <code style={{ color: '#A6ACCD' }}>ReactElement</code> that are able to receives a ref and have implemented specific methods and properties will be animated. The required ref properties are:
           </p>
@@ -510,7 +517,7 @@ const Card = forwardRef((props, ref) => {
 
 
 
-          <H3 id="prop-duration" data-code-heading>
+          <H3 id="prop-normalize-keys" data-code-heading>
             <code>
               <span style={{ color: '#E4F0FB' }}>normalizeKeys</span>
               <span style={{ color: '#ACD7FF' }}>?:</span>
@@ -610,6 +617,9 @@ const Card = forwardRef((props, ref) => {
           <LinkButton href="/docs#" className="inline-block mt-40">
             Back to top ↑
           </LinkButton>
+          <LinkButton href="" className="inline-block mt-40 ml-2">
+            ⭐️ Star on GitHub →
+          </LinkButton>
 
 
           <Footer />
@@ -649,6 +659,7 @@ function LinkButton(
   { className, ...props }: ComponentProps<"a">
 ) {
   return <a {...props} className={cn(
+    `inline-block`,
     `bg-[#181820] border border-[#445] p-2 px-3 leading-none rounded-lg`,
     `[@media(pointer:fine)]:hover:bg-[#223]`,
     `text-xs font-medium`,

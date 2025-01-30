@@ -54,10 +54,12 @@ export function useArrayDemo() {
 
 
 
-export function useArrayArticleDemo() {
-  const lastIdRef = useRef(10)
+export function useArrayArticleDemo(
+  initCount: number = 10
+) {
+  const lastIdRef = useRef(initCount)
 
-  const [arr, setArr] = useState([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  const [arr, setArr] = useState([...Array(initCount)].map((_, i) => i))
 
 
   const shuffle = () => setArr(prev => prev.toSorted(() => Math.random() - 0.5))
@@ -101,7 +103,7 @@ export function useArrayArticleDemo() {
     remove,
     removeFn,
     reverse,
-    moveUp, 
+    moveUp,
     moveDown
   }
 
@@ -173,3 +175,58 @@ export const exampleArticles: {
       author: "Fuma"
     },
   ]
+
+
+export function useGenericArrayDemo<T>(
+  source: T[],
+  initCount: number = 10
+) {
+  const lastIdRef = useRef(initCount)
+  const [arr, setArr] = useState([...Array(initCount)].map((_, i) => i))
+
+  const shuffle = () => setArr(prev => prev.toSorted(() => Math.random() - 0.5))
+  const add = () => {
+    const newArr = [...arr]
+    newArr.splice(Math.floor(Math.random() * arr.length), 0, ++lastIdRef.current)
+    setArr(newArr)
+  }
+  const remove = (key: number) => setArr(prev => prev.filter(e => e !== key))
+  const removeFn = (key: number) => () => remove(key)
+
+  const reverse = () => setArr(prev => prev.toReversed())
+
+  const moveUp = (key: number) => {
+    const index = arr.indexOf(key)
+    if (index === 0) return
+    const newArr = [...arr]
+    newArr[index] = arr[index - 1]
+    newArr[index - 1] = key
+    setArr(newArr)
+  }
+
+  const moveDown = (key: number) => {
+    const index = arr.indexOf(key)
+    if (index === arr.length - 1) return
+    const newArr = [...arr]
+    newArr[index] = arr[index + 1]
+    newArr[index + 1] = key
+    setArr(newArr)
+  }
+
+  return {
+    arr: arr.map(i => {
+      return {
+        ...source[i % source.length],
+        id: i,
+      }
+    }),
+    shuffle,
+    add,
+    remove,
+    removeFn,
+    reverse,
+    moveUp,
+    moveDown
+  }
+
+}

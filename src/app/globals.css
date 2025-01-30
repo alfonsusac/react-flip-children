@@ -174,3 +174,7 @@ a {
   box-shadow: inset 1px 1px 1px 0 #fff2, 1px 1px 1px 0 #000;
   /* border: 1px solid rgba(255, 255, 255, 0.1); */
 }
+
+.anchor-none {
+  overflow-anchor: none;
+}
