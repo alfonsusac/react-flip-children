@@ -298,7 +298,7 @@ const Card = forwardRef((props, ref) => {
 
 
           <H3 id="demo">Demo</H3>
-          <ul>
+          <ul >
             <li>
               <LinkButton href="/">Simple Demo {'->'}</LinkButton>
             </li>
@@ -308,8 +308,16 @@ const Card = forwardRef((props, ref) => {
             <li>
               <LinkButton href="/test-stress">Stress Test  {'->'}</LinkButton>
             </li>
+            <li>
+              <LinkButton href="/shadcn-ui">With Shadcn  {'->'}</LinkButton>
+            </li>
+            <li>
+              <LinkButton href="/heroui">With HeroUI  {'->'}</LinkButton>
+            </li>
+            <li>
+              <LinkButton href="/mantine">With Mantine  {'->'}</LinkButton>
+            </li>
           </ul>
-
 
 
           <H3 id="compatibility">Compatibility</H3>
@@ -417,8 +425,13 @@ const Card = forwardRef((props, ref) => {
 
           
           
-          <H3 id="tailwind">Mantine</H3>
-          
+          <H3 id="mantine">Mantine</H3>
+          <p>
+            React Flip Children can be integrated with Mantine with minimal effort.
+          </p>
+          <LinkButton href="/mantine" className="inline-block">
+            Mantine Integration Guide {'->'}
+          </LinkButton>
 
 
 

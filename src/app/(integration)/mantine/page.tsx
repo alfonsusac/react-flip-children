@@ -431,7 +431,7 @@ function HeaderContent() {
   return (
     <>
       <LinkButton
-        href="/docs#heroui"
+        href="/docs#mantine"
         className="bg-[#fff] border-[#ddd] text-[#777] hover:bg-[#eee] inline-block mb-2 md:mb-12"
       >{'<-'} Back to Docs</LinkButton><br />
 
