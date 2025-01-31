@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, memo, PureComponent, useEffect, useRef, useState, type ChangeEvent, type ComponentProps, type MouseEvent, type SVGProps } from "react"
+import { Fragment, memo, PureComponent, useEffect, useLayoutEffect, useRef, useState, type ChangeEvent, type ComponentProps, type MouseEvent, type SVGProps } from "react"
 import { AnimateChild } from "../ui/Reorder2"
 import { cn } from "lazy-cn"
 import { ReorderArray } from "../ui/Reorder"
@@ -146,8 +146,14 @@ export function ClientTestPage() {
               <label>px</label>
             </InputGroup>
             <ButtonGroup>
-              <Button data-selected={match("separator", false)} onClick={change("separator")(false)}>None</Button>
-              <Button data-selected={match("separator", true)} onClick={change("separator")(true)}>With Separator</Button>
+              <Button data-selected={match("separator", false)} onClick={() => {
+                change("separator")(false)()
+                change("normalizeKeys")(false)()
+              }}>None</Button>
+              <Button data-selected={match("separator", true)} onClick={() => {
+                change("separator")(true)
+                change("normalizeKeys")(true)()
+              }}>With Separator</Button>
             </ButtonGroup>
           </div>
         </SettingGroup>
@@ -155,7 +161,7 @@ export function ClientTestPage() {
         <SettingGroup label="Animator">
           <div className="flex gap-2 flex-wrap">
             <ButtonGroup>
-              <Button data-selected={match("reorderer", "4")} onClick={change("reorderer")("4")}>V0.4</Button>
+              <Button data-selected={match("reorderer", "4")} onClick={change("reorderer")("4")}>Latest</Button>
               <Button data-selected={match("reorderer", "3")} onClick={change("reorderer")("3")}>V0.3</Button>
               <Button data-selected={match("reorderer", "2")} onClick={change("reorderer")("2")}>V0.2</Button>
               <Button data-selected={match("reorderer", "1")} onClick={change("reorderer")("1")}>V0.1</Button>
@@ -229,6 +235,28 @@ export function ClientTestPage() {
                 </InputGroup>
               </>
             )}
+            {settings.reorderer === "4" && (
+              <>
+                <ButtonGroup>
+                  <Button data-selected={settings.normalizeKeys} onClick={change("normalizeKeys")(!settings.normalizeKeys)}>Normalize Keys</Button>
+                  <Button data-selected={settings.useAbsolutePositionOnDeletedElements} onClick={change("useAbsolutePositionOnDeletedElements")(!settings.useAbsolutePositionOnDeletedElements)}>Use Absolute Position On Deleted Elements</Button>
+                </ButtonGroup>
+                <InputGroup>
+                  <Label>Deletion Delay</Label>
+                  <input type="number" step={0.1} min={0} value={settings.delayDeletion ?? ""} onChange={changeWithNumber("delayDeletion")} />
+                  <label>ms</label>
+                </InputGroup>
+                <InputGroup>
+                  <Label>Stagger</Label>
+                  <input type="number" step={0.1} min={0} value={settings.stagger ?? ""} onChange={changeWithNumber("stagger")} />
+                  <label>ms</label>
+                </InputGroup>
+                <ButtonGroup>
+                  <Button data-selected={match("snapshotStrategy", "offset")} onClick={change("snapshotStrategy")("offset")}>Use Offset</Button>
+                  <Button data-selected={match("snapshotStrategy", "getBoundingClientRect")} onClick={change("snapshotStrategy")("getBoundingClientRect")}>Use getBoundingClientRect</Button>
+                </ButtonGroup>
+              </>
+            )}
           </div>
         </SettingGroup>
 
@@ -263,14 +291,30 @@ export function ClientTestPage() {
         {settings.reorderer === "4" && (
           <div {...parentProps}>
             {settings.separator ? (
-              <AnimateChildren>
+              <AnimateChildren
+                normalizeKeys={settings.normalizeKeys}
+                useAbsolutePositionOnDeletedElements={settings.useAbsolutePositionOnDeletedElements}
+                delayDeletion={settings.delayDeletion}
+                stagger={settings.stagger}
+                snapshotStrategy={settings.snapshotStrategy}
+                easing={easing}
+                duration={settings.duration}
+              >
                 {firstFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
                 <Separator />
                 {restOfFive.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
                 <KeylessAnimateChildDiv />
               </AnimateChildren>
             ) : (
-              <AnimateChildren>
+              <AnimateChildren
+                normalizeKeys={settings.normalizeKeys}
+                useAbsolutePositionOnDeletedElements={settings.useAbsolutePositionOnDeletedElements}
+                delayDeletion={settings.delayDeletion}
+                stagger={settings.stagger}
+                snapshotStrategy={settings.snapshotStrategy}
+                easing={easing}
+                duration={settings.duration}
+              >
                 {childrenProps.map(({ key, ...props }) => <AnimateChildDiv {...props} key={key} />)}
                 <KeylessAnimateChildDiv />
               </AnimateChildren>
@@ -550,17 +594,22 @@ function useSettings() {
     control: boolean,
     animation: "none" | "appear" | "bounce",
     separator: boolean,
+    normalizeKeys: boolean,
+    delayDeletion: number,
+    useAbsolutePositionOnDeletedElements: boolean,
+    stagger: number,
+    snapshotStrategy: "offset" | "getBoundingClientRect",
   } = {
-    initialLength: 20,
+    initialLength: 100,
     flexDir: "row",
     justify: "start",
     items: "start",
-    width: 5,
-    height: 2,
+    width: 8,
+    height: 3,
     grow: false,
     duration: 500,
     reorderer: "4",
-    gap: 8,
+    gap: 4,
     stiffness: 200,
     damping: 26,
     rftStagger: "none",
@@ -577,6 +626,11 @@ function useSettings() {
     control: true,
     animation: "none",
     separator: true,
+    normalizeKeys: true,
+    delayDeletion: 500,
+    useAbsolutePositionOnDeletedElements: false,
+    stagger: 0,
+    snapshotStrategy: "offset",
   }
 
   const readonlysp = useSearchParams()
@@ -647,18 +701,53 @@ function SettingGroup(
   }
 ) {
   const [opened, setOpened] = useState(true)
+  const firstRef = useRef<boolean>(true)
+
+  const contentRef = useRef<HTMLDivElement>(null)
+  const parentRef = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    if (!contentRef.current) return
+    if (opened) {
+      contentRef.current.style.height = `auto`
+      if (!firstRef.current) {
+        const anim = contentRef.current.animate([
+          { height: 0 },
+          { height: `${ contentRef.current.scrollHeight }px` },
+        ], {
+          duration: contentRef.current.scrollHeight * 4,
+          easing: "ease-in-out",
+        })
+        anim.onfinish = () => anim.cancel()
+      }
+    }
+    if (!opened) {
+      contentRef.current.style.height = `0px`
+      if (!firstRef.current) {
+        const anim = contentRef.current.animate([
+          { height: `${ contentRef.current.scrollHeight }px` },
+          { height: 0 },
+        ], {
+          duration: contentRef.current.scrollHeight * 4,
+          easing: "ease-in-out",
+        })
+        anim.onfinish = () => anim.cancel()
+      }
+    }
+    firstRef.current = false
+  }, [opened])
+
+
   return (
-    <div className="flex flex-col gap-1">
-      <div onClick={() => setOpened(!opened)} className="self-start text-[0.6rem] font-bold uppercase text-slate-500 cursor-pointer hover:text-slate-800 select-none">
+    <div className="flex flex-col gap-1" ref={parentRef}>
+      <div onClick={() => {
+        setOpened(!opened)
+      }} className="self-start text-[0.6rem] font-bold uppercase text-slate-500 cursor-pointer hover:text-slate-800 select-none">
         <MynauiChevronRightSolid className="inline text-[1.3em] data-[opened]:rotate-90 align-[-2.5px]" data-opened={opened ? "" : undefined} /> {label}
       </div>
-      {
-        opened && (
-          <div>
-            {props.children}
-          </div>
-        )
-      }
+      <div ref={contentRef} className='overflow-hidden'>
+        {props.children}
+      </div>
     </div>
   )
 }

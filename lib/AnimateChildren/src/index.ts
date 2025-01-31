@@ -57,7 +57,6 @@ export function AnimateChildren(
     delayDeletion: props.delayDeletion ?? 500,
     useAbsolutePositionOnDeletedElements: props.useAbsolutePositionOnDeletedElements ?? false,
     stagger: props.stagger ?? 0,
-    // snapshotStrategy: props.snapshotStrategy ?? "offset"
     snapshotStrategy: props.snapshotStrategy ?? "offset"
   }
 
@@ -66,29 +65,29 @@ export function AnimateChildren(
   const [rendered, setRendered] = useState<ValidNode[]>([])
   const data = useRefMap<SavedChildData>(() => ({ ref: createRef() }))
 
-  const fn = useRefObject({
-    saveChildRectAndAnimation: (entry: SavedChildData) => {
-      const node = entry.ref.current
-      if (!node) return
-      // entry.rect = node.getBoundingClientRect()
+  function saveChildRectAndAnimation(entry: SavedChildData) {
+    const node = entry.ref.current
+    if (!node) return
+    // entry.rect = node.getBoundingClientRect()
 
-      if (opts.snapshotStrategy === "getBoundingClientRect" && parent.rect) {
-        const clientRect = node.getBoundingClientRect()
-        entry.rect = {
-          x: clientRect.x - parent.rect.x,
-          y: clientRect.y - parent.rect.y
-        }
-      } else {
-        entry.rect = {
-          x: node.offsetLeft,
-          y: node.offsetTop
-        }
+    if (opts.snapshotStrategy === "getBoundingClientRect" && parent.rect) {
+      console.log("using getBoundingClientRect")
+      const clientRect = node.getBoundingClientRect()
+      entry.rect = {
+        x: clientRect.x - parent.rect.x,
+        y: clientRect.y - parent.rect.y
       }
+    } else {
+      console.log("using offset")
+      entry.rect = {
+        x: node.offsetLeft,
+        y: node.offsetTop
+      }
+    }
 
-      entry.cssAnimationTimes = node.getAnimations().filter(isCSSAnimation).map(a => a.currentTime)
-      // Only save CSSAnimation times because CSSTransition can't be persisted
-    },
-  })
+    entry.cssAnimationTimes = node.getAnimations().filter(isCSSAnimation).map(a => a.currentTime)
+    // Only save CSSAnimation times because CSSTransition can't be persisted
+  }
 
   const parent = useParent()
 
@@ -145,6 +144,9 @@ export function AnimateChildren(
     let existingElementCount = 0
     // For stagger: to save the order of the elements in previous order
 
+    let tempParent: AnimatableElement | undefined
+    // Temporarily store parent in this cycle to save the parent node and rect only once
+
     // Iterate through rendered children to mark deleted elements
     rendered.forEach(
       (child, index) => {
@@ -155,16 +157,20 @@ export function AnimateChildren(
         if (!entry?.ref.current) return
         const node = entry.ref.current
 
-        parent.node ??= (() => {
-          const tempparent = node.parentElement ?? parent.node
-          if (tempparent) {
-            parent.saveNode(tempparent)
+        //╭───────────────────╮
+        //│ Parent Animation  │
+        //╰───────────────────╯
+        tempParent ??= (() => {
+          const newParent = node.parentElement ?? parent.node
+          if (newParent) {
+            parent.saveNode(newParent)
+            parent.saveRect()
           }
-          return tempparent
+          return newParent
         })()
         // Cache parent node
 
-        fn.saveChildRectAndAnimation(entry)
+        saveChildRectAndAnimation(entry)
         // Save the rect data and css animationTimes of the current node
 
         //╭───────────────────╮
@@ -201,7 +207,7 @@ export function AnimateChildren(
           // If timeout is already cleared, do not proceed with deletion. This will fuck up the stability of the elements.
 
           // Save the rect and animation and everything else again here.
-          data.forEach(fn.saveChildRectAndAnimation)
+          data.forEach(saveChildRectAndAnimation)
           parent.saveRect()
 
           setRendered(prev => filterNodeByKey(prev, child.key))
@@ -218,10 +224,7 @@ export function AnimateChildren(
 
     setRendered(newRender)
 
-    //╭───────────────────╮
-    //│ Parent Animation  │
-    //╰───────────────────╯
-    parent.saveRect()
+
 
     // Why missing dependencies like "data", "parent", and "rendered" are ignored:
     //   "parent" is using useRef therefore its not reactive
@@ -263,10 +266,6 @@ export function AnimateChildren(
         // Reconcile the css animation times of the current node
         //   We assumed that the css animation times are in the same order before and after setRendered. (before and after reflow)
         node.getAnimations()
-          .map(a => {
-
-            return a
-          })
           .filter((a) => {
             if (opts.stagger && a.id.startsWith("__react-flip-children-move-animation")) {
               const delay = Number(a.id.split('+delay=')[1])
@@ -291,12 +290,14 @@ export function AnimateChildren(
         // const curr = node.getBoundingClientRect()
         let curr: { x: number, y: number }
         if (opts.snapshotStrategy === "getBoundingClientRect" && parent.rect) {
+          console.log("using getBoundingClientRect")
           const clientRect = node.getBoundingClientRect()
           curr = {
             x: clientRect.x - parent.rect.x,
             y: clientRect.y - parent.rect.y,
           }
         } else {
+          console.log("using offset")
           curr = {
             x: node.offsetLeft,
             y: node.offsetTop
