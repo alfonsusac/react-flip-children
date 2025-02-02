@@ -28,8 +28,8 @@ type ValidNode =
 
 type SavedChildData = {
   ref: RefObject<AnimatableElement | null>,
-  timeout?: NodeJS.Timeout,
-  rect?: Pick<DOMRect, "x" | "y">,
+  deleting?: boolean,
+  rect?: Pick<DOMRect, "x" | "y" | "width" | "height">,
   cssAnimationTimes?: AnimationTime[],
   order?: number
 }
@@ -47,7 +47,8 @@ export function AnimateChildren(
     delayDeletion?: number
     useAbsolutePositionOnDeletedElements?: boolean
     stagger?: number
-    snapshotStrategy?: "getBoundingClientRect" | "offset"
+    strategy?: "interrupt" | "continuous" | "reset"
+    disableAnimationReconciliation?: boolean
   }
 ) {
   const opts = {
@@ -57,7 +58,8 @@ export function AnimateChildren(
     delayDeletion: props.delayDeletion ?? 500,
     useAbsolutePositionOnDeletedElements: props.useAbsolutePositionOnDeletedElements ?? false,
     stagger: props.stagger ?? 0,
-    snapshotStrategy: props.snapshotStrategy ?? "offset"
+    strategy: props.strategy ?? "continuous",
+    disableAnimationReconciliation: props.disableAnimationReconciliation ?? false,
   }
 
 
@@ -68,22 +70,25 @@ export function AnimateChildren(
   function saveChildRectAndAnimation(entry: SavedChildData) {
     const node = entry.ref.current
     if (!node) return
-    // entry.rect = node.getBoundingClientRect()
 
-    if (opts.snapshotStrategy === "getBoundingClientRect" && parent.rect) {
-      console.log("using getBoundingClientRect")
-      const clientRect = node.getBoundingClientRect()
+    if (opts.strategy === "interrupt" && parent.rect) {
+      const rect = node.getBoundingClientRect()
       entry.rect = {
-        x: clientRect.x - parent.rect.x,
-        y: clientRect.y - parent.rect.y
+        x: rect.x - parent.rect.x,
+        y: rect.y - parent.rect.y,
+        width: rect.width,
+        height: rect.height,
       }
     } else {
-      console.log("using offset")
       entry.rect = {
         x: node.offsetLeft,
-        y: node.offsetTop
+        y: node.offsetTop,
+        width: (node as HTMLDivElement).offsetWidth,
+        height: (node as HTMLDivElement).offsetHeight,
       }
     }
+
+
 
     entry.cssAnimationTimes = node.getAnimations().filter(isCSSAnimation).map(a => a.currentTime)
     // Only save CSSAnimation times because CSSTransition can't be persisted
@@ -91,16 +96,19 @@ export function AnimateChildren(
 
   const parent = useParent()
 
-
   useEffect(() => {   // On incoming children change
     const keys = new Set<string>()
     // Track keys to prevent duplicates
+
+    // console.time("cloning")
 
     const mapFn = opts.normalizeKeys
       ? flatMapPreserveKey<ValidNode>
       : flatMap<ValidNode>
 
     let keylessCount = 0
+
+    const deletingKeys: string[] = []
 
 
     // Flat iterate through every children to process incoming new elements
@@ -120,10 +128,11 @@ export function AnimateChildren(
         //╭───────────────────╮
         //│ Delete Animation  │
         //╰───────────────────╯
-        entry.ref.current?.removeAttribute("data-deleting")
-        // Remove 'data-deleting' attribute if present to trigger un-delete transition
-        clearTimeout(entry.timeout)
-        delete entry.timeout
+        if (entry.deleting) {
+          entry.ref.current?.removeAttribute("data-deleting")
+          // Remove 'data-deleting' attribute if present to trigger un-delete transition
+          delete entry.deleting
+        }
         // Clear existing timeout to prevent existing timeout to trigger deletion
         // ────────────────────
 
@@ -199,30 +208,52 @@ export function AnimateChildren(
         newRender.splice(index, 0, clone(child, props))
         // Re-add the deleted elements back in the children with "data-deleting" props.
 
-        if (entry.timeout) return
+        if (entry.deleting) return
         // Schedule deletion ideally after animation completes but ONLY if existing timeout hadn't been run yet
 
-        entry.timeout = setTimeout(() => {
-          if (!entry.timeout) return
-          // If timeout is already cleared, do not proceed with deletion. This will fuck up the stability of the elements.
+        deletingKeys.push(child.key)
+        entry.deleting = true
 
-          // Save the rect and animation and everything else again here.
-          data.forEach(saveChildRectAndAnimation)
-          parent.saveRect()
+        // entry.timeout = setTimeout(() => {
+        //   if (!entry.timeout) return
+        //   // If timeout is already cleared, do not proceed with deletion. This will fuck up the stability of the elements.
 
-          setRendered(prev => filterNodeByKey(prev, child.key))
-          // Trigger re-render so that useLayoutEffect can run again
+        //   // Save the rect and animation and everything else again here.
+        //   data.forEach(saveChildRectAndAnimation)
+        //   parent.saveRect()
 
-          data.delete(child.key)
-          // Delete the entry
 
-        }, opts.delayDeletion)
+        //   setRendered(prev => filterNodeByKey(prev, child.key))
+        //   // Trigger re-render so that useLayoutEffect can run again
+        //   // NB: Performance Hog. is there a way to debounce this?
+
+        //   data.delete(child.key)
+        //   // Delete the entry
+
+        // }, opts.delayDeletion)
         // ────────────────────
 
       }
     )
 
     setRendered(newRender)
+
+
+    // Timeout for deletion are queued here
+    setTimeout(() => {
+      data.forEach(saveChildRectAndAnimation)
+      parent.saveRect()
+
+      deletingKeys.forEach(i => {
+        if (!data.get(i)?.deleting) return
+        setRendered(prev => filterNodeByKey(prev, i))
+        data.delete(i)
+      })
+
+    }, opts.delayDeletion)
+
+
+    // console.timeEnd("cloning")
 
 
 
@@ -239,12 +270,12 @@ export function AnimateChildren(
   // On rendered change before repaint
   useLayoutEffect(() => {
 
+    // console.time("getting animation queue")
     // Animations are collected in a queue because we need useLayoutEffect to run as fast as possible.
     // We can run the animation here but it would cause a lot of lag.
     // Therefore, animations are run in the next frame using requestAnimationFrame.
     const animationQueue = new AnimationQueue()
 
-    // let animCount = 0 // TODO: Might delete later
     // This is to apply staggered animation by apply longer delay multipled by the count
     // Problem: delay is re-added when animations are stacked
     // Solution: check first if there are existing animation
@@ -263,10 +294,18 @@ export function AnimateChildren(
         let hasPrevAnimation = false
         // To prevent adding extra delay for staggered animation.
 
+
         // Reconcile the css animation times of the current node
         //   We assumed that the css animation times are in the same order before and after setRendered. (before and after reflow)
-        node.getAnimations()
+        //   NB: Major Performance Hit
+        const animations = node.getAnimations()
+        // console.log(animations)
+        animations
           .filter((a) => {
+            if (opts.strategy === "interrupt" && a.id.startsWith("__react-flip-children-move-animation")) {
+              a.cancel()
+              return false
+            }
             if (opts.stagger && a.id.startsWith("__react-flip-children-move-animation")) {
               const delay = Number(a.id.split('+delay=')[1])
               const currentTime = Number(a.currentTime)
@@ -274,8 +313,6 @@ export function AnimateChildren(
                 a.currentTime = delay
               }
               hasPrevAnimation = true
-              // To prevent adding extra delay for staggered animation.
-              // If there are existing animations, we don't need to add extra delay.
             }
 
             if (isCSSAnimation(a))
@@ -283,49 +320,62 @@ export function AnimateChildren(
           })
           .forEach((animation, index) => animation.currentTime = entry.cssAnimationTimes?.[index] ?? 0)
 
-        const prev = entry.rect
+        let prev = entry.rect
         if (!prev) return // Can't animate if rect is not saved
         if (opts.duration === 0) return // Can't animate if duration is 0
 
-        // const curr = node.getBoundingClientRect()
-        let curr: { x: number, y: number }
-        if (opts.snapshotStrategy === "getBoundingClientRect" && parent.rect) {
-          console.log("using getBoundingClientRect")
-          const clientRect = node.getBoundingClientRect()
+        let curr: SavedChildData['rect']
+
+        if (opts.strategy === "interrupt" && parent.rect) {
+          const rect = node.getBoundingClientRect()
           curr = {
-            x: clientRect.x - parent.rect.x,
-            y: clientRect.y - parent.rect.y,
+            x: rect.x - parent.rect.x,
+            y: rect.y - parent.rect.y,
+            width: rect.width,
+            height: rect.height,
           }
         } else {
-          console.log("using offset")
           curr = {
             x: node.offsetLeft,
-            y: node.offsetTop
+            y: node.offsetTop,
+            width: (node as HTMLDivElement).offsetWidth,
+            height: (node as HTMLDivElement).offsetHeight,
           }
         }
 
         const deltaY = prev.y - curr.y
         const deltaX = prev.x - curr.x
+        const deltaWidth = prev.width - curr.width
+        const deltaHeight = prev.height - curr.height
         if (!deltaY && !deltaX) return
         const delay = !hasPrevAnimation ? (entry.order ?? 0) * opts.stagger : 0
+
         animationQueue.add({
           node,
           keyframes: [
-            { translate: `${ deltaX }px ${ deltaY }px` },
-            { translate: `0px 0px` }
+            {
+              translate: `${ deltaX + (deltaWidth / 2) }px ${ deltaY + (deltaHeight / 2) }px`,
+              scale: `${ prev.width / curr.width } ${ prev.height / curr.height }`,
+            },
+            {
+              translate: `0px 0px`,
+              scale: `1 1`,
+            }
           ],
           options: {
             duration: opts.duration,
             easing: opts.easing,
             delay: delay,
             fill: "both",
-            composite: "add",
+            composite: opts.strategy === "reset" ? "replace" : "add",
             id: `__react-flip-children-move-animation+delay=${ delay }`
           },
           cancelOnFinish: true
         })
       }
     )
+
+    // console.timeEnd("getting animation queue")
 
     //╭───────────────────╮
     //│ Parent Animation  │
@@ -334,6 +384,7 @@ export function AnimateChildren(
     if (parentAnimation) animationQueue.add(parentAnimation)
 
     requestAnimationFrame(() => {
+      // console.time("animating")
       animationQueue.animate()
       // Animate all the animations in the queue. This includes elements that had moved and parent if they had moved.
 
@@ -342,6 +393,7 @@ export function AnimateChildren(
       //╰───────────────────╯
       data.forEach(entry => entry.ref.current?.removeAttribute("data-adding"))
       // Remove the "data-adding" attribute to trigger the CSS transition
+      // console.timeEnd("animating")
     })
 
 

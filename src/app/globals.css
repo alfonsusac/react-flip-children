@@ -112,10 +112,10 @@ a {
 }
 
 .card {
-  @apply transition-all duration-1000 data-[adding]:bg-green-500 
-  data-[deleting]:bg-red-500 will-change-transform transform-gpu
-  w-[var(--width)] h-[var(--height)] text-xs tracking-tighter border 
-   rounded-md font-mono 
+  /* clip-path: inset(0 round 4px); */
+  @apply transition-all duration-1000 will-change-transform transform-gpu
+  w-[var(--width)] h-[var(--height)] text-xs tracking-tighter border
+   font-mono 
   flex items-center justify-center cursor-pointer
   hover:bg-slate-50 bg-white;
 }
