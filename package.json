@@ -34,6 +34,7 @@
     "next": "15.1.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-easy-flip": "^4.0.3",
     "react-flip-toolkit": "^7.2.4",
     "react-is": "^19.0.0",
     "react-magic-motion": "^1.1.2",

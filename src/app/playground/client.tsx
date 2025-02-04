@@ -13,6 +13,8 @@ import { AnimatePresence, MagicMotion } from "react-magic-motion"
 import { AnimateChild2 } from "../ui/Reorder3"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import { motion } from "motion/react"
+import { FlipProvider, useFlip } from "react-easy-flip"
+import { getReactEasyFlipEasing } from "./react-easy-flip"
 
 
 export function ClientTestPage() {
@@ -72,16 +74,15 @@ export function ClientTestPage() {
     style: {
       gap: `${ settings.gap }px`,
       flexDirection: settings.flexDir,
-      width: settings.flexDir === "column" ? undefined : undefined,
       justifyContent: settings.justify,
       "--width": `${ settings.width }rem`,
       "--height": `${ settings.height }rem`,
     },
     className: cn(
-      `p-4 overflow-y-visible overflow-x-clip flex flex-wrap gap-2 transition-all `,
-      {
-        "overflow-x-auto": settings.flexDir === "column",
-      },
+      `p-4 overflow-hidden flex flex-wrap gap-2 transition-all `,
+      // {
+      //   "overflow-x-auto": settings.flexDir === "column",
+      // },
       {
         "bg-slate-100": settings.background,
         "shadow-sm": settings.background,
@@ -97,6 +98,8 @@ export function ClientTestPage() {
         "data-[deleting]:*:scale-0": settings.entryExitAnimation === "scale",
         "data-[adding]:*:scale-0": settings.entryExitAnimation === "scale",
         "*:rounded-md": settings.rounded,
+        "h-full": settings.flexDir === "column",
+        "w-max": settings.flexDir === "column",
       },
     ),
   } as ComponentProps<"div">
@@ -114,6 +117,10 @@ export function ClientTestPage() {
     }
   }, [settings.easing])
 
+  useFlip("flip-root", {
+    duration: settings.duration,
+    easing: getReactEasyFlipEasing(settings.easing),
+  })
 
   return (
     <div className="flex flex-col h-screen w-screen bg-slate-200 -mx-8 -my-8">
@@ -178,6 +185,7 @@ export function ClientTestPage() {
             <ButtonGroup>
               <Button data-selected={match("reorderer", "4")} onClick={change("reorderer")("4")}>React FlIP Children</Button>
               <Button data-selected={match("reorderer", "framer")} onClick={change("reorderer")("framer")}>Motion</Button>
+              <Button data-selected={match("reorderer", "react-easy-flip")} onClick={change("reorderer")("react-easy-flip")}>react-easy-flip</Button>
               <Button data-selected={match("reorderer", "3")} onClick={change("reorderer")("3")}>V0.3</Button>
               <Button data-selected={match("reorderer", "2")} onClick={change("reorderer")("2")}>V0.2</Button>
               <Button data-selected={match("reorderer", "1")} onClick={change("reorderer")("1")}>V0.1</Button>
@@ -257,6 +265,9 @@ export function ClientTestPage() {
                 <ButtonGroup>
                   <Button data-selected={settings.normalizeKeys} onClick={change("normalizeKeys")(!settings.normalizeKeys)}>Normalize Keys</Button>
                   <Button data-selected={settings.useAbsolutePositionOnDeletedElements} onClick={change("useAbsolutePositionOnDeletedElements")(!settings.useAbsolutePositionOnDeletedElements)}>Use Absolute Position On Deleted Elements</Button>
+                  <Button data-selected={settings.reconcileCSSAnimation} onClick={change("reconcileCSSAnimation")(!settings.reconcileCSSAnimation)}>Reconcile CSS Animation</Button>
+                  <Button data-selected={settings.scalceAnimation} onClick={change("scalceAnimation")(!settings.scalceAnimation)}>Scale Animation</Button>
+                  <Button data-selected={settings.parentAnimation} onClick={change("parentAnimation")(!settings.parentAnimation)}>Parent Animation</Button>
                 </ButtonGroup>
                 <InputGroup>
                   <Label>Deletion Delay</Label>
@@ -312,9 +323,11 @@ export function ClientTestPage() {
         </SettingGroup>
       </div>
 
+
+
       <div className={cn(
-        "h-0 grow",
-        settings.flexDir === "column" ? "overflow-auto flex" : "overflow-auto"
+        "h-0 grow overflow-auto overflow-x-auto",
+        settings.flexDir === "column" ? "h-full" : ""
       )}>
         {settings.reorderer === "none" && (
           <div {...parentProps}>
@@ -322,6 +335,21 @@ export function ClientTestPage() {
             <KeylessAnimateChildDiv />
           </div>
         )}
+        {settings.reorderer === "react-easy-flip" && (
+          <FlipProvider>
+            <div {...parentProps} data-flip-root-id="flip-root">
+              {childrenProps.map(({ key, ...props }) =>
+                <UnmemoizedAnimateChildDiv
+                  {...props}
+                  key={key}
+                  data-flip-id={"flip-item-"+key}
+                />)}
+              <KeylessAnimateChildDiv />
+            </div>
+          </FlipProvider>
+        )}
+
+
         {settings.reorderer === "framer" && (
           <div {...parentProps}>
             {childrenProps.map(({ key, ...props }) =>
@@ -627,7 +655,7 @@ function useSettings() {
     height: number,
     grow: boolean,
     duration: number,
-    reorderer: "4" | "framer" | "3" | "2" | "1" | "viewtransition" | "react-flip-toolkit" | "auto-animate" | "react-magic-motion" | "none",
+    reorderer: "4" | "framer" | "3" | "2" | "1" | "viewtransition" | "react-flip-toolkit" | "auto-animate" | "react-magic-motion" | "none" | "react-easy-flip",
     gap: number,
     stiffness: number,
     damping: number,
@@ -654,6 +682,9 @@ function useSettings() {
     rounded: boolean,
     color: boolean,
     background: boolean,
+    reconcileCSSAnimation: boolean,
+    scalceAnimation: boolean,
+    parentAnimation: boolean,
   } = {
     initialLength: 100,
     flexDir: "row",
@@ -690,6 +721,9 @@ function useSettings() {
     rounded: true,
     color: true,
     background: true,
+    reconcileCSSAnimation: true,
+    scalceAnimation: true,
+    parentAnimation: true,
   }
 
   const readonlysp = useSearchParams()
@@ -970,7 +1004,7 @@ const AnimateChildDiv = memo(function AnimateChildDiv(
   )
 })
 
-const KeylessAnimateChildDiv = (
+export const KeylessAnimateChildDiv = (
   { className, ...props }: ComponentProps<"div">
 ) => {
   return (
@@ -980,7 +1014,7 @@ const KeylessAnimateChildDiv = (
   )
 }
 
-const UnmemoizedAnimateChildDiv = function UnmemoizedAnimateChildDiv(
+export const UnmemoizedAnimateChildDiv = function UnmemoizedAnimateChildDiv(
   { className, ...props }: ComponentProps<"div">
 ) {
   return (

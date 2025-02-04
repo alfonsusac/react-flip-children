@@ -1,23 +1,46 @@
 "use client"
 
-import { createRef, isValidElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactElement, type ReactNode, type ReactPortal, type Ref, type RefObject } from "react"
-import { flatMap, isPortal, type ReactElementWithKey, cloneWithMergedRef, filterNodeByKey, createProp, clone, type AnimationTime, flatMapPreserveKey } from "./helper"
-
+import {
+  createRef,
+  isValidElement,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactElement,
+  type ReactNode,
+  type ReactPortal,
+  type Ref,
+  type RefObject
+} from "react"
+import {
+  flatMap,
+  isPortal,
+  cloneWithMergedRef,
+  clone,
+  flatMapPreserveKey,
+  type AnimationTime,
+} from "./helper"
 
 //╭─────────────────────────────────────────────────╮
 //│ Types                                           │
 //╰─────────────────────────────────────────────────╯
-type AnimatableElement = Pick<HTMLElement,
-  | "animate"
-  | "getBoundingClientRect"
-  | "getAnimations"
-  | "removeAttribute"
-  | "parentElement"
-  | "offsetTop"
-  | "offsetLeft"
->
+type AnimatableElement =
+  | Pick<HTMLElement,
+    | "animate"
+    | "getBoundingClientRect"
+    | "getAnimations"
+    | "dataset"
+    | "style"
+    | "parentElement"
+    | "offsetTop"
+    | "offsetLeft"
+    | "offsetWidth"
+    | "offsetHeight">
+
 type ProcessedReactElement =
-  | ReactElementWithKey<{ ref: Ref<AnimatableElement> }>
+  | ReactElement<{ ref: Ref<AnimatableElement> }> & { key: string }
 
 type ValidNode =
   | string
@@ -29,9 +52,10 @@ type ValidNode =
 type SavedChildData = {
   ref: RefObject<AnimatableElement | null>,
   deleting?: boolean,
+  adding?: boolean,
   rect?: Pick<DOMRect, "x" | "y" | "width" | "height">,
-  cssAnimationTimes?: AnimationTime[],
-  order?: number
+  cssAnimationTimes: AnimationTime[],
+  order: number
 }
 
 
@@ -49,23 +73,30 @@ export function AnimateChildren(
     stagger?: number
     strategy?: "interrupt" | "continuous" | "reset"
     disableAnimationReconciliation?: boolean
+    disableScaleAnimation?: boolean
+    disableParentAnimation?: boolean
   }
 ) {
   const opts = {
-    easing: props.easing ?? "ease-out",
-    duration: props.duration ?? 500,
-    normalizeKeys: props.normalizeKeys ?? false,
-    delayDeletion: props.delayDeletion ?? 500,
-    useAbsolutePositionOnDeletedElements: props.useAbsolutePositionOnDeletedElements ?? false,
-    stagger: props.stagger ?? 0,
-    strategy: props.strategy ?? "continuous",
-    disableAnimationReconciliation: props.disableAnimationReconciliation ?? false,
+    easing: "ease-in-out",
+    duration: 500,
+    normalizeKeys: false,
+    delayDeletion: 500,
+    useAbsolutePositionOnDeletedElements: false,
+    stagger: 0,
+    strategy: "continuous",
+    disableAnimationReconciliation: false,
+    disableScaleAnimation: false,
+    disableParentAnimation: false,
+    ...props
   }
 
-
-
   const [rendered, setRendered] = useState<ValidNode[]>([])
-  const data = useRefMap<SavedChildData>(() => ({ ref: createRef() }))
+  const data = useRefMap<SavedChildData>(() => ({
+    ref: createRef(),
+    cssAnimationTimes: [],
+    order: 0
+  }))
 
   function saveChildRectAndAnimation(entry: SavedChildData) {
     const node = entry.ref.current
@@ -83,33 +114,31 @@ export function AnimateChildren(
       entry.rect = {
         x: node.offsetLeft,
         y: node.offsetTop,
-        width: (node as HTMLDivElement).offsetWidth,
-        height: (node as HTMLDivElement).offsetHeight,
+        width: node.offsetWidth,
+        height: node.offsetHeight,
       }
     }
 
-
-
-    entry.cssAnimationTimes = node.getAnimations().filter(isCSSAnimation).map(a => a.currentTime)
+    if (opts.disableAnimationReconciliation)
+      return
+    entry.cssAnimationTimes = node.getAnimations()
+      .filter(isCSSAnimation)
+      .map(a => a.currentTime)
     // Only save CSSAnimation times because CSSTransition can't be persisted
   }
 
   const parent = useParent()
 
-  useEffect(() => {   // On incoming children change
+  useEffect(() => { // On incoming children change
     const keys = new Set<string>()
+    let keylessCount = 0
     // Track keys to prevent duplicates
-
-    // console.time("cloning")
 
     const mapFn = opts.normalizeKeys
       ? flatMapPreserveKey<ValidNode>
       : flatMap<ValidNode>
 
-    let keylessCount = 0
-
     const deletingKeys: string[] = []
-
 
     // Flat iterate through every children to process incoming new elements
     const newRender = mapFn(children,
@@ -129,20 +158,19 @@ export function AnimateChildren(
         //│ Delete Animation  │
         //╰───────────────────╯
         if (entry.deleting) {
-          entry.ref.current?.removeAttribute("data-deleting")
-          // Remove 'data-deleting' attribute if present to trigger un-delete transition
           delete entry.deleting
         }
         // Clear existing timeout to prevent existing timeout to trigger deletion
         // ────────────────────
 
-        const modifiedProp = createProp()
-        modifiedProp['key'] = key
-
+        const modifiedProp: Record<string, any> = { key }
         //╭───────────────────╮
         //│ Add Animation     │
         //╰───────────────────╯
-        if (!inPrev) modifiedProp["data-adding"] = ''
+        if (!inPrev) {
+          modifiedProp["data-adding"] = ''
+          entry.adding = true
+        }
         // This will be deleted later after layout paint to trigger CSS transition via attribute change
         // ────────────────────
 
@@ -169,14 +197,7 @@ export function AnimateChildren(
         //╭───────────────────╮
         //│ Parent Animation  │
         //╰───────────────────╯
-        tempParent ??= (() => {
-          const newParent = node.parentElement ?? parent.node
-          if (newParent) {
-            parent.saveNode(newParent)
-            parent.saveRect()
-          }
-          return newParent
-        })()
+        tempParent ??= parent.saveNodeAndRect(node.parentElement)
         // Cache parent node
 
         saveChildRectAndAnimation(entry)
@@ -194,15 +215,14 @@ export function AnimateChildren(
         }
         // Filter only the deleted keys
 
-        const props = createProp()
-        props["data-deleting"] = ""
+        const props: Record<string, any> = { "data-deleting": "" }
 
         if (opts.useAbsolutePositionOnDeletedElements) {
           props.style = {
             position: 'absolute',
             top: node.offsetTop,
             left: node.offsetLeft,
-          } as CSSProperties
+          } satisfies CSSProperties
         }
 
         newRender.splice(index, 0, clone(child, props))
@@ -213,26 +233,7 @@ export function AnimateChildren(
 
         deletingKeys.push(child.key)
         entry.deleting = true
-
-        // entry.timeout = setTimeout(() => {
-        //   if (!entry.timeout) return
-        //   // If timeout is already cleared, do not proceed with deletion. This will fuck up the stability of the elements.
-
-        //   // Save the rect and animation and everything else again here.
-        //   data.forEach(saveChildRectAndAnimation)
-        //   parent.saveRect()
-
-
-        //   setRendered(prev => filterNodeByKey(prev, child.key))
-        //   // Trigger re-render so that useLayoutEffect can run again
-        //   // NB: Performance Hog. is there a way to debounce this?
-
-        //   data.delete(child.key)
-        //   // Delete the entry
-
-        // }, opts.delayDeletion)
         // ────────────────────
-
       }
     )
 
@@ -241,21 +242,27 @@ export function AnimateChildren(
 
     // Timeout for deletion are queued here
     setTimeout(() => {
-      data.forEach(saveChildRectAndAnimation)
-      parent.saveRect()
+      // data.forEach(saveChildRectAndAnimation)
+      // parent.saveRect()
 
-      deletingKeys.forEach(i => {
-        if (!data.get(i)?.deleting) return
-        setRendered(prev => filterNodeByKey(prev, i))
-        data.delete(i)
-      })
-
+      // deletingKeys.forEach(i => {
+      //   if (!data.get(i)?.deleting) return
+      //   setRendered(prev => filterNodeByKey(prev, i))
+      //   data.delete(i)
+      // })
+      tempParent = undefined
+      for (let [key, entry] of data) {
+        if (!entry?.ref.current) return
+        const node = entry.ref.current
+        tempParent ??= parent.saveNodeAndRect(node.parentElement)
+        saveChildRectAndAnimation(entry)
+        if (!entry.deleting) return
+        setRendered(prev => filterNodeByKey(prev, key))
+        data.delete(key);
+      }
     }, opts.delayDeletion)
 
-
     // console.timeEnd("cloning")
-
-
 
     // Why missing dependencies like "data", "parent", and "rendered" are ignored:
     //   "parent" is using useRef therefore its not reactive
@@ -264,7 +271,6 @@ export function AnimateChildren(
     //     We need "rendered" to be a state because we are relying on useLayoutEffect which needs a dependency to run.
     //     We need useLayoutEffect because we need to run some code before layout repaints.
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children])
 
   // On rendered change before repaint
@@ -287,38 +293,42 @@ export function AnimateChildren(
 
         // We can't get the ref from child.props.ref because their ref might be a callback ref.
         const entry = data.get(child.key)
-
         if (!entry?.ref.current) return
         const node = entry.ref.current
 
         let hasPrevAnimation = false
         // To prevent adding extra delay for staggered animation.
 
-
         // Reconcile the css animation times of the current node
         //   We assumed that the css animation times are in the same order before and after setRendered. (before and after reflow)
         //   NB: Major Performance Hit
-        const animations = node.getAnimations()
         // console.log(animations)
-        animations
-          .filter((a) => {
-            if (opts.strategy === "interrupt" && a.id.startsWith("__react-flip-children-move-animation")) {
-              a.cancel()
-              return false
-            }
-            if (opts.stagger && a.id.startsWith("__react-flip-children-move-animation")) {
-              const delay = Number(a.id.split('+delay=')[1])
-              const currentTime = Number(a.currentTime)
-              if (delay > currentTime) {
-                a.currentTime = delay
-              }
-              hasPrevAnimation = true
-            }
 
-            if (isCSSAnimation(a))
-              return true
-          })
-          .forEach((animation, index) => animation.currentTime = entry.cssAnimationTimes?.[index] ?? 0)
+        if (opts.stagger || !opts.disableAnimationReconciliation) {
+          const animations = node.getAnimations()
+          animations
+            .filter((a) => {
+              if (opts.strategy === "interrupt" && a.id.startsWith("__react-flip-children-move-animation")) {
+                a.cancel()
+                return false
+              }
+              if (opts.stagger && a.id.startsWith("__react-flip-children-move-animation")) {
+                const delay = Number(a.id.split('+delay=')[1])
+                const currentTime = Number(a.currentTime)
+                if (delay > currentTime) {
+                  a.currentTime = delay
+                }
+                hasPrevAnimation = true
+              }
+
+              if (isCSSAnimation(a))
+                return true
+            })
+            .forEach(
+              (a, i) => a.currentTime = entry.cssAnimationTimes[i]
+            )
+        }
+
 
         let prev = entry.rect
         if (!prev) return // Can't animate if rect is not saved
@@ -348,19 +358,28 @@ export function AnimateChildren(
         const deltaWidth = prev.width - curr.width
         const deltaHeight = prev.height - curr.height
         if (!deltaY && !deltaX) return
-        const delay = !hasPrevAnimation ? (entry.order ?? 0) * opts.stagger : 0
+        const delay = !hasPrevAnimation
+          ? entry.order * opts.stagger
+          : 0
 
         animationQueue.add({
           node,
           keyframes: [
-            {
-              translate: `${ deltaX + (deltaWidth / 2) }px ${ deltaY + (deltaHeight / 2) }px`,
-              scale: `${ prev.width / curr.width } ${ prev.height / curr.height }`,
-            },
-            {
-              translate: `0px 0px`,
-              scale: `1 1`,
-            }
+            opts.disableScaleAnimation
+              ? {
+                translate: `${ deltaX }px ${ deltaY }px`,
+              }
+              : {
+                translate: `${ deltaX + (deltaWidth / 2) }px ${ deltaY + (deltaHeight / 2) }px`,
+                scale: `${ prev.width / curr.width } ${ prev.height / curr.height }`,
+              },
+            opts.disableScaleAnimation
+              ? {
+                translate: `0px 0px`,
+              } : {
+                translate: `0px 0px`,
+                scale: `1 1`,
+              }
           ],
           options: {
             duration: opts.duration,
@@ -375,27 +394,27 @@ export function AnimateChildren(
       }
     )
 
-    // console.timeEnd("getting animation queue")
-
     //╭───────────────────╮
     //│ Parent Animation  │
     //╰───────────────────╯
-    const parentAnimation = parent.queueAnimation(opts)
-    if (parentAnimation) animationQueue.add(parentAnimation)
+    if (!opts.disableParentAnimation) {
+      const parentAnimation = parent.queueAnimation(opts)
+      if (parentAnimation) animationQueue.add(parentAnimation)
+    }
 
     requestAnimationFrame(() => {
-      // console.time("animating")
       animationQueue.animate()
       // Animate all the animations in the queue. This includes elements that had moved and parent if they had moved.
 
-      //╭───────────────────╮
-      //│ Add Animation     │
-      //╰───────────────────╯
-      data.forEach(entry => entry.ref.current?.removeAttribute("data-adding"))
-      // Remove the "data-adding" attribute to trigger the CSS transition
-      // console.timeEnd("animating")
+      data.forEach(
+        entry => {
+          if (entry.adding && entry.ref.current) {
+            delete entry.ref.current.dataset.adding
+            delete entry.adding
+          }
+        })
+      // Remove the "data-adding" attribute to trigger CSS transition
     })
-
 
   }, [rendered])
 
@@ -440,7 +459,8 @@ function useRefMap<T>(
     },
     forEach: (...args: Parameters<typeof ref['current']['forEach']>) => ref.current.forEach(...args),
     delete: (key: string) => ref.current.delete(key),
-    entry: ref.current
+    entry: ref.current,
+    [Symbol.iterator]: () => ref.current[Symbol.iterator]()
   }
 }
 
@@ -448,8 +468,10 @@ function useParent() {
   const parent = useRefObject({
     rect: undefined as undefined | DOMRect,
     node: undefined as undefined | AnimatableElement,
-    saveNode(node?: AnimatableElement) {
+    saveNodeAndRect(node?: AnimatableElement | null) {
       parent.node = node ?? parent.node
+      parent.saveRect()
+      return parent.node
     },
     saveRect() {
       if (!parent.node) return
@@ -490,7 +512,7 @@ function useParent() {
 
 function useRefObject<T extends object>(defaultObj?: T) {
   const ref = useRef(defaultObj ?? {})
-  return ref.current as T // directly return .current to avoid ref.current. everywhere.
+  return ref.current as T
 }
 
 
@@ -506,12 +528,19 @@ function isValidRenderedChild(child: ValidNode): child is ProcessedReactElement 
     && child.key !== null
     && !isPortal(child)
 }
-function isCSSAnimation(animation: Animation): animation is CSSAnimation {
-  return animation instanceof CSSAnimation
+
+const isCSSAnimation
+  = (a: Animation): a is CSSAnimation => a instanceof CSSAnimation
+
+const filterNodeByKey
+  = <T>(node: T[], key: string) => node.filter(n => isValidElement(n) ? n.key !== key : true)
+
+type AnimationItem = {
+  node: AnimatableElement,
+  keyframes: Keyframe[],
+  options: KeyframeAnimationOptions,
+  cancelOnFinish: boolean
 }
-
-
-type AnimationItem = { node: AnimatableElement, keyframes: Keyframe[], options: KeyframeAnimationOptions, cancelOnFinish: boolean }
 
 class AnimationQueue {
   queue: AnimationItem[] = []

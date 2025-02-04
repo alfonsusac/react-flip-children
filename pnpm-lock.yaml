@@ -71,6 +71,9 @@ importers:
       react-dom:
         specifier: ^19.0.0
         version: 19.0.0(react@19.0.0)
+      react-easy-flip:
+        specifier: ^4.0.3
+        version: 4.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react-flip-toolkit:
         specifier: ^7.2.4
         version: 7.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
@@ -3073,6 +3076,12 @@ packages:
     resolution: {integrity: sha512-4GV5sHFG0e/0AD4X+ySy6UJd3jVl1iNsNHdpad0qhABJ11twS3TTBnseqsKurKcsNqCEFeGL3uLpVChpIO3QfQ==}
     peerDependencies:
       react: ^19.0.0
+
+  react-easy-flip@4.0.3:
+    resolution: {integrity: sha512-hfQLj/tkPvRJ5MQHVEaWh+2T8aXZ4YIcGuP1k187KraAFyJwt992sLc9bd190K01ifBWtEL3nT/AuvhJRk//GQ==}
+    peerDependencies:
+      react: '>= 16.8.0'
+      react-dom: '>= 16.8.0'
 
   react-flip-toolkit@7.2.4:
     resolution: {integrity: sha512-+aZBZwzHBDfJzMRLjAAOKiBkrk8PV0YFVE0k1x85+UsykApLwg8a0LlQ5H80uFltFZmGtrQ7EE1krhiZ1jI5ig==}
@@ -7751,6 +7760,11 @@ snapshots:
     dependencies:
       react: 19.0.0
       scheduler: 0.25.0
+
+  react-easy-flip@4.0.3(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+    dependencies:
+      react: 19.0.0
+      react-dom: 19.0.0(react@19.0.0)
 
   react-flip-toolkit@7.2.4(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:

@@ -7,7 +7,6 @@ type Pretty<T> = T extends object
   ? { [K in keyof T]: T[K] }
   : T;
 
-
 //─────────────────────────────────────────────────╮
 // react-is                                        │
 //                                                 │  
@@ -17,9 +16,6 @@ export function isFragment(child: ReactNode): child is ReactElement<{ children?:
 }
 export function isPortal(child: ReactNode): child is ReactPortal {
   return _isPortal(child)
-}
-export function isStandardFlattenedReactElement(child: ReactElement): child is ReactElement<Record<string, any>> & { key: string } {
-  return typeof child.props === "object" && child.key != null
 }
 
 type PrimitiveChild =
@@ -127,12 +123,10 @@ export type ReactElementWithStandardProps<
   T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>,
 > = ReactElement<P, T>
 
-
-export type ReactElementWithKey<
-  P extends Record<string, any> = Record<string, any>,
-  T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>,
-> = Omit<ReactElementWithStandardProps<P, T>, 'key'> & { key: string }
-
+// export type ReactElementWithKey<
+//   P extends Record<string, any> = Record<string, any>,
+//   T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>,
+// > = ReactElementWithStandardProps<P, T> & { key: string }
 
 export function clone<
   E extends ReactElementWithStandardProps,
@@ -153,6 +147,7 @@ export function cloneWithMergedRef<
 ) {
   // Todo: merge ref too from incoming children with this ref.
 
+
   // Goofy type casting since ReactElement has a Prop generic and we are just adding on the end of it
   return cloneElement(element, { ref, ...props }) as
     Pretty<E & { props: E['props'] & { ref: R } }>
@@ -166,13 +161,3 @@ export function cloneWithStyle<
 ) {
   return cloneElement(element, { style }) as E
 }
-
-export function filterNodeByKey<T>(node: T[], key: string) {
-  return node.filter(n => isValidElement(n) ? n.key !== key : true)
-}
-
-
-export function createProp<P extends Record<string, any>>(init?: P) {
-  return {} as P & Record<string, any>
-}
-
