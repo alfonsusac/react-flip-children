@@ -93,20 +93,6 @@ a {
   transform: translate(0, 50vh) rotateY(80deg);
 }
 
-/* .playing-card {
-  will-change: transform;
-  transform: rotateY(0deg) !important;
-  transition: all 0.5s !important;
-  position: relative;
-  @apply antialiased;
-}
-
-.playing-card:hover {
-  scale: 1.1;
-  rotate: 2deg !important;
-  transform: rotateY(90deg) !important;
-} */
-
 .top {
   z-index: 9999 !important;
 }
@@ -114,10 +100,10 @@ a {
 .card {
   /* clip-path: inset(0 round 4px); */
   @apply transition-all duration-1000 will-change-transform transform-gpu
-  w-[var(--width)] h-[var(--height)] text-xs tracking-tighter border
+  w-[var(--width)] h-[var(--height)] text-xs tracking-tighter
    font-mono 
-  flex items-center justify-center cursor-pointer
-  hover:bg-slate-50 bg-white;
+  flex items-center justify-center cursor-pointer select-none
+  hover:bg-slate-50;
 }
 
 .hide-scrollbar {

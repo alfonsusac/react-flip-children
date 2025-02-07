@@ -123,18 +123,14 @@ export type ReactElementWithStandardProps<
   T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>,
 > = ReactElement<P, T>
 
-// export type ReactElementWithKey<
-//   P extends Record<string, any> = Record<string, any>,
-//   T extends string | JSXElementConstructor<any> = string | JSXElementConstructor<any>,
-// > = ReactElementWithStandardProps<P, T> & { key: string }
-
 export function clone<
   E extends ReactElementWithStandardProps,
+  P extends Record<string, any>
 >(
   element: E,
-  props?: Record<string, any>
+  props?: P
 ) {
-  return cloneElement(element, props) as E
+  return cloneElement(element, props) as Pretty<E & { props: E['props'] & P }>
 }
 
 export function cloneWithMergedRef<

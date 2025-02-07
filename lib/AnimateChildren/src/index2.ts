@@ -27,7 +27,8 @@ function useRefMap<T extends { ref: RefObject<any> }>() {
       (...args: Parameters<Map<string, T>['forEach']>) => ref.current.forEach(...args),
     delete:
       (key: string) => ref.current.delete(key),
-    [Symbol.iterator]: () => ref.current[Symbol.iterator]()
+    [Symbol.iterator]:
+      () => ref.current[Symbol.iterator]()
   }
 }
 function useObject<T extends object>(defaultObj?: T) {
@@ -73,30 +74,30 @@ function cloneElementWithRef<
   const passedDownRef = 'ref' in element.props ? element.props.ref : null
   const mergedRef
     = passedDownRef ?
-      (node: T) => {
-        if (isRefCallback(passedDownRef)) {
-          const cleanup = passedDownRef(node)
-          ref.current = node
-          return () => {
-            if (isReact19RefCallbackCleanUpFunction(cleanup)) {
-              cleanup()
-            } else {
-              passedDownRef(null)
-              ref.current = null
-            }
-          }
-        }
-        if (isRefObject(passedDownRef)) {
-          passedDownRef.current = node
-          ref.current = node
-          return () => {
-            passedDownRef.current = null
-            ref.current = null
-          }
-        }
-        ref.current = node
-        return () => ref.current = null
+(node: T) => {
+  if (isRefCallback(passedDownRef)) {
+    const cleanup = passedDownRef(node)
+    ref.current = node
+    return () => {
+      if (isReact19RefCallbackCleanUpFunction(cleanup)) {
+        cleanup()
+      } else {
+        passedDownRef(null)
+        ref.current = null
       }
+    }
+  }
+  if (isRefObject(passedDownRef)) {
+    passedDownRef.current = node
+    ref.current = node
+    return () => {
+      passedDownRef.current = null
+      ref.current = null
+    }
+  }
+  ref.current = node
+  return () => ref.current = null
+}
       : ref
 
   return cloneElement(element, { ...props, mergedRef }) as Pretty<
@@ -317,11 +318,11 @@ function AnimateChildren(props: AnimateChildrenProps) {
     setTimeout(() => {
       tempParent = undefined
       for (let [key, entry] of data) {
-        if (!entry?.ref.current) return
+        if (!entry?.ref.current) continue
         const node = entry.ref.current
         tempParent ??= parent.saveNode(node.parentElement)
         saveChildData(entry)
-        if (!entry.deleting) return
+        if (!entry.deleting) continue
         setRendered(prev => filterNodeByKey(prev, key))
         data.delete(key);
       }
@@ -458,4 +459,51 @@ function AnimateChildren(props: AnimateChildrenProps) {
   }, [rendered])
 
 
+}
+
+
+
+
+
+
+
+
+
+function mergeRef<
+  E extends Ref<any>,
+  R extends RefObject<unknown>,
+  T extends R['current']
+>(
+  passedDownRef: E,
+  ref: R,
+  props?: Record<string, any>
+) {
+  const mergedRef
+    = passedDownRef ?
+      (node: T) => {
+        if (isRefCallback(passedDownRef)) {
+          const cleanup = passedDownRef(node)
+          ref.current = node
+          return () => {
+            if (isReact19RefCallbackCleanUpFunction(cleanup)) {
+              cleanup()
+            } else {
+              passedDownRef(null)
+              ref.current = null
+            }
+          }
+        }
+        if (isRefObject(passedDownRef)) {
+          passedDownRef.current = node
+          ref.current = node
+          return () => {
+            passedDownRef.current = null
+            ref.current = null
+          }
+        }
+        ref.current = node
+        return () => ref.current = null
+      }
+      : ref
+  return mergedRef
 }

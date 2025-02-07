@@ -51,9 +51,9 @@ export function ClientTestPage() {
         backgroundColor: settings.color ? `hsl(${ index * 3 }, 70%, 80%)` : undefined,
       },
       onClick: (typeof item === "number" && !settings.control) ? () => remove(item) : undefined,
-      children: <div>
+      children: <>
         {
-          typeof item === "number" && (
+          typeof item === "number" && settings.control && (
             <div className="absolute top-1 right-1 left-1 flex opacity-0 transition-all group-hover:data-[visible]:opacity-100" data-visible={settings.control ? "" : undefined}>
               <div onClick={() => remove(item)} className="rounded-sm text-slate-300 hover:text-slate-600 text-xl"><MaterialSymbolsCloseRounded /></div>
               <div className="grow" />
@@ -62,8 +62,10 @@ export function ClientTestPage() {
             </div>
           )
         }
+        <span className={settings.text ? "transition-all" : "opacity-0 select-none transition-all"}>
         {item}
-      </div>,
+        </span>
+      </>,
     } satisfies ComponentProps<"div"> & { key: string | number }
   })
 
@@ -79,23 +81,31 @@ export function ClientTestPage() {
       "--height": `${ settings.height }rem`,
     },
     className: cn(
-      `p-4 overflow-hidden flex flex-wrap gap-2 transition-all `,
+      `p-4 flex flex-wrap gap-2 transition-all `,
       // {
       //   "overflow-x-auto": settings.flexDir === "column",
       // },
       {
         "bg-slate-100": settings.background,
         "shadow-sm": settings.background,
+
+        "overflow-hidden": settings.overflow === "hidden",
+        "overflow-visible": settings.overflow === "visible",
+
+        "*:bg-white": settings.elBackground,
+        "*:border": settings.border,
         "*:grow": settings.grow,
         "*:drop-shadow-lg": settings.dropShadow,
         "*:animate-none": settings.animation === "none",
         "*:animate-appear": settings.animation === "appear",
         "*:animate-bounce": settings.animation === "bounce",
         "data-[deleting]:*:bg-red-500": settings.entryExitAnimation === "color",
-        "data-[adding]:*:bg-green-500": settings.entryExitAnimation === "color",
         "data-[deleting]:*:opacity-0": settings.entryExitAnimation === "opacity",
-        "data-[adding]:*:opacity-0": settings.entryExitAnimation === "opacity",
         "data-[deleting]:*:scale-0": settings.entryExitAnimation === "scale",
+
+        "data-[adding]:*:duration-0": true,
+        "data-[adding]:*:bg-green-500": settings.entryExitAnimation === "color",
+        "data-[adding]:*:opacity-0": settings.entryExitAnimation === "opacity",
         "data-[adding]:*:scale-0": settings.entryExitAnimation === "scale",
         "*:rounded-md": settings.rounded,
         "h-full": settings.flexDir === "column",
@@ -149,6 +159,10 @@ export function ClientTestPage() {
               <Label>Initial Length</Label>
               <input type="number" step={1} value={settings.initialLength ?? ""} onChange={changeWithNumber("initialLength")} />
             </InputGroup>
+            <ButtonGroup>
+              <Button data-selected={match("overflow", "visible")} onClick={change("overflow")("visible")}>Visible</Button>
+              <Button data-selected={match("overflow", "hidden")} onClick={change("overflow")("hidden")}>Hidden</Button>
+            </ButtonGroup>
             <ButtonGroup>
               <Button data-selected={match("flexDir", "row")} onClick={change("flexDir")("row")}>Row</Button>
               <Button data-selected={match("flexDir", "column")} onClick={change("flexDir")("column")}>Column</Button>
@@ -264,7 +278,7 @@ export function ClientTestPage() {
               <>
                 <ButtonGroup>
                   <Button data-selected={settings.normalizeKeys} onClick={change("normalizeKeys")(!settings.normalizeKeys)}>Normalize Keys</Button>
-                  <Button data-selected={settings.useAbsolutePositionOnDeletedElements} onClick={change("useAbsolutePositionOnDeletedElements")(!settings.useAbsolutePositionOnDeletedElements)}>Use Absolute Position On Deleted Elements</Button>
+                  <Button data-selected={settings.useAbsolutePositionOnDelete} onClick={change("useAbsolutePositionOnDelete")(!settings.useAbsolutePositionOnDelete)}>Use Absolute Position On Deleted Elements</Button>
                   <Button data-selected={settings.reconcileCSSAnimation} onClick={change("reconcileCSSAnimation")(!settings.reconcileCSSAnimation)}>Reconcile CSS Animation</Button>
                   <Button data-selected={settings.scalceAnimation} onClick={change("scalceAnimation")(!settings.scalceAnimation)}>Scale Animation</Button>
                   <Button data-selected={settings.parentAnimation} onClick={change("parentAnimation")(!settings.parentAnimation)}>Parent Animation</Button>
@@ -302,6 +316,9 @@ export function ClientTestPage() {
               <label>rem</label>
             </InputGroup>
             <ButtonGroup>
+              <Button data-selected={settings.border} onClick={change("border")(!settings.border)}>Border</Button>
+              <Button data-selected={settings.elBackground} onClick={change("elBackground")(!settings.elBackground)}>Background</Button>
+              <Button data-selected={settings.text} onClick={change("text")(!settings.text)}>Text</Button>
               <Button data-selected={settings.grow} onClick={change("grow")(!settings.grow)}>Grow</Button>
               <Button data-selected={settings.dropShadow} onClick={change("dropShadow")(!settings.dropShadow)}>Drop Shadow</Button>
               <Button data-selected={settings.control} onClick={change("control")(!settings.control)}>Control</Button>
@@ -326,7 +343,7 @@ export function ClientTestPage() {
 
 
       <div className={cn(
-        "h-0 grow overflow-auto overflow-x-auto",
+        "h-0 grow overflow-y-auto overflow-x-auto",
         settings.flexDir === "column" ? "h-full" : ""
       )}>
         {settings.reorderer === "none" && (
@@ -342,7 +359,7 @@ export function ClientTestPage() {
                 <UnmemoizedAnimateChildDiv
                   {...props}
                   key={key}
-                  data-flip-id={"flip-item-"+key}
+                  data-flip-id={"flip-item-" + key}
                 />)}
               <KeylessAnimateChildDiv />
             </div>
@@ -371,6 +388,9 @@ export function ClientTestPage() {
             {settings.separator ? (
               <AnimateChildren
                 {...settings}
+                disableAnimationReconciliation={!settings.reconcileCSSAnimation}
+                disableParentAnimation={!settings.parentAnimation}
+                disableScaleAnimation={!settings.scalceAnimation}
               >
                 {firstFive.map(({ key, ...props }) => <UnmemoizedAnimateChildDiv {...props} key={key} />)}
                 <Separator />
@@ -380,6 +400,9 @@ export function ClientTestPage() {
             ) : (
               <AnimateChildren
                 {...settings}
+                disableAnimationReconciliation={!settings.reconcileCSSAnimation}
+                disableParentAnimation={!settings.parentAnimation}
+                disableScaleAnimation={!settings.scalceAnimation}
               >
                 {childrenProps.map(({ key, ...props }) => <UnmemoizedAnimateChildDiv {...props} key={key} />)}
                 <KeylessAnimateChildDiv />
@@ -675,7 +698,7 @@ function useSettings() {
     separator: boolean,
     normalizeKeys: boolean,
     delayDeletion: number,
-    useAbsolutePositionOnDeletedElements: boolean,
+    useAbsolutePositionOnDelete: boolean,
     stagger: number,
     strategy: "interrupt" | "continuous" | "reset",
     entryExitAnimation: "opacity" | "scale" | "color" | "none",
@@ -685,6 +708,10 @@ function useSettings() {
     reconcileCSSAnimation: boolean,
     scalceAnimation: boolean,
     parentAnimation: boolean,
+    text: boolean,
+    elBackground: boolean,
+    border: boolean,
+    overflow: "hidden" | "visible",
   } = {
     initialLength: 100,
     flexDir: "row",
@@ -714,7 +741,7 @@ function useSettings() {
     separator: true,
     normalizeKeys: true,
     delayDeletion: 500,
-    useAbsolutePositionOnDeletedElements: false,
+    useAbsolutePositionOnDelete: false,
     stagger: 0,
     strategy: "continuous",
     entryExitAnimation: "opacity",
@@ -724,6 +751,10 @@ function useSettings() {
     reconcileCSSAnimation: true,
     scalceAnimation: true,
     parentAnimation: true,
+    text: true,
+    elBackground: true,
+    border: true,
+    overflow: "visible",
   }
 
   const readonlysp = useSearchParams()

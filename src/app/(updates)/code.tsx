@@ -68,8 +68,12 @@ export function MagicCode(
   // return rendered
 
   return <AnimateChildren
-    useAbsolutePositionOnDeletedElements
+    useAbsolutePositionOnDelete
+    disableAnimationReconciliation
+    disableScaleAnimation
+    // disableParentAnimation
     delayDeletion={1000}
+    // strategy="interrupt"
     stagger={props.stagger}
   >
     {rendered}

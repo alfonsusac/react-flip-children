@@ -15,13 +15,15 @@ import {
   type RefObject
 } from "react"
 import {
-  flatMap,
   isPortal,
   cloneWithMergedRef,
   clone,
   flatMapPreserveKey,
   type AnimationTime,
 } from "./helper"
+import { useRefMap } from "./useRefMap"
+import { flatMap } from "./flatMap"
+import { mergeRef } from "./ref"
 
 //╭─────────────────────────────────────────────────╮
 //│ Types                                           │
@@ -51,13 +53,13 @@ type ValidNode =
 
 type SavedChildData = {
   ref: RefObject<AnimatableElement | null>,
+  tobedeleted?: boolean,
   deleting?: boolean,
   adding?: boolean,
   rect?: Pick<DOMRect, "x" | "y" | "width" | "height">,
   cssAnimationTimes: AnimationTime[],
   order: number
 }
-
 
 //╭─────────────────────────────────────────────────╮
 //│ # Main                                          │
@@ -69,7 +71,7 @@ export function AnimateChildren(
     duration?: number
     normalizeKeys?: boolean
     delayDeletion?: number
-    useAbsolutePositionOnDeletedElements?: boolean
+    useAbsolutePositionOnDelete?: boolean
     stagger?: number
     strategy?: "interrupt" | "continuous" | "reset"
     disableAnimationReconciliation?: boolean
@@ -82,7 +84,7 @@ export function AnimateChildren(
     duration: 500,
     normalizeKeys: false,
     delayDeletion: 500,
-    useAbsolutePositionOnDeletedElements: false,
+    useAbsolutePositionOnDelete: false,
     stagger: 0,
     strategy: "continuous",
     disableAnimationReconciliation: false,
@@ -98,7 +100,7 @@ export function AnimateChildren(
     order: 0
   }))
 
-  function saveChildRectAndAnimation(entry: SavedChildData) {
+  function saveChildRectAndAnimation(entry: SavedChildData, reconcileAnimation?: boolean) {
     const node = entry.ref.current
     if (!node) return
 
@@ -119,7 +121,7 @@ export function AnimateChildren(
       }
     }
 
-    if (opts.disableAnimationReconciliation)
+    if (opts.disableAnimationReconciliation || reconcileAnimation === false)
       return
     entry.cssAnimationTimes = node.getAnimations()
       .filter(isCSSAnimation)
@@ -134,14 +136,9 @@ export function AnimateChildren(
     let keylessCount = 0
     // Track keys to prevent duplicates
 
-    const mapFn = opts.normalizeKeys
-      ? flatMapPreserveKey<ValidNode>
-      : flatMap<ValidNode>
-
-    const deletingKeys: string[] = []
-
     // Flat iterate through every children to process incoming new elements
-    const newRender = mapFn(children,
+    const newRender = flatMap<ValidNode>(
+      children,
       child => {
         if (!isValidElement(child) || isPortal(child)) return child
         // Skips processing invalid elements or portals but left as-is in the children
@@ -149,40 +146,38 @@ export function AnimateChildren(
         //   Even if they have keys, portal can't be animated since its not a valid animatable element
 
         const key = child.key ?? `____${ keylessCount++ }`
-        keys.add(key)
-        // Check for duplicate keys
+        keys.add(key)                               // Check for duplicate keys
 
-        const { entry, inPrev } = data.getOrAdd(key)
+        const [entry, isNew] = data.getOrAdd(key)
 
-        //╭───────────────────╮
-        //│ Delete Animation  │
-        //╰───────────────────╯
-        if (entry.deleting) {
-          delete entry.deleting
-        }
-        // Clear existing timeout to prevent existing timeout to trigger deletion
-        // ────────────────────
+        if (entry.deleting)
+          delete entry.deleting                     // Clear existing timeout to prevent existing timeout to trigger deletion
 
         const modifiedProp: Record<string, any> = { key }
-        //╭───────────────────╮
-        //│ Add Animation     │
-        //╰───────────────────╯
-        if (!inPrev) {
-          modifiedProp["data-adding"] = ''
+
+        if (isNew) {
+          // modifiedProp["data-adding"] = ''          
           entry.adding = true
         }
-        // This will be deleted later after layout paint to trigger CSS transition via attribute change
-        // ────────────────────
 
-        return cloneWithMergedRef(child, entry.ref, modifiedProp)
-      }
+        const el = clone(child, {
+          ref: mergeRef<AnimatableElement>(child.props.ref, (node) => {
+            entry.ref.current = node
+            if (isNew && node) node.dataset.adding = ''  // This will be deleted later after layout paint to trigger CSS transition via attribute change
+            return () => { entry.ref.current = null }
+          }),
+          key,
+          ...modifiedProp
+        })
+
+        return el
+      },
+      opts.normalizeKeys
     )
 
-    let existingElementCount = 0
-    // For stagger: to save the order of the elements in previous order
-
-    let tempParent: AnimatableElement | undefined
-    // Temporarily store parent in this cycle to save the parent node and rect only once
+    let staggerElementCount = 0                     // For stagger: To save the order of the elements in previous order before changed to new order
+    let tempParent: AnimatableElement | undefined   // For parent: Temporarily store parent in this cycle to save the parent node and rect only once
+    const deletingKeys: string[] = []               // For deletion: To store keys that are not in the new render for delete animation using one setTimeout
 
     // Iterate through rendered children to mark deleted elements
     rendered.forEach(
@@ -194,75 +189,34 @@ export function AnimateChildren(
         if (!entry?.ref.current) return
         const node = entry.ref.current
 
-        //╭───────────────────╮
-        //│ Parent Animation  │
-        //╰───────────────────╯
-        tempParent ??= parent.saveNodeAndRect(node.parentElement)
-        // Cache parent node
+        tempParent ??= parent.saveNodeAndRect(node.parentElement)   // Cache parent node
+        saveChildRectAndAnimation(entry)                            // Save the rect data and css animationTimes of the current node
 
-        saveChildRectAndAnimation(entry)
-        // Save the rect data and css animationTimes of the current node
-
-        //╭───────────────────╮
-        //│ Delete Animation  │ This part below is for deletion animation.
-        //╰───────────────────╯
-        if (opts.delayDeletion === 0) return
-        // If delayDeletion is 0, we don't need to animate deletion.  We can delete it immediately.
+        // ↓ This part below is for deletion animation.
+        if (!opts.delayDeletion)
+          return                                                    // If deletion is instant, skip exit animations
 
         if (keys.has(child.key)) {
-          entry.order = existingElementCount++
-          return
+          entry.order = staggerElementCount++
+          return                                                    // Filter for deleted keys
         }
-        // Filter only the deleted keys
-
-        const props: Record<string, any> = { "data-deleting": "" }
-
-        if (opts.useAbsolutePositionOnDeletedElements) {
+        const props: Record<string, any> = {}
+        if (opts.useAbsolutePositionOnDelete) {
           props.style = {
             position: 'absolute',
-            top: node.offsetTop,
+            top: node.offsetTop, // Todo: try with rect.y/x
             left: node.offsetLeft,
           } satisfies CSSProperties
         }
+        newRender.splice(index, 0, clone(child, props))             // Re-add the deleted elements back in the children with "data-deleting" props.
 
-        newRender.splice(index, 0, clone(child, props))
-        // Re-add the deleted elements back in the children with "data-deleting" props.
-
-        if (entry.deleting) return
-        // Schedule deletion ideally after animation completes but ONLY if existing timeout hadn't been run yet
-
+        if (entry.deleting) return                                  // Schedule deletion ideally after animation completes but ONLY if existing timeout hadn't been run yet
         deletingKeys.push(child.key)
-        entry.deleting = true
-        // ────────────────────
+        entry.tobedeleted = true
       }
     )
 
     setRendered(newRender)
-
-
-    // Timeout for deletion are queued here
-    setTimeout(() => {
-      // data.forEach(saveChildRectAndAnimation)
-      // parent.saveRect()
-
-      // deletingKeys.forEach(i => {
-      //   if (!data.get(i)?.deleting) return
-      //   setRendered(prev => filterNodeByKey(prev, i))
-      //   data.delete(i)
-      // })
-      tempParent = undefined
-      for (let [key, entry] of data) {
-        if (!entry?.ref.current) return
-        const node = entry.ref.current
-        tempParent ??= parent.saveNodeAndRect(node.parentElement)
-        saveChildRectAndAnimation(entry)
-        if (!entry.deleting) return
-        setRendered(prev => filterNodeByKey(prev, key))
-        data.delete(key);
-      }
-    }, opts.delayDeletion)
-
-    // console.timeEnd("cloning")
 
     // Why missing dependencies like "data", "parent", and "rendered" are ignored:
     //   "parent" is using useRef therefore its not reactive
@@ -276,11 +230,15 @@ export function AnimateChildren(
   // On rendered change before repaint
   useLayoutEffect(() => {
 
+    console.log("useLayoutEffect")
+
     // console.time("getting animation queue")
     // Animations are collected in a queue because we need useLayoutEffect to run as fast as possible.
     // We can run the animation here but it would cause a lot of lag.
     // Therefore, animations are run in the next frame using requestAnimationFrame.
     const animationQueue = new AnimationQueue()
+
+    const deletingKeys: string[] = []
 
     // This is to apply staggered animation by apply longer delay multipled by the count
     // Problem: delay is re-added when animations are stacked
@@ -296,14 +254,22 @@ export function AnimateChildren(
         if (!entry?.ref.current) return
         const node = entry.ref.current
 
-        let hasPrevAnimation = false
-        // To prevent adding extra delay for staggered animation.
+        if (entry.tobedeleted) {
+          deletingKeys.push(child.key)
+          node.dataset.deleting = ''
+          delete entry.tobedeleted
+          entry.deleting = true
+          return
+        }
+
+        if (entry.adding)
+          node.dataset.adding = ''
+
+        let hasPrevAnimation = false                  // To prevent adding extra delay for staggered animation.
 
         // Reconcile the css animation times of the current node
         //   We assumed that the css animation times are in the same order before and after setRendered. (before and after reflow)
         //   NB: Major Performance Hit
-        // console.log(animations)
-
         if (opts.stagger || !opts.disableAnimationReconciliation) {
           const animations = node.getAnimations()
           animations
@@ -329,10 +295,9 @@ export function AnimateChildren(
             )
         }
 
-
         let prev = entry.rect
-        if (!prev) return // Can't animate if rect is not saved
-        if (opts.duration === 0) return // Can't animate if duration is 0
+        if (!prev) return                       // Can't animate if rect is not saved
+        if (opts.duration === 0) return         // Can't animate if duration is 0
 
         let curr: SavedChildData['rect']
 
@@ -348,8 +313,8 @@ export function AnimateChildren(
           curr = {
             x: node.offsetLeft,
             y: node.offsetTop,
-            width: (node as HTMLDivElement).offsetWidth,
-            height: (node as HTMLDivElement).offsetHeight,
+            width: node.offsetWidth,
+            height: node.offsetHeight,
           }
         }
 
@@ -357,8 +322,10 @@ export function AnimateChildren(
         const deltaX = prev.x - curr.x
         const deltaWidth = prev.width - curr.width
         const deltaHeight = prev.height - curr.height
+
         if (!deltaY && !deltaX) return
-        const delay = !hasPrevAnimation
+
+        const delay = !hasPrevAnimation       // If there is no previous animation, add delay
           ? entry.order * opts.stagger
           : 0
 
@@ -406,14 +373,33 @@ export function AnimateChildren(
       animationQueue.animate()
       // Animate all the animations in the queue. This includes elements that had moved and parent if they had moved.
 
-      data.forEach(
-        entry => {
-          if (entry.adding && entry.ref.current) {
-            delete entry.ref.current.dataset.adding
-            delete entry.adding
+      data.forEach(entry => {
+        if (entry.deleting && entry.ref.current) {
+          entry.ref.current.dataset.deleting = '' // Remove the "data-adding" attribute to trigger CSS transition
+        }
+      })
+
+      const keys = deletingKeys
+      requestAnimationFrame(() => {
+        data.forEach(
+          entry => {
+            if (entry.adding && entry.ref.current) {
+              delete entry.ref.current.dataset.adding
+              delete entry.adding
+            }
           }
-        })
-      // Remove the "data-adding" attribute to trigger CSS transition
+        )
+        keys.length && setTimeout(() => {
+          data.forEach(e => saveChildRectAndAnimation(e))   // Cache parent node
+          parent.saveRect()                                 // Save the rect data and css animationTimes of the current node
+
+          keys.forEach(i => {
+            if (!data.get(i)?.deleting) return
+            setRendered(prev => filterNodeByKey(prev, i))
+            data.delete(i)
+          })
+        }, opts.delayDeletion)
+      })
     })
 
   }, [rendered])
@@ -424,45 +410,6 @@ export function AnimateChildren(
 }
 
 
-
-//╭─────────────────────────────────────────────────╮
-//│ Hooks                                           │
-//╰─────────────────────────────────────────────────╯
-function useRefMap<T>(
-  defaultValues: () => T
-) {
-  const ref = useRef<Map<string, T>>(new Map())
-
-  return {
-    getOrAdd(key: string) {
-      const existing = ref.current.get(key)
-      if (existing) return { entry: existing, inPrev: true }
-
-      const newRef = defaultValues
-        ? defaultValues()
-        : createRef<AnimatableElement>()
-
-      ref.current.set(key, newRef as T)
-      return { entry: newRef as T, inPrev: false }
-      //  Would it be better to have the ref already attached to the element?
-      //  Answer: No, because we need to attach the ref.
-      //  There are no other ways to ensure that the ref is already attached to the element.
-      //  Therefore, do not use .getOrAdd() if you don't plan to attach the ref to the element.
-    },
-    get(key: string) {
-      return ref.current.get(key)
-      // Error should be handled gracefully here.
-      // What happens if we're not in the cloneElement phase but the key doesn't exist?
-      // We shouldn't throw error here because we're not sure if the key is valid.
-      // And we have no way to ensure that the keys are synchronized to the elements being rendered.
-      // We also shouldn't throw because it is better to have a fallback than to crash the app.
-    },
-    forEach: (...args: Parameters<typeof ref['current']['forEach']>) => ref.current.forEach(...args),
-    delete: (key: string) => ref.current.delete(key),
-    entry: ref.current,
-    [Symbol.iterator]: () => ref.current[Symbol.iterator]()
-  }
-}
 
 function useParent() {
   const parent = useRefObject({

@@ -1,13 +1,16 @@
-import type { ReactElement, ReactNode, ReactPortal } from "react";
+import { version, type ReactElement, type ReactNode, type ReactPortal } from "react";
 import { isFragment as _isFragment, isPortal as _isPortal } from "react-is";
 
 type Pretty<T> = T extends object
   ? { [K in keyof T]: T[K] }
   : T;
 
-export function isFragment(child: ReactNode): child is ReactElement<{ children?: ReactNode }> {
-  return _isFragment(child)
+export function isReact19() {
+  return version.startsWith("19")
 }
-export function isPortal(child: ReactNode): child is ReactPortal {
-  return _isPortal(child)
-}
+
+export type Expect<T extends true> = T;
+export type Equal<X, Y> =
+  (<T>() => T extends X ? 1 : 2) extends (<T>() => T extends Y ? 1 : 2)
+  ? true
+  : false;

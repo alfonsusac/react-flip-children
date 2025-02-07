@@ -12,6 +12,7 @@ import { DragArea } from "../ui/DragArea"
 import BackCard from "../ui/backcard.png"
 import { AnimateChild } from "../ui/Reorder2"
 import { AnimateChild2 } from "../ui/Reorder3"
+import { AnimateChildren } from "../../../lib/AnimateChildren/src"
 
 
 export function Client(props: {
@@ -234,7 +235,7 @@ export function Client(props: {
           example === 3 && "flex-col self-stretch",
           example === 4 && "flex-row self-stretch items-center justify-center flex-nowrap *:shrink *:min-w-0 pr-32"
         )}>
-          <AnimateChild2
+          <AnimateChildren
             // @ts-expect-error - not valid props.
             usingFixedSpeed={isFixedSpeed}
             animationOptions={{
@@ -279,7 +280,7 @@ export function Client(props: {
               </Card>)}
             {example === 4 &&
               arr.map((item, index) => <PlayingCard itemId={item} key={item} {...cardProps(item)} zIndex={index} length={arr.length} />)}
-          </AnimateChild2>
+          </AnimateChildren>
         </div>
       </div>
     </div>
@@ -463,8 +464,11 @@ function Card(
   return (
     <div
       className={cn(
-        "data-[adding=true]:duration-0",
-        "data-[adding=true]:opacity-0",
+        // "data-[adding]:duration-0",
+        "data-[adding]:opacity-0",
+        "data-[deleting]:opacity-0",
+        // "data-[adding=true]:duration-0",
+        // "data-[adding=true]:opacity-0",
         "relative w-20 h-20 p-2 border border-indigo-700 bg-indigo-800 shadow-xl rounded-md group flex flex-col",
         "transition-all duration-1000",
         "group",
