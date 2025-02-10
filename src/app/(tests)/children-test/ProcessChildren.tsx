@@ -2,7 +2,7 @@
 
 import { cloneElement, type ComponentProps, isValidElement, useState, type ReactNode, useRef, type RefObject, useEffect, Children, createRef, type ReactElement, type CSSProperties } from "react"
 import { isFragment } from "react-is"
-import { flatMap } from "../../../../lib/AnimateChildren/src/helper"
+import { flatMap } from "../../../../lib/AnimateChildren/src/flatMap"
 
 export function Div(props: ComponentProps<"div">) { return <div {...props} /> }
 
