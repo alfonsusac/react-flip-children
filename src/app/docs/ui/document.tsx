@@ -32,7 +32,7 @@ function Anchor(
 ) {
   return <a {...props} href={forId ? `#${ forId }` : undefined} className={cn(
     "opacity-0",
-
+    
     "font-medium",
     "text-2xl",
     "text-center leading-none",

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { codeToTokens, type ThemedToken } from "shiki"
+import { codeToTokens, type BundledLanguage, type ThemedToken } from "shiki"
 
 export function CodeBlock(
   props: {
@@ -9,6 +9,7 @@ export function CodeBlock(
     tsx?: boolean
     css?: boolean
     html?: boolean
+    lang?: BundledLanguage
     rowHighlight?: number[]
   }
 ) {
@@ -17,7 +18,7 @@ export function CodeBlock(
     props.tsx ? "tsx"
       : props.css ? "css"
         : props.html ? "html"
-          : "tsx"
+          : props.lang ?? "tsx"
 
   const [tokens, setTokens] = useState<ThemedToken[][]>([])
 
@@ -44,7 +45,7 @@ export function CodeBlock(
   }, [code, lang])
 
   return (
-    <pre>
+    <pre className="!bg-black/20">
       <code>
         {highlightedCode.length ? highlightedCode : <span className="opacity-0">{code}</span>}
       </code>

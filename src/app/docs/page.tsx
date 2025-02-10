@@ -1,12 +1,12 @@
 /* eslint-disable @next/next/no-html-link-for-pages */
 import { cn } from "lazy-cn"
-import { Commissioner, Inter, Lato, Lexend, Source_Sans_3 } from "next/font/google"
 import { CodeBlock } from "./ui/code"
 import { H3, H4 } from "./ui/document"
-import type { ComponentProps, SVGProps } from "react"
+import { Fragment, type ComponentProps, type ReactNode, type SVGProps } from "react"
 import { Sidebar } from "./ui/Sidebar"
 import { Footer } from "../ui/Footer"
 import { RootBackground } from "../ui/Background"
+import type { AnimateChildren } from "../../../lib/AnimateChildren/src"
 
 
 
@@ -99,18 +99,18 @@ export default function DocsPage() {
 
       <div className="flex mx-auto max-w-[30rem]">
 
-
         <Sidebar />
 
         <div id="content" className="relative !w-full max-w-[30rem] shrink-0">
 
           <header className={cn(
-            `text-[#445]`,
+            `text-[#556]`,
             `[&_a]:!text-[#445]`,
             `hover:[&_a]:!text-[#ccd]`,
             `[&_a]:transition-colors`,
             `[&_a]:cursor-pointer`,
           )}>
+
             <div className="flex gap-3 text-2xl">
               <a target="_blank" href="https://github.com/alfonsusac/react-flip-array">
                 <CibGithub />
@@ -129,6 +129,8 @@ export default function DocsPage() {
               `leading-none`,
               `font-bold`,
               `mt-4`,
+              `break-words`,
+              // `text-[#99a]`,
             )}>
               React Flip Children<br />Documentation
             </h1>
@@ -186,7 +188,7 @@ export default function DocsPage() {
           <p>
             Install the package via your package manager of choice.
           </p>
-          <CodeBlock code={`
+          <CodeBlock lang={"zsh"} code={`
 npm install react-flip-children
         `} />
 
@@ -264,7 +266,8 @@ export default function App() {
 card {
   opacity: 1;
 }
-card[data-adding], card[data-deleting] {
+card[data-adding], 
+card[data-deleting] {
   opacity: 0;
 }
           `} />
@@ -423,8 +426,8 @@ const Card = forwardRef((props, ref) => {
             HeroUI Integration Guide {'->'}
           </LinkButton>
 
-          
-          
+
+
           <H3 id="mantine">Mantine</H3>
           <p>
             React Flip Children can be integrated with Mantine with minimal effort.
@@ -456,96 +459,69 @@ const Card = forwardRef((props, ref) => {
             <code>{'<AnimateChildren/>'}</code> is a React component, and is configured via the following props:
           </p>
 
+          {/* Using object.entries to synchronize with the API's parameter types */}
+          {Object.entries({
+            "children": {
+              type: "ReactNode",
+              default: "",
+              content: <>
+                <p>
+                  The children to animate. This can be any valid <code style={{ color: '#5DE4C7' }}>ReactNode</code>, but only valid children will be animated. Others may be rendered but not animated, or omitted entirely.
+                </p>
 
-          <H3 id="prop-children" data-code-heading>
-            <code>
-              <span style={{ color: '#E4F0FB' }}>children</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> ReactNode</span>
-            </code>
-          </H3>
-          <p>
-            The children to animate. This can be any valid <code style={{ color: '#5DE4C7' }}>ReactNode</code>, but only valid children will be animated. Others may be rendered but not animated, or omitted entirely.
-          </p>
+                <h5 id="omitted-nodes">Omitted Nodes</h5>
+                <p>
+                  <code style={{ color: '#A6ACCD' }}>null</code>
+                  , <code style={{ color: '#A6ACCD' }}>undefined</code>
+                  , and <code style={{ color: '#A6ACCD' }} >boolean</code> values will be omitted.
+                </p>
 
-          <h5 id="omitted-nodes">Omitted Nodes</h5>
-          <p>
-            <code style={{ color: '#A6ACCD' }}>null</code>
-            , <code style={{ color: '#A6ACCD' }}>undefined</code>
-            , and <code style={{ color: '#A6ACCD' }} >boolean</code> values will be omitted.
-          </p>
+                <h5 id="not-animated">Rendered but Not Animated</h5>
+                <p>
+                  <code style={{ color: '#A6ACCD' }}>string</code>
+                  , <code style={{ color: '#A6ACCD' }}>number</code>
+                  , <code style={{ color: '#A6ACCD' }}>bigint</code>
+                  , <code style={{ color: '#A6ACCD' }}>ReactPortal</code>, and invalid Elements will be rendered but not animated.
+                </p>
 
-          <h5 id="not-animated">Rendered but Not Animated</h5>
-          <p>
-            <code style={{ color: '#A6ACCD' }}>string</code>
-            , <code style={{ color: '#A6ACCD' }}>number</code>
-            , <code style={{ color: '#A6ACCD' }}>bigint</code>
-            , <code style={{ color: '#A6ACCD' }}>ReactPortal</code>, and invalid Elements will be rendered but not animated.
-          </p>
-
-          <h5 id="animatable-elements">Animatable Elements</h5>
-          <p>
-            Only <code style={{ color: '#A6ACCD' }}>ReactElement</code> that are able to receives a ref and have implemented specific methods and properties will be animated. The required ref properties are:
-          </p>
-          <ul>
-            <li><code>animate</code></li>
-            <li><code>getBoundingClientRect</code></li>
-            <li><code>getAnimations</code></li>
-            <li><code>removeAttribute</code></li>
-            <li><code>parentElement</code></li>
-          </ul>
-
-
-
-
-          <H3 id="prop-duration" data-code-heading>
-            <code>
-              <span style={{ color: '#E4F0FB' }}>duration</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> number</span>
-              <span style={{ color: '#A6ACCD' }}> = 500</span>
-            </code>
-            {/* <div className="inline-block text-xs !font-bold text-[#778] p-1 px-2 bg-[#223] ml-2 rounded-md">WIP</div> */}
-          </H3>
-          <p>
-            The duration of the moving animation in milliseconds.
-          </p>
-
-
-
-
-
-          <H3 id="prop-easing" data-code-heading>
-            <code>
-              <span style={{ color: '#E4F0FB' }}>easing</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> string</span>
-              <span style={{ color: '#A6ACCD' }}> = {'"ease-in-out"'}</span>
-            </code>
-            {/* <div className="inline-block text-xs !font-bold text-[#778] p-1 px-2 bg-[#223] ml-2 rounded-md">WIP</div> */}
-          </H3>
-          <p>
-            The easing of the moving animation.
-          </p>
-
-
-
-          <H3 id="prop-normalize-keys" data-code-heading>
-            <code>
-              <span style={{ color: '#E4F0FB' }}>normalizeKeys</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> boolean</span>
-              <span style={{ color: '#A6ACCD' }}> = {'false'}</span>
-            </code>
-            {/* <div className="inline-block text-xs !font-bold text-[#778] p-1 px-2 bg-[#223] ml-2 rounded-md">WIP</div> */}
-          </H3>
-          <p>
-            Whether or not to normalize keys. If set to <code>true</code>, the component will flatten the children array and check for uniquely defined keys. If set to <code>false</code> (default), the component allows for duplicate keys if its under different fragment.
-          </p>
-          <p>
-            By default, this configuration is allowed:
-          </p>
-          <CodeBlock code={`
+                <h5 id="animatable-elements">Animatable Elements</h5>
+                <p>
+                  Only <code style={{ color: '#A6ACCD' }}>ReactElement</code> that are able to receives a ref and have implemented specific methods and properties will be animated. The required ref properties are:
+                </p>
+                <ul>
+                  <li><code>animate</code></li>
+                  <li><code>getBoundingClientRect</code></li>
+                  <li><code>getAnimations</code></li>
+                  <li><code>removeAttribute</code></li>
+                  <li><code>parentElement</code></li>
+                </ul>
+              </>
+            },
+            easing: {
+              type: "string",
+              default: "\"ease-in-out\"",
+              content: <p>
+                The easing of the moving animation.
+              </p>
+            },
+            duration: {
+              type: "number",
+              default: "500",
+              content: <p>
+                The duration of the moving animation in milliseconds.
+              </p>
+            },
+            normalizeKeys: {
+              type: "boolean",
+              default: "false",
+              content: <>
+                <p>
+                  Whether or not to normalize keys. If set to <code>true</code>, the component will flatten the children array and check for uniquely defined keys. If set to <code>false</code> (default), the component allows for duplicate keys if its under different fragment.
+                </p>
+                <p>
+                  By default, this configuration is allowed:
+                </p>
+                <CodeBlock code={`
 <AnimateChildren>
   {arr1.map((el,i) => <div key={i}>{el}</div>)}
   <>
@@ -553,87 +529,98 @@ const Card = forwardRef((props, ref) => {
   </>
 </AnimateChildren> // ✅ Legal, No errors
             `} />
-          <p>
-            If set to true, the above configuration will throw an error.
-          </p>
-
-
-
-          <H3 id="prop-delayDeletion" data-code-heading>
-            <code>
-              <span style={{ color: '#E4F0FB' }}>delayDeletion</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> number</span>
-              <span style={{ color: '#A6ACCD' }}> = {'500'}</span>
-            </code>
-
-          </H3>
-          <p>
-            The delay before the deletion of the child. This is useful when you want to animate the child before it is removed from the DOM.
-          </p>
-
-
-
-
-
-          <H3 id="prop-useAbsolutePositionOnDeletedElements" data-code-heading>
-            <code className="">
-              <span style={{ color: '#E4F0FB' }}>useAbsolutePositionOnDeletedElements</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> boolean</span>
-              <span style={{ color: '#A6ACCD' }}> = {'false'}</span>
-            </code>
-
-          </H3>
-          <p>
-            Whether or not to use absolute position on deleted elements. If set to <code>true</code>, the component will use absolute position to animate the deleted child.
-          </p>
-          <p>
-            <b>Recommended:</b><br />
-            Set to true if the width of the child is fixed.
-          </p>
-
-
-          <H3 id="prop-stagger" data-code-heading>
-            <code>
-              <span style={{ color: '#E4F0FB' }}>stagger</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> number</span>
-            </code>
-
-          </H3>
-          <p>
-            The stagger of the moving animation in milliseconds. The animation delay will be skipped if the animation is interrupted.
-          </p>
-
-
-          <H3 id="prop-snapshotStrategy" data-code-heading>
-            <code>
-              <span style={{ color: '#E4F0FB' }}>snapshotStrategy</span>
-              <span style={{ color: '#ACD7FF' }}>?:</span>
-              <span style={{ color: '#5DE4C7' }}> {'"getBoundingClientRect" | "offset"'}</span>
-              <span style={{ color: '#A6ACCD' }}> = {'"offset"'}</span>
-            </code>
-          </H3>
-          <p>
-            The strategy to use when taking a snapshot of the child&apos;s position. The default is <code>offset</code>, which uses the <code>offsetLeft</code> and <code>offsetTop</code> property of the child. If set to <code>getBoundingClientRect</code>, the component will use the <code>getBoundingClientRect</code> method to take a snapshot of the child&apos;s position.
-          </p>
-
-
-
-
-
-
-
+                <p>
+                  If set to true, the above configuration will throw an error.
+                </p>
+              </>
+            },
+            delayDeletion: {
+              type: "number",
+              default: "500",
+              content: <p>
+                The delay before the deletion of the child. This is useful when you want to animate the child before it is removed from the DOM.
+              </p>
+            },
+            useAbsolutePositionOnDelete: {
+              type: "boolean",
+              default: "false",
+              content: <>
+                <p>
+                  Whether or not to use absolute position on deleted elements. If set to <code>true</code>, the component will use absolute position to animate the deleted child.
+                </p>
+                <p>
+                  <b>Recommended:</b><br />
+                  Set to true if the width of the child is fixed.
+                </p>
+              </>
+            },
+            stagger: {
+              type: "number",
+              content: <p>
+                The stagger of the moving animation in milliseconds. The animation delay will be skipped if the animation is interrupted.
+              </p>
+            },
+            strategy: {
+              type: '"interrupt" | "continuous" | "reset"',
+              default: "continuous",
+              content: <p>
+                The strategy to use when taking a snapshot of the child&apos;s position. The default is <code>continuous</code>, which uses the <code>offsetLeft</code> and <code>offsetTop</code> property of the child. If set to <code>interrupt</code>, the component will use the <code>getBoundingClientRect</code> method to take a snapshot of the child&apos;s position.
+              </p>
+            },
+            disableAnimationReconciliation: {
+              type: "boolean",
+              content: <>
+                <p>
+                  Whether or not to disable animation reconciliation. If set to <code>true</code>, the component will not reconcile CSS animations.
+                </p>
+                <p>
+                  <b>Recommended:</b><br />
+                  Set to <code>false</code> if animating a large number of children.
+                </p>
+              </>
+            },
+            disableScaleAnimation: {
+              type: "boolean",
+              content: <p>
+                Whether or not to disable scale animation. If set to <code>true</code>, the component will not scale the child during animating the reorder.
+              </p>
+            },
+            disableParentAnimation: {
+              type: "boolean",
+              content: <p>
+                Whether or not to disable parent animation. If set to <code>true</code>, the component will not animate the parent.
+              </p>
+            }
+          } satisfies {
+            [key in keyof Props]-?: {
+              type: string
+              default?: string
+              content: ReactNode
+            }
+          }).map(([key, value]) => (
+            <Fragment key={key}>
+              <H3 id={`props-${ key }`} data-code-heading>
+                <code>
+                  <span style={{ color: '#E4F0FB' }}>{key}</span>
+                  <span style={{ color: '#ACD7FF' }}>?:</span>
+                  <span style={{ color: '#5DE4C7' }}> {value.type}</span>
+                  {
+                    value.default &&
+                    <span style={{ color: '#A6ACCD' }}> = {value.default}</span>
+                  }
+                </code>
+              </H3>
+              {value.content}
+            </Fragment>
+          ))}
 
 
           <LinkButton href="/docs#" className="inline-block mt-40">
             Back to top ↑
           </LinkButton>
-          <LinkButton href="" className="inline-block mt-40 ml-2">
+          <LinkButton href="https://github.com/alfonsusac/react-flip-children" className="inline-block mt-40 ml-2">
             ⭐️ Star on GitHub →
           </LinkButton>
-
 
           <Footer />
         </div>
@@ -645,8 +632,73 @@ const Card = forwardRef((props, ref) => {
   )
 }
 
+const propsInfo = {
+  "children": {
+    type: "ReactNode",
+    default: "",
+    content: <LinkButton href="" className="inline-block mt-40 ml-2">
+      ⭐️ Star on GitHub →
+    </LinkButton>
+  },
+  easing: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  duration: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  normalizeKeys: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  delayDeletion: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  useAbsolutePositionOnDelete: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  stagger: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  strategy: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  disableAnimationReconciliation: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  disableScaleAnimation: {
+    type: "",
+    default: "",
+    content: undefined
+  },
+  disableParentAnimation: {
+    type: "",
+    default: "",
+    content: undefined
+  }
+} satisfies {
+  [key in keyof Props]-?: {
+    type: string
+    default: string
+    content: ReactNode
+  }
+}
 
-
+type Props = Parameters<typeof AnimateChildren>[0]
 
 
 function CibGithub(props: SVGProps<SVGSVGElement>) {
