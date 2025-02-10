@@ -11,7 +11,6 @@ import { ThemeProvider } from "next-themes"
 import { getPublishedVersion } from "../lib/npm"
 
 
-
 export default function DocsPage() {
   return (
     <ThemeProvider defaultTheme="dark" enableSystem={true} attribute="class">

@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.2.0
+
+### Minor Changes
+
+- Added more props and improve deletion animation performance
+
 ## 0.1.3
 
 ### Patch Changes

@@ -10,7 +10,8 @@
     "lib:build": "cd lib/AnimateChildren && pnpm build",
     "lib:changeset": "cd lib/AnimateChildren && changeset",
     "lib:version": "cd lib/AnimateChildren && changeset version",
-    "lib:publish": "cd lib/AnimateChildren && pnpm publish"
+    "lib:publish": "cd lib/AnimateChildren && pnpm publish",
+    "lib:pack": "cd lib/AnimateChildren && pnpm pack"
   },
   "dependencies": {
     "@formkit/auto-animate": "^0.8.2",

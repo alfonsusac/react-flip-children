@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "removeComments": true,
+    // "removeComments": true,
     "declaration": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
