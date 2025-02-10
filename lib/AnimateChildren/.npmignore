@@ -1,5 +1,6 @@
 node_modules/
 src/
+draft/
 .changeset
 tsconfig.json
 .parcel-cache
