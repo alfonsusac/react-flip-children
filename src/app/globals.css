@@ -6,6 +6,7 @@ html {
   scroll-behavior: smooth;
   color-scheme: dark;
   transition: all 0.3s; 
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -15,6 +16,7 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   transition: all 0.3s; 
+  scrollbar-gutter: stable;
 }
 
 @keyframes dash {
@@ -118,11 +120,11 @@ a {
 @supports (scrollbar-color: auto) {
   body{
     scrollbar-width: thin;
-    scrollbar-color: #505068 #151519;
+    scrollbar-color: #50508033 #151519;
   }
   .sidebar-scrollbar {
-    scrollbar-width: auto;
-    scrollbar-color: #505068 #151519;
+    scrollbar-width: thin;
+    scrollbar-color: #50508033 #151519;
   }
 }
 
@@ -133,7 +135,7 @@ a {
     background: #151519;
   }
   body::-webkit-scrollbar-thumb {
-    background: #505068;
+    background: #50508033;
     border-radius: 4px;
   }
 
@@ -142,7 +144,7 @@ a {
     background: #151519;
   }
   .sidebar-scrollbar::-webkit-scrollbar-thumb {
-    background: #505068;
+    background: #50508033;
     border-radius: 4px;
   }
 }
@@ -163,4 +165,19 @@ a {
 
 .anchor-none {
   overflow-anchor: none;
+}
+
+
+.top-fade-mask {
+  mask: linear-gradient(
+    to bottom, 
+    #151519,
+    #15151900
+  );
+  -webkit-mask: linear-gradient(
+    to bottom, 
+    #151519,
+    #15151900
+  );
+  
 }
