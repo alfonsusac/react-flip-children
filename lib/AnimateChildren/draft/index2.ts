@@ -74,30 +74,30 @@ function cloneElementWithRef<
   const passedDownRef = 'ref' in element.props ? element.props.ref : null
   const mergedRef
     = passedDownRef ?
-(node: T) => {
-  if (isRefCallback(passedDownRef)) {
-    const cleanup = passedDownRef(node)
-    ref.current = node
-    return () => {
-      if (isReact19RefCallbackCleanUpFunction(cleanup)) {
-        cleanup()
-      } else {
-        passedDownRef(null)
-        ref.current = null
+      (node: T) => {
+        if (isRefCallback(passedDownRef)) {
+          const cleanup = passedDownRef(node)
+          ref.current = node
+          return () => {
+            if (isReact19RefCallbackCleanUpFunction(cleanup)) {
+              cleanup()
+            } else {
+              passedDownRef(null)
+              ref.current = null
+            }
+          }
+        }
+        if (isRefObject(passedDownRef)) {
+          passedDownRef.current = node
+          ref.current = node
+          return () => {
+            passedDownRef.current = null
+            ref.current = null
+          }
+        }
+        ref.current = node
+        return () => ref.current = null
       }
-    }
-  }
-  if (isRefObject(passedDownRef)) {
-    passedDownRef.current = node
-    ref.current = node
-    return () => {
-      passedDownRef.current = null
-      ref.current = null
-    }
-  }
-  ref.current = node
-  return () => ref.current = null
-}
       : ref
 
   return cloneElement(element, { ...props, mergedRef }) as Pretty<
@@ -284,7 +284,6 @@ function AnimateChildren(props: AnimateChildrenProps) {
         const node = entry.ref.current
 
         tempParent ??= parent.saveNode(node.parentElement)
-
         saveChildData(entry)
 
         if (!opts.delayDeletion)
