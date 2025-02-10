@@ -31,7 +31,7 @@ export function Sidebar() {
         })
       }, {
         root: null,
-        rootMargin: "0% 0% -50% 0%",
+        rootMargin: "0% 0% -80% 0%",
         threshold: 1,
       })
 
@@ -59,6 +59,13 @@ export function Sidebar() {
   return (
     <>
       <div className={cn(
+        "fixed top-0 left-0 right-0 h-20 z-40",
+        "pointer-events-none",
+        "bg-gradient-to-b from-[#151519] to-[#15151900]",
+        "top-fade-mask",
+      )}>
+      </div>
+      <div className={cn(
         "fixed top-4 left-4 z-50 p-2 bg-[#151519]",
         "px-3",
         "rounded-lg",
@@ -70,7 +77,7 @@ export function Sidebar() {
         "shadow-[0_0px_5px_0_#334]",
         "flex items-center gap-1",
         "transition-all",
-        open && "shadow-none",
+        open && "shadow-none border-transparent",
         "group",
         "touch-none",
       )}
@@ -84,9 +91,8 @@ export function Sidebar() {
         } Table of Contents
       </div>
       <div className={cn(
-        "w-52 shrink-0",
+        "shrink-0",
         "bg-[#151519]",
-
         "w-80",
         "fixed",
         "z-40",
@@ -96,7 +102,6 @@ export function Sidebar() {
         // "p-8",
         "transition-all",
         open ? "left-0 shadow-[0_0_40px_0_#223]" : "-left-80",
-        // "pt-12",
         "flex flex-col",
       )}
       >
@@ -111,6 +116,10 @@ export function Sidebar() {
 
             "sidebar-scrollbar",
           )}>
+          <div className="text-sm px-4 opacity-40 hover:opacity-80 select-none">
+            {/* "Press Ctrl+F (Windows) or Cmd+F (Mac) to search the page!" */}
+            Press <kbd className="text-xs">Ctrl+F</kbd> (Windows) or <kbd className="text-xs">Cmd+F</kbd> (Mac) to search the page!
+          </div>
           {
             headers.map((header, index) => (
               <a
@@ -129,8 +138,8 @@ export function Sidebar() {
                   "py-2",
                   "cursor-pointer",
                   "!no-underline",
-                  "!text-[#ccd]",
-                  "hover:!text-[#88f]",
+                  "!text-[#aab]",
+                  "hover:!text-[#dde]",
                   "outline-none",
                   "outline-transparent",
 
@@ -143,14 +152,14 @@ export function Sidebar() {
                   "truncate",
                   "shrink-0",
 
-                  header.level === 2 && "pl-3  py-2 mt-3 !font-medium",
-                  header.level === 3 && "pl-7  py-1 ",
-                  header.level === 4 && "pl-12 py-1 text-xs",
-                  header.level === 5 && "pl-16 py-1 text-xs",
+                  header.level === 2 && "pl-3  py-2 mt-3 !font-semibold",
+                  header.level === 3 && "pl-7  py-[0.35rem] -my-0.5",
+                  header.level === 4 && "pl-12 py-[0.35rem] -my-[0.1rem] text-xs",
+                  header.level === 5 && "pl-12 py-[0.35rem] -my-[0.1rem] text-xs",
                 )}>
                 {header.level !== 2 && (
                   <div className="absolute left-4 w-0.5 top-0 bottom-0 bg-[#252540]">
-                    <div className="absolute left-0 w-0.5 top-1 bottom-1 group-data-[visible]:bg-[#44a]" />
+                    <div className="absolute left-0 w-0.5 top-1 bottom-1 group-data-[visible]:bg-[#77c]" />
                   </div>
                 )}
                 {
