@@ -23,6 +23,12 @@ type FlatMapReactNode =
   | ReactPortal
   | Pretty<ReactElement<StandardProps> & { key: string }> //  All element in flatMap are assumed to be ReactElement with key due to Children.toArray()
 
+
+// Flat forEach children implementation
+// - Inspired by [https://www.npmjs.com/package/react-keyed-flatten-children]
+// - Key prefix is needed because child of fragment does not add the fragment's key. Therefore it has to be added manually.
+// - Doesn't handle async components properly. This is a weakness in React's part
+
 function flatForEach(
   children: ReactNode,
   callback: Callback,

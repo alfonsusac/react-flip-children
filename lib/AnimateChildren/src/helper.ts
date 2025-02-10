@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Children, cloneElement, isValidElement, type CSSProperties, type ExoticComponent, type JSXElementConstructor, type LazyExoticComponent, type ReactElement, type ReactNode, type ReactPortal, type Ref } from "react";
+import { cloneElement, type JSXElementConstructor, type ReactElement, type ReactNode, type ReactPortal } from "react";
 import { isFragment as _isFragment, isPortal as _isPortal } from "react-is";
 
 
@@ -18,101 +18,7 @@ export function isPortal(child: ReactNode): child is ReactPortal {
   return _isPortal(child)
 }
 
-type PrimitiveChild =
-  | string
-  | number
-  | bigint
-  | boolean
-  | null
-  | undefined
-
-export function isPrimitive(node: ReactNode): node is PrimitiveChild {
-  return node == null || typeof node !== 'object'
-}
-
 export type AnimationTime = (null | CSSNumberish)
-
-
-//─────────────────────────────────────────────────╮
-// FlatMap                                         │
-//                                                 │   
-// Flat forEach children implementation
-// - Inspired by [https://www.npmjs.com/package/react-keyed-flatten-children]
-// - Key prefix is needed because child of fragment does not add the fragment's key. Therefore it has to be added manually.
-// - Doesn't handle async components properly. This is a weakness in React's part
-export function flatForEach(
-  children: ReactNode,
-  callback: (child: FlatMapReactNode, index: number) => void,
-  keyPrefix: string = ""
-) {
-  Children
-    .toArray(children)
-    .forEach((child, index) => {
-      if (isFragment(child))
-        flatForEach(
-          child.props.children,
-          callback,
-          keyPrefix + child.key
-        )
-      else if (!isValidElement(child))
-        callback(child as FlatMapReactNode, index)
-      else
-        callback(cloneElement(child, { key: keyPrefix + (child.key) }) as FlatMapReactNode, index)
-    })
-}
-
-export function flatMap<T>(
-  children: ReactNode,
-  mapFn: (child: FlatMapReactNode, index: number) => T
-) {
-  const arr: T[] = []
-  flatForEach(children, (child, index) => arr.push(mapFn(child, index)))
-  return arr
-}
-
-export function flatForEachPreserveKey(
-  children: ReactNode,
-  callback: (child: FlatMapReactNode, index: number) => void,
-) {
-  Children.forEach(children, (child, index) => {
-    if (isFragment(child)) {
-      flatForEachPreserveKey(child.props.children, callback)
-    }
-    callback(child as FlatMapReactNode, index)
-  })
-}
-
-export function flatMapPreserveKey<T>(
-  children: ReactNode,
-  mapFn: (child: FlatMapReactNode, index: number) => T
-) {
-  const arr: T[] = []
-  flatForEachPreserveKey(children, (child, index) => arr.push(mapFn(child, index)))
-  return arr
-}
-
-export type ReactElementFromFlatMap
-  = ReactElement<Record<string, any>> & { key: string }
-
-export type FlatMapReactNode
-  = Exclude<ReactNode,
-    | null
-    | undefined
-    | boolean
-    | Iterable<ReactNode>
-    | ReactElement // filter out these types
-    | Promise<ReactNode>
-  >
-  | string
-  | Pretty<ReactElementFromFlatMap> // ReactElement<Record<string, any>> & { key: string }
-  | ReactPortal
-// all child in flatMap are assumed
-//  to be ReactElement with key due to Children.toArray()
-
-export type FlatMapReactNodePrimitive =
-  | string
-  | number
-  | bigint
 
 
 //─────────────────────────────────────────────────╮
@@ -131,29 +37,4 @@ export function clone<
   props?: P
 ) {
   return cloneElement(element, props) as Pretty<E & { props: E['props'] & P }>
-}
-
-export function cloneWithMergedRef<
-  E extends ReactElementWithStandardProps,
-  R extends Ref<unknown>
->(
-  element: E,
-  ref: R,
-  props?: Record<string, any>
-) {
-  // Todo: merge ref too from incoming children with this ref.
-
-
-  // Goofy type casting since ReactElement has a Prop generic and we are just adding on the end of it
-  return cloneElement(element, { ref, ...props }) as
-    Pretty<E & { props: E['props'] & { ref: R } }>
-}
-
-export function cloneWithStyle<
-  E extends ReactElementWithStandardProps
->(
-  element: E,
-  style: CSSProperties
-) {
-  return cloneElement(element, { style }) as E
 }

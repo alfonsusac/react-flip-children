@@ -17,7 +17,7 @@ export default function DocsPage() {
     <ThemeProvider defaultTheme="dark" enableSystem={true} attribute="class">
       <article
         style={{
-          //@ts-ignore custom css props
+          //@ts-expect-error custom css props
           "--bg-dark": "#151519",
           "--bg-dark-2": "#181820",
 

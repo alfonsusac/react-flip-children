@@ -1,4 +1,4 @@
-import { createRef, useRef } from "react";
+import { useRef } from "react";
 
 export function useRefMap<T>(
   defaultValues: () => T
@@ -20,8 +20,6 @@ export function useRefMap<T>(
     delete:
       (key: string) => ref.current.delete(key),
     current: ref.current,
-    // [Symbol.iterator]:
-    //   () => ref.current[Symbol.iterator]()
   }
 }
 
