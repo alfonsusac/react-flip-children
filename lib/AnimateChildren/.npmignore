@@ -1,8 +1,10 @@
 node_modules/
 src/
 draft/
+script/
 .changeset
 tsconfig.json
 .parcel-cache
-
+package2.json
+package/
 *.tgz

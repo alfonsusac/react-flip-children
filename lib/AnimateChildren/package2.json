@@ -13,7 +13,6 @@
     "css transition",
     "css animation",
     "waapi",
-    "web animation api",
     "react19"
   ],
   "homepage": "https://react-flip-children.alfon.dev/",
@@ -44,9 +43,7 @@
     "react-is": "^19.0.0"
   },
   "scripts": {
-    "build": "rm -rf dist && rm -rf dist-src && tsup src/index.ts --dts --format cjs,esm --out-dir dist && npm pack && mkdir -p ./dist-src && mv *.tgz ./dist-src/ && tar -xvzf ./dist-src/*.tgz -C ./dist-src/ && zip -r ./dist-src/$(basename ./dist-src/*.tgz .tgz).zip ./dist-src/* && rm -rf ./dist-src/package",
-
-    "build2": "rm -rf dist && rm -rf dist-src && tsc && npm pack && mkdir -p ./dist-src && mv *.tgz ./dist-src/ && tar -xvzf ./dist-src/*.tgz -C ./dist-src/ && zip -r ./dist-src/$(basename ./dist-src/*.tgz .tgz).zip ./dist-src/* && rm -rf ./dist-src/package"
+    "build": "rm -rf dist && tsup src/index.ts --dts --format cjs,esm --out-dir dist"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.11",

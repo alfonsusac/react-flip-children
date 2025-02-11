@@ -414,6 +414,9 @@ const Card = forwardRef((props, ref) => {
               <li>
                 Using both async components and <code>useSearchParams</code> from Next.js can cause hanging.
               </li>
+              <li>
+                <code>Argument of type 'Element' is not assignable to parameter of type 'ReactNode'.</code> This is a TypeScript issue that can be resolved by casting the element to <code>ReactNode</code> or changing <code>moduleResolution</code> in <code>tsconfig.json</code> to other values than <code>node</code> or <code>classic</code>.
+              </li>
             </ul>
 
 
