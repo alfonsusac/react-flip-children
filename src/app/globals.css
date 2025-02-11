@@ -7,7 +7,7 @@ html {
   color-scheme: dark;
   /* This will delay transition to the end */
   /* transition: all 0.3s;  */
-  scrollbar-gutter: stable;
+  /* scrollbar-gutter: stable; */
 }
 
 body {
@@ -17,8 +17,7 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   /* This will delay transition to the end */
-  /* transition: all 0.3s;   */
-  scrollbar-gutter: stable;
+  background-color: red;
 }
 
 @keyframes dash {
@@ -120,15 +119,15 @@ a {
 
 /* For browsers that support `scrollbar-*` properties */
 @supports (scrollbar-color: auto) {
-  html{
+  html {
     scrollbar-width: thin;
-    scrollbar-color: #50508033  #0000;
+    scrollbar-color: #50508033 #0000;
   }
   .sidebar-scrollbar {
     scrollbar-width: thin;
-    scrollbar-color: #50508033  #0000;
+    scrollbar-color: #50508033 #0000;
   }
-  html:is(.dark *){
+  html:is(.dark *) {
     scrollbar-width: thin;
     scrollbar-color: #50508033 #0000;
   }
@@ -138,34 +137,39 @@ a {
   }
 }
 
-/* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements */
-@supports selector(::-webkit-scrollbar) {
-  body::-webkit-scrollbar {
-    width: 0.5rem;
-    background: #151519;
-  }
-  body::-webkit-scrollbar-thumb {
-    background: #50508033;
-    border-radius: 4px;
-  }
+/* Otherwise, use `::-webkit-scrollbar-*` pseudo-elements
+  @supports selector(::-webkit-scrollbar) {
+    body::-webkit-scrollbar {
+      width: 0.5rem;
+      background: #151519;
+    }
+    body::-webkit-scrollbar-thumb {
+      background: #50508033;
+      border-radius: 4px;
+    }
 
-  .sidebar-scrollbar::-webkit-scrollbar {
-    width: 0.5rem;
-    background: #151519;
-  }
-  .sidebar-scrollbar::-webkit-scrollbar-thumb {
-    background: #50508033;
-    border-radius: 4px;
-  }
-}
+    .sidebar-scrollbar::-webkit-scrollbar {
+      width: 0.5rem;
+      background: #151519;
+    }
+    .sidebar-scrollbar::-webkit-scrollbar-thumb {
+      background: #50508033;
+      border-radius: 4px;
+    }
+  } */
 
 .magic-move-pre > * {
   text-rendering: geometricPrecision;
 }
 
 .heroui-bg {
-  background: 
-    conic-gradient(from 0.5turn at 100% 0%, #000022, #00002200, 10deg, #00002200),
+  background: conic-gradient(
+      from 0.5turn at 100% 0%,
+      #000022,
+      #00002200,
+      10deg,
+      #00002200
+    ),
     conic-gradient(from 0.5turn at 0% 0%, #00002200, 350deg, #00002200, #000022);
   backdrop-filter: blur(0.4px);
   border-radius: 6px;
@@ -177,17 +181,9 @@ a {
   overflow-anchor: none;
 }
 
+/* --- Docs --------------------------------- */
 
 .top-fade-mask {
-  mask: linear-gradient(
-    to bottom, 
-    #151519,
-    #15151900
-  );
-  -webkit-mask: linear-gradient(
-    to bottom, 
-    #151519,
-    #15151900
-  );
-  
+  mask: linear-gradient(to bottom, #151519, #15151900);
+  -webkit-mask: linear-gradient(to bottom, #151519, #15151900);
 }

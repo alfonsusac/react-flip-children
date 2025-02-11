@@ -31,8 +31,8 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "React Array FLIP Animation",
-  description: "A FLIP animation for reordering arrays in React",
+  title: "React Flip Children",
+  description: "A FLIP animation for reordering children in React",
   authors: [
     {
       name: "Alfonsus Ardani",

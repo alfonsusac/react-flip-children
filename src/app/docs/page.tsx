@@ -4,14 +4,25 @@ import { H3 } from "./ui/document"
 import { Fragment, type ComponentProps, type ReactNode, type SVGProps } from "react"
 import { Sidebar } from "./ui/Sidebar"
 import { Footer } from "../ui/Footer"
-import { RootBackground } from "../ui/Background"
 import type { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import { ThemeProvider } from "next-themes"
 import { getPublishedVersion } from "../lib/npm"
 
 export default function DocsPage() {
+
   return (
-    <ThemeProvider defaultTheme="dark" enableSystem={true} attribute="class">
+    <ThemeProvider defaultTheme="dark" attribute="class">
+      <style>{`
+html {
+}
+html:has(.docs) {
+  background: #fff;
+}
+html.dark:has(.docs) {
+  background: #151519;
+}
+      `}
+      </style>
       <article
         style={{
           //@ts-expect-errorw custom css props
@@ -23,9 +34,10 @@ export default function DocsPage() {
 
           "--text-dark": "#aab",
           "--text-light": "#445",
-
         }}
         className={cn(
+          `docs`,
+
           `min-h-screen p-4 docs-article`,
           `font-[family-name:_var(--inter)]`,
 
@@ -134,7 +146,6 @@ export default function DocsPage() {
 
           `relative`,
         )}>
-        <RootBackground color="#151519" />
 
         <div className="flex mx-auto max-w-[30rem]">
 
