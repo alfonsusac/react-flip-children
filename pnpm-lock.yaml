@@ -114,6 +114,9 @@ importers:
       eslint-config-next:
         specifier: 15.1.2
         version: 15.1.2(eslint@9.20.0(jiti@1.21.7))(typescript@5.7.3)
+      eslint-plugin-react-hooks:
+        specifier: ^5.1.0
+        version: 5.1.0(eslint@9.20.0(jiti@1.21.7))
       postcss:
         specifier: ^8.5.2
         version: 8.5.2
@@ -5465,7 +5468,7 @@ snapshots:
 
   '@react-aria/i18n@3.12.4(react@19.0.0)':
     dependencies:
-      '@internationalized/date': 3.7.0
+      '@internationalized/date': 3.6.0
       '@internationalized/message': 3.1.6
       '@internationalized/number': 3.6.0
       '@internationalized/string': 3.2.5
@@ -5923,7 +5926,7 @@ snapshots:
       '@internationalized/date': 3.6.0
       '@internationalized/string': 3.2.5
       '@react-stately/form': 3.1.1(react@19.0.0)
-      '@react-stately/overlays': 3.6.13(react@19.0.0)
+      '@react-stately/overlays': 3.6.12(react@19.0.0)
       '@react-stately/utils': 3.10.5(react@19.0.0)
       '@react-types/datepicker': 3.9.0(react@19.0.0)
       '@react-types/shared': 3.26.0(react@19.0.0)
@@ -6981,7 +6984,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.24.0(eslint@9.20.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0)(eslint@9.20.0(jiti@1.21.7)))(eslint@9.20.0(jiti@1.21.7)):
+  eslint-module-utils@2.12.0(@typescript-eslint/parser@8.24.0(eslint@9.20.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0)(eslint@9.20.0(jiti@1.21.7)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
@@ -7003,7 +7006,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.20.0(jiti@1.21.7)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.24.0(eslint@9.20.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0(eslint-plugin-import@2.31.0)(eslint@9.20.0(jiti@1.21.7)))(eslint@9.20.0(jiti@1.21.7))
+      eslint-module-utils: 2.12.0(@typescript-eslint/parser@8.24.0(eslint@9.20.0(jiti@1.21.7))(typescript@5.7.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.7.0)(eslint@9.20.0(jiti@1.21.7))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3

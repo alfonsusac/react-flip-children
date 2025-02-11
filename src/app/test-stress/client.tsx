@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-key */
+/* eslint-disable @next/next/no-img-element */
 "use client"
 
 import { useEffect, useImperativeHandle, useRef, useState, type ComponentProps, type ReactNode, type SVGProps } from "react"
@@ -444,7 +444,7 @@ function PlayingCard(
               backfaceVisibility: "hidden",
             }}
           >
-            <img src={BackCard.src} className="w-full h-full brightness-95" />
+            <img src={BackCard.src} className="w-full h-full brightness-95" alt="playing card background back-side" />
           </div>
         </div>
       </div>

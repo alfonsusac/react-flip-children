@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 "use client"
 
 import { cloneElement, type ComponentProps, isValidElement, useState, type ReactNode, useRef, type RefObject, useEffect, Children, createRef, type ReactElement, type CSSProperties } from "react"

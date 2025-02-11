@@ -138,7 +138,7 @@ export function Sidebar() {
           ] : "pointer-events-none",
         )}
         onClick={() => {
-          window.innerWidth < 1135 &&
+          if (window.innerWidth < 1135)
             setSidebarOpen(false)
         }}
       />

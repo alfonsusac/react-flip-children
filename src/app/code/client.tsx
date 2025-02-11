@@ -1,9 +1,10 @@
+/* eslint-disable @next/next/no-img-element */
+
+
 "use client"
 
-import { Children, useState } from "react";
-import type { Token } from "../codeToken";
-import { Button, Button2 } from "../ui/Button";
-import { ReorderArray } from "../ui/Reorder";
+import { useState } from "react";
+import { Button2 } from "../ui/Button";
 import { cn } from "lazy-cn";
 import type { ThemedToken } from "shiki";
 import { AnimateCode, type GetPossibleLengths } from "../ui/AnimateCode";
@@ -72,7 +73,7 @@ export default function Client<T extends ThemedToken[][][]>(props: {
               byLine ? diffLines : diffWordsWithSpace
             }
           />
-          <img className="absolute bottom-0 right-0 opacity-20 hue-rotate-180" src="/logo.svg" />
+          <img className="absolute bottom-0 right-0 opacity-20 hue-rotate-180" src="/logo.svg" alt="" />
         </div>
       </div>
     </div>

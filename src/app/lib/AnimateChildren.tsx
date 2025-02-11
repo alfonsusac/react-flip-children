@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+
 "use client"
 
 import { createRef, isValidElement, useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode, type ReactPortal, type Ref, type RefObject } from "react"
@@ -156,7 +158,6 @@ export function AnimateChildren(
     //     We need "rendered" to be a state because we are relying on useLayoutEffect which needs a dependency to run.
     //     We need useLayoutEffect because we need to run some code before layout repaints.
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [children])
 
   // On rendered change before repaint

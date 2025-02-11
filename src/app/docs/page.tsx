@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-html-link-for-pages */
 import { cn } from "lazy-cn"
 import { CodeBlock } from "./ui/code"
 import { H3 } from "./ui/document"
@@ -9,7 +8,6 @@ import { RootBackground } from "../ui/Background"
 import type { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import { ThemeProvider } from "next-themes"
 import { getPublishedVersion } from "../lib/npm"
-
 
 export default function DocsPage() {
   return (
@@ -415,7 +413,7 @@ const Card = forwardRef((props, ref) => {
                 Using both async components and <code>useSearchParams</code> from Next.js can cause hanging.
               </li>
               <li>
-                <code>Argument of type 'Element' is not assignable to parameter of type 'ReactNode'.</code> This is a TypeScript issue that can be resolved by casting the element to <code>ReactNode</code> or changing <code>moduleResolution</code> in <code>tsconfig.json</code> to other values than <code>node</code> or <code>classic</code>.
+                <code>Argument of type &apos;Element&apos; is not assignable to parameter of type &apos;ReactNode&apos;.</code> This is a TypeScript issue that can be resolved by casting the element to <code>ReactNode</code> or changing <code>moduleResolution</code> in <code>tsconfig.json</code> to other values than <code>node</code> or <code>classic</code>.
               </li>
             </ul>
 

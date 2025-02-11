@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client"
 
 import { Children, cloneElement, createRef, isValidElement, useEffect, useLayoutEffect, useMemo, useRef, useState, type JSX, type JSXElementConstructor, type Key, type ReactElement, type ReactNode, type ReactPortal, type Ref, type RefCallback, type RefObject } from "react";

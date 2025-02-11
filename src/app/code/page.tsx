@@ -94,7 +94,7 @@ export default async function Page() {
       <div className="bg-[#D4420C] p-8 rounded-xl text-[#F8B660] shadow-[0_60px_0_0_#ac3408,_0_60px_40px_20px_#0002,_inset_0px_2px_2px_0_#e5501a,_inset_0px_-2px_2px_0_#a9380f] relative">
         <Client tokens={[b1, b2, b3, t1, t2, t3, t4, t5, t6]} />
         <div className="mt-2 -mb-4 font-semibold opacity-60">Prototype property of LAVA. Please return if found.</div>
-        <img className="absolute -bottom-16 right-4 scale-y-50 opacity-20" src="/logo.svg" />
+        <img className="absolute -bottom-16 right-4 scale-y-50 opacity-20" src="/logo.svg" alt="" />
       </div>
       <Outro />
     </div>
