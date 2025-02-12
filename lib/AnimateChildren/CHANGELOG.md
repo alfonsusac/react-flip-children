@@ -1,5 +1,17 @@
 # react-flip-children
 
+## 0.3.1
+
+### Patch Changes
+
+- readme
+
+## 0.3.0
+
+### Minor Changes
+
+- fix wrong size on delete absolute
+
 ## 0.2.0
 
 ### Minor Changes

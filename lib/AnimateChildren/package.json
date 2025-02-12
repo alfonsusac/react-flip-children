@@ -1,6 +1,6 @@
 {
   "name": "react-flip-children",
-  "version": "0.2.0",
+  "version": "0.3.1",
   "description": "A simple react component to animate children",
   "keywords": [
     "react",
@@ -45,7 +45,6 @@
   },
   "scripts": {
     "build": "rm -rf dist && rm -rf dist-src && tsup src/index.ts --dts --format cjs,esm --out-dir dist && npm pack && mkdir -p ./dist-src && mv *.tgz ./dist-src/ && tar -xvzf ./dist-src/*.tgz -C ./dist-src/ && zip -r ./dist-src/$(basename ./dist-src/*.tgz .tgz).zip ./dist-src/* && rm -rf ./dist-src/package",
-
     "build2": "rm -rf dist && rm -rf dist-src && tsc && npm pack && mkdir -p ./dist-src && mv *.tgz ./dist-src/ && tar -xvzf ./dist-src/*.tgz -C ./dist-src/ && zip -r ./dist-src/$(basename ./dist-src/*.tgz .tgz).zip ./dist-src/* && rm -rf ./dist-src/package"
   },
   "devDependencies": {
