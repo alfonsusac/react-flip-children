@@ -1,6 +1,7 @@
 node_modules/
 src/
 draft/
+dist-src/
 script/
 .changeset
 tsconfig.json
