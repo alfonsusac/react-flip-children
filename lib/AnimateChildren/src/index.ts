@@ -203,8 +203,10 @@ export function AnimateChildren(
         keys.add(key)                               // Check for duplicate keys
 
         const [entry, isNew] = data.getOrAdd(key)
-        if (entry.deleting)
+        if (entry.deleting) {
+          delete entry.ref.current?.dataset.deleting
           delete entry.deleting                     // Clear existing timeout to prevent existing timeout to trigger deletion
+        }
 
         if (isNew)
           entry.adding = true
@@ -218,6 +220,7 @@ export function AnimateChildren(
               return () => { entry.ref.current = null }
             }),
           key,
+          "data-adding": isNew ? '' : undefined
         })
         return el
       },
@@ -241,12 +244,15 @@ export function AnimateChildren(
         tempParent ??= parent.saveNodeAndRect(node.parentElement)   // Cache parent node
         saveChildRectAndAnimation(entry)                            // Save the rect data and css animationTimes of the current node
 
+        if (keys.has(child.key)) {
+          entry.order = staggerElementCount++                       // Get the order of the elements in the new order for staggered animation
+        }
+
         // ↓ This part below is for deletion animation.
         if (!opts.delayDeletion)
           return                                                    // If deletion is instant, skip exit animations
 
         if (keys.has(child.key)) {
-          entry.order = staggerElementCount++
           return                                                    // Filter for deleted keys
         }
         const props: Record<string, any> = {}
@@ -255,6 +261,8 @@ export function AnimateChildren(
             position: 'absolute',
             top: entry.rect?.y ?? node.offsetTop,
             left: entry.rect?.x ?? node.offsetLeft,
+            width: entry.size?.width ?? node.offsetWidth,
+            height: entry.size?.height ?? node.offsetHeight,
           } satisfies CSSProperties
         }
         newRender.splice(index, 0, clone(child, props))             // Re-add the deleted elements back in the children with "data-deleting" props.
@@ -303,8 +311,8 @@ export function AnimateChildren(
           return
         }
 
-        if (entry.adding)
-          node.dataset.adding = ''
+        // if (entry.adding)
+        //   node.dataset.adding = ''
 
         let hasPrevAnimation = false                     // To prevent adding extra delay for staggered animation.
 
@@ -416,7 +424,7 @@ export function AnimateChildren(
             id: `__react-flip-children-move-animation+delay=${ delay }`
           },
           onRegister: (animation) => {
-            animation.oncancel = () => animation.cancel()
+            animation.onfinish = () => animation.cancel()
           },
         })
       }
@@ -437,12 +445,14 @@ export function AnimateChildren(
 
       const keys = deletingKeys
       requestAnimationFrame(() => {
-        data.forEach(entry => {
-          if (entry.ref.current)
-            delete entry.ref.current.dataset.adding
-          if (entry.adding)
-            delete entry.adding
-        })
+        setTimeout(() => {
+          data.forEach(entry => {
+            if (entry.ref.current)
+              delete entry.ref.current.dataset.adding
+            if (entry.adding)
+              delete entry.adding
+          })
+        }, 0)
         keys.length && setTimeout(() => {
           data.forEach(e => saveChildRectAndAnimation(e))   // Cache parent node
           parent.saveRect()                                 // Save the rect data and css animationTimes of the current node
