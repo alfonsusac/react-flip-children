@@ -7,6 +7,7 @@ import { Footer } from "../ui/Footer"
 import type { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import { ThemeProvider } from "next-themes"
 import { getPublishedVersion } from "../lib/npm"
+import { LinkButton2 as LinkButton } from "../ui/Button"
 
 export default function DocsPage() {
 
@@ -23,9 +24,9 @@ html.dark:has(.docs) {
 }
       `}
       </style>
-      <article
+      <main
         style={{
-          //@ts-expect-errorw custom css props
+          //@ts-expect-error custom css props
           "--bg-dark": "#151519",
           "--bg-dark-2": "#181820",
 
@@ -59,7 +60,6 @@ html.dark:has(.docs) {
           "[&_h2]:!text-3xl",
           `[&_h2]:text-center`,
 
-
           `[&_h3]:text-[#334]`,
           `[&_h3]:dark:text-[#dde]`,
           `[&_h3]:font-[family-name:var(--inter)]`,
@@ -69,7 +69,6 @@ html.dark:has(.docs) {
           `[&_h3]:tracking-tight`,
           `[&_h3]:pt-16`,
           `[&_h3]:block`,
-
 
           `[&_h4]:text-[#cce]`,
           `[&_h4]:font-[family-name:var(--inter)]`,
@@ -690,7 +689,7 @@ const Card = forwardRef((props, ref) => {
 
         </div>
 
-      </article >
+      </main >
     </ThemeProvider>
   )
 }
@@ -718,38 +717,3 @@ function Fa6BrandsXTwitter(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-function LinkButton(
-  { className, ...props }: ComponentProps<"a">
-) {
-  return <a {...props} className={cn(
-    `inline-block`,
-    `bg-[#fff]`,
-    `dark:bg-[#181820]`,
-
-    `[@media(pointer:fine)]:hover:bg-[#f5f5f9]`,
-    `[@media(pointer:fine)]:hover:dark:bg-[#223]`,
-
-    `border`,
-
-    `border-[#ccd]`,
-    `dark:border-[#334]`,
-
-    `[@media(pointer:fine)]:hover:border-[#bbc]`,
-    `[@media(pointer:fine)]:hover:dark:border-[#445]`,
-
-    `p-2 px-3 leading-none rounded-lg`,
-
-    `text-xs font-medium`,
-    `!no-underline`,
-
-    `shadow-[inset_0_-4px_2px_0_#0081]`,
-    `active:shadow-[inset_0_-2px_2px_0_#0082]`,
-
-    `dark:shadow-[inset_0_-4px_2px_0_#0006]`,
-    `dark:active:shadow-[inset_0_-2px_2px_0_#0008]`,
-
-    `active:translate-y-0.5`,
-    `transition-all duration-100`,
-    className
-  )} />
-}

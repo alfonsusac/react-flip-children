@@ -126,3 +126,40 @@ export function LinkButton(
     className
   )} />
 }
+
+export function LinkButton2(
+  { className, ...props }: ComponentProps<"a">
+) {
+  return <a {...props} className={cn(
+    `select-none cursor-pointer`,
+    `inline-block`,
+    `bg-[#fff]`,
+    `dark:bg-[#181820]`,
+
+    `[@media(pointer:fine)]:hover:bg-[#f5f5f9]`,
+    `[@media(pointer:fine)]:hover:dark:bg-[#223]`,
+
+    `border`,
+
+    `border-[#ccd]`,
+    `dark:border-[#334]`,
+
+    `[@media(pointer:fine)]:hover:border-[#bbc]`,
+    `[@media(pointer:fine)]:hover:dark:border-[#445]`,
+
+    `p-2 px-3 leading-none rounded-lg`,
+
+    `text-xs font-medium`,
+    `!no-underline`,
+
+    `shadow-[inset_0_-4px_2px_0_#0081]`,
+    `active:shadow-[inset_0_-2px_2px_0_#0082]`,
+
+    `dark:shadow-[inset_0_-4px_2px_0_#0006]`,
+    `dark:active:shadow-[inset_0_-2px_2px_0_#0008]`,
+
+    `active:translate-y-0.5`,
+    `transition-all duration-100`,
+    className
+  )} />
+}

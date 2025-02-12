@@ -17,7 +17,7 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
   /* This will delay transition to the end */
-  background-color: red;
+  /* background-color: red; */
 }
 
 @keyframes dash {
@@ -186,4 +186,8 @@ a {
 .top-fade-mask {
   mask: linear-gradient(to bottom, #151519, #15151900);
   -webkit-mask: linear-gradient(to bottom, #151519, #15151900);
+}
+
+.stable-scrollbar {
+  scrollbar-gutter: stable;
 }

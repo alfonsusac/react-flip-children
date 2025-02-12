@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState, type CSSProperties } from "react"
-import { codeToTokens, type BundledLanguage, type ThemedToken } from "shiki"
+import { codeToTokens, type BundledLanguage, type BundledTheme, type ThemedToken } from "shiki"
 
 export function CodeBlock(
   props: {
@@ -11,6 +11,9 @@ export function CodeBlock(
     html?: boolean
     lang?: BundledLanguage
     rowHighlight?: number[]
+    lightTheme?: BundledTheme
+    darkTheme?: BundledTheme
+    className?: string
   }
 ) {
   const code = props.code.trimStart().trimEnd()
@@ -39,8 +42,8 @@ export function CodeBlock(
       const resultDark = await codeToTokens(code, {
         lang,
         themes: {
-          dark: "poimandres",
-          light: "vitesse-light",
+          dark: props.darkTheme ?? "poimandres",
+          light: props.lightTheme ?? "vitesse-light",
         },
       })
 
@@ -58,13 +61,12 @@ export function CodeBlock(
         })
       })
 
-      console.log(resultDark)
       setTokensDark(resultDark.tokens)
     })()
-  }, [code, lang])
+  }, [code, lang, props.darkTheme, props.lightTheme])
 
   return (
-    <pre className="">
+    <pre className={props.className}>
       <code className="[&_span]:dark:!text-[var(--shiki-dark)] [&_span]:transition-all">
         {highlightedCodeDark.length ? highlightedCodeDark : <span className="opacity-0">{code}</span>}
       </code>

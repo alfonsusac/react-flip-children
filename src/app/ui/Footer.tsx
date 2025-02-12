@@ -6,10 +6,10 @@ export function Footer(
 ) {
   return (
     <footer className={cn(
-      "py-20 text-sm text-center opacity-60",
+      "py-20 text-sm text-center text-zinc-500",
       className,
     )}>
-      &copy; {new Date().getUTCFullYear()} Alfonsus Ardani. All rights reserved.
+      &copy; {new Date().getUTCFullYear()} <a className="text-zinc-800 dark:text-zinc-300 !no-underline hover:!underline cursor-pointer" href="https://alfon.dev" target="_blank">Alfonsus Ardani</a>. All rights reserved.
     </footer>
   )
 }
