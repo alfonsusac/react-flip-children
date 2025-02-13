@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.3.4
+
+### Patch Changes
+
+- fix parent animation oncancel -> onfinish
+
 ## 0.3.3
 
 ### Patch Changes
