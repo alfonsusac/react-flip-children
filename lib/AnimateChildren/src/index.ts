@@ -325,7 +325,6 @@ export function AnimateChildren(
         // Reconcile the css animation times of the current node
         //   We assumed that the css animation times are in the same order before and after setRendered. (before and after reflow)
         //   NB: Major Performance Hit
-        // console.log(`key: ${child.key}`, entry.animations.map(a => a.currentTime))
         if (opts.stagger || !opts.disableAnimationReconciliation) {
           const animations = node.getAnimations()
           animations
@@ -512,10 +511,11 @@ function useParent() {
         options: {
           duration: opts.duration,
           easing: opts.easing,
+          fill: "both",
           composite: "add",
         },
         onRegister: (animation) => {
-          animation.oncancel = () => animation.cancel()
+          animation.onfinish = () => animation.cancel()
         },
       } satisfies AnimationItem
     }
