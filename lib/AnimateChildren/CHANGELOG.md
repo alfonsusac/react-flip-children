@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.3.5
+
+### Patch Changes
+
+- only build to esm
+
 ## 0.3.4
 
 ### Patch Changes

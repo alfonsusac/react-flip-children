@@ -9,3 +9,4 @@ tsconfig.json
 package2.json
 package/
 *.tgz
+CHANGELOG.md
