@@ -292,6 +292,12 @@ export function AnimateChildren(
     // Running the animation here would cause a lot of lag.
     // Therefore, animations are run in the next frame using requestAnimationFrame.
 
+
+    if (!opts.disableParentAnimation) {                     // Parent Animation
+      const parentAnimation = parent.queueAnimation(opts)
+      if (parentAnimation) animationQueue.add(parentAnimation)
+    }
+
     const deletingKeys: string[] = []
     // For optimizing deletion: only remove attribute for deleted keys in this array.
 
@@ -430,10 +436,6 @@ export function AnimateChildren(
       }
     )
 
-    if (!opts.disableParentAnimation) {                     // Parent Animation
-      const parentAnimation = parent.queueAnimation(opts)
-      if (parentAnimation) animationQueue.add(parentAnimation)
-    }
 
     requestAnimationFrame(() => {
       animationQueue.animate()                              // Animate all the animations in the queue. This includes elements that had moved and parent if they had moved.
