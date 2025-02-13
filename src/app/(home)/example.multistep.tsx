@@ -11,19 +11,17 @@ export function MultiStepExample() {
   });
 
   // To determine which direction the animation should go from and to
-  const [direction, setDirection] = useState<"left" | "right">("right");
+  const [direction, setDirection] = useState<"left" | "right" | undefined>();
 
   const handleNext = () => {
-    if (step < steps.length - 1) {
-      setStep((prev) => prev + 1);
-      setDirection("right");
-    }
+    if (step >= steps.length - 1) return
+    setStep((prev) => prev + 1);
+    setDirection("right");
   };
   const handleRestart = () => {
-    if (step > 0) {
-      setStep(0);
-      setDirection("left");
-    }
+    if (step <= 0) return
+    setStep(0);
+    setDirection("left");
   };
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setFormData((prev) => ({
@@ -51,7 +49,7 @@ export function MultiStepExample() {
           })
         }
       </div>
-      
+
       <div>
         <AnimateChildren
           useAbsolutePositionOnDelete
@@ -112,13 +110,7 @@ function Button(
   props: ComponentProps<"button">
 ) {
   return (
-    <button
-      {...props}
-      className={cn(
-        "border border-[var(--border-light)] bg-[var(--bg-light-2)] p-2 px-4 rounded-md",
-        props.className
-      )}
-    />
+    <button {...props} className={cn("border border-[var(--border-light)] bg-[var(--bg-light-2)] p-2 px-4 rounded-md", props.className)} />
   )
 }
 

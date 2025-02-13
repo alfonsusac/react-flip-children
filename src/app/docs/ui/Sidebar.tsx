@@ -2,6 +2,7 @@
 
 import { cn } from "lazy-cn"
 import { useTheme } from "next-themes"
+import Link from "next/link"
 import { useEffect, useRef, useState, type SVGProps } from "react"
 
 
@@ -176,14 +177,14 @@ export function Sidebar() {
         <div
           className={cn(
             "flex flex-col  overflow-auto",
-            // "-mx-8",
             "px-4",
-            // "mt-12",
-            // "pt-4",
             "pb-20",
 
             "sidebar-scrollbar",
           )}>
+          
+
+
           {/* Theme Switcher */}
           <div className="rounded-3xl !box-border flex p-0.5 ml-1 mb-2 self-start">
             {
@@ -216,8 +217,8 @@ export function Sidebar() {
                     "dark:text-[var(--text-dark)]",
 
                     mounted && item.active && [
-                      "bg-[#ebebef]",
-                      "dark:bg-[#334]",
+                      "bg-[#f0f0ff]",
+                      "dark:bg-[#223]",
 
                       "text-[#111]",
                       "dark:text-[#dde]",
@@ -229,9 +230,41 @@ export function Sidebar() {
               ))
             }
           </div>
-          <div className="text-sm px-2 opacity-50 select-none">
+          {/* <div className="text-sm px-2 opacity-50 select-none">
             Press <kbd className="text-xs">Ctrl+F</kbd> (Windows) or <kbd className="text-xs">Cmd+F</kbd> (Mac) to search the page!
-          </div>
+          </div> */}
+          <a
+            href="/"
+            className={cn(
+              "select-none cursor-pointer",
+              "!no-underline",
+              "text-sm",
+              "py-2",
+
+              "text-[#556]",
+              "hover:text-[#334]",
+
+              "dark:text-[#aab]",
+              "dark:hover:text-[#dde]",
+
+              "outline-none",
+              "outline-transparent",
+
+              "hover:bg-[#f0f0ff]",
+              "dark:hover:bg-[#223]",
+              "rounded-md",
+
+              "pl-3  py-2 -my-1 -mb-3",
+
+              "flex items-center gap-2 text-xl font-semibold tracking-tighter leading-none",
+
+              "group",
+            )}
+          >
+            {/* <LucideArrowLeft className="text-[#77c4] group-hover-[visible]:text-[#77c]" /> */}
+            React Flip<br />Children
+          </a>
+
           {
             headers.map((header, index) => (
               <a
@@ -247,7 +280,6 @@ export function Sidebar() {
                 className={cn(
                   "select-none",
 
-                  "animate-appear",
                   "text-sm",
                   "py-2",
                   "cursor-pointer",
@@ -312,16 +344,21 @@ function MaterialSymbolsChevronLeftRounded(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-
 function LucideSun(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></g></svg>
   )
 }
 
-
 function LucideMoon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 3a6 6 0 0 0 9 9a9 9 0 1 1-9-9"></path></svg>
+  )
+}
+
+
+export function LucideArrowLeft(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="m12 19l-7-7l7-7m7 7H5"></path></svg>
   )
 }

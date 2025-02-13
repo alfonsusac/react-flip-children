@@ -2,7 +2,7 @@ import { cn } from "lazy-cn"
 import { CodeBlock } from "./ui/code"
 import { H3 } from "./ui/document"
 import { Fragment, type ComponentProps, type ReactNode, type SVGProps } from "react"
-import { Sidebar } from "./ui/Sidebar"
+import { LucideArrowLeft, Sidebar } from "./ui/Sidebar"
 import { Footer } from "../ui/Footer"
 import type { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import { ThemeProvider } from "next-themes"
@@ -145,18 +145,15 @@ html.dark:has(.docs) {
 
           `relative`,
         )}>
-
-        <div className="flex mx-auto max-w-[30rem]">
-
+        <div className="flex flex-col mx-auto max-w-[30rem]">
           <Sidebar />
-
           <div id="content" className="relative !w-full max-w-[30rem] shrink-0">
 
             <header className={cn(
               `text-[#99a]`,
               `[&_a]:!text-[#99a]`,
               `hover:[&_a]:!text-[#557]`,
-              
+
               `dark:text-[#556]`,
               `dark:[&_a]:!text-[#445]`,
               `dark:hover:[&_a]:!text-[#ccd]`,
@@ -164,7 +161,6 @@ html.dark:has(.docs) {
               `[&_a]:transition-colors`,
               `[&_a]:cursor-pointer`,
             )}>
-
               <div className="flex gap-3 text-2xl">
                 <a target="_blank" href="https://github.com/alfonsusac/react-flip-array">
                   <CibGithub />

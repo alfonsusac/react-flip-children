@@ -1,7 +1,7 @@
 import { cn } from "lazy-cn"
 import { useArrayDemo } from "../(updates)/shared"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
-import type { SVGProps } from "react"
+import { LucideTrash, RadixIconsPlus } from "./assets"
 
 export function APIKeysExample() {
 
@@ -14,7 +14,7 @@ export function APIKeysExample() {
         <div className="flex gap-2">
           <div className="grow flex-1">Key</div>
           <div className="grow flex-1">Value</div>
-          <div className="w-8"/>
+          <div className="w-8 shrink-0"/>
         </div>
 
         <AnimateChildren duration={300} useAbsolutePositionOnDelete>
@@ -41,7 +41,7 @@ export function APIKeysExample() {
                 />
                 <button
                   onClick={() => demo.remove(item)}
-                  className="p-1 w-8 h-8 flex items-center justify-center rounded-md bg-[var(--bg-light-2)] hover:bg-[var(--bg-light-3)] cursor-pointer active:bg-[var(--bg-light-3)] select-none transition-all text-[var(--text-light)] border border-[var(--border-light)]">
+                  className="p-1 w-8 h-8 shrink-0 flex items-center justify-center rounded-md bg-[var(--bg-light-2)] hover:bg-[var(--bg-light-3)] cursor-pointer active:bg-[var(--bg-light-3)] select-none transition-all text-[var(--text-light)] border border-[var(--border-light)]">
                   <LucideTrash />
                 </button>
               </div>
@@ -66,27 +66,3 @@ export function APIKeysExample() {
 }
 
 
-export function LucideTrash(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
-  )
-}
-
-export function LucideArrowUp(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 12l7-7l7 7m-7 7V5"></path></svg>
-  )
-}
-
-export function LucideArrowDown(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14m7-7l-7 7l-7-7"></path></svg>
-  )
-}
-
-
-export function RadixIconsPlus(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15" {...props}><path fill="currentColor" fillRule="evenodd" d="M8 2.75a.5.5 0 0 0-1 0V7H2.75a.5.5 0 0 0 0 1H7v4.25a.5.5 0 0 0 1 0V8h4.25a.5.5 0 0 0 0-1H8z" clipRule="evenodd"></path></svg>
-  )
-}

@@ -2,19 +2,22 @@
 
 import { cn } from "lazy-cn"
 import { LinkButton2 } from "../ui/Button"
-import { useEffect, type ComponentProps, type SVGProps } from "react"
+import { useEffect, useState, type ComponentProps, type SVGProps } from "react"
 import { Footer } from "../ui/Footer"
 import { CodeBlock } from "../docs/ui/code"
-import { NotificationExample } from "./example.notificaitons"
+import { NotificationExample } from "./example.notifications"
 import { FormBuilderExample } from "./example.formbuilder"
 import { GalleryExample } from "./example.gallery"
 import { APIKeysExample } from "./example.apikeys"
 import { TitleExample } from "./example.title"
 import { MultiStepExample } from "./example.multistep"
+import type { Codes } from "./page"
+import { AnimateChildren } from "../../../lib/AnimateChildren/src"
 
 export default function Home(
   props: {
-    version: string
+    version: string,
+    codes: Codes
   }
 ) {
   return (
@@ -48,110 +51,114 @@ export default function Home(
         "--border-light": "#e3e3ef",
         "--border-light-2": "#ededf8",
 
+        "--padding": "1rem",
       }}
       className={cn(
-        "min-h-screen p-4",
+        "min-h-screen p-[var(--padding)]",
         "font-[family-name:var(--inter)]",
 
         "bg-[var(--bg-light)]",
-        "dark:bg-[var(--bg-dark)]",
 
         "text-[var(--text-light)]",
-        "dark:text-[var(--text-dark)]",
 
+        "*:mx-auto *:max-w-[30rem]",
+
+        "root-stable-both-scrollbar",
+
+        "overflow-x-hidden",
       )}
     >
-      <div className="mx-auto max-w-[30rem]">
+      <header className="pt-20">
+        {/* Badge */}
+        <div className={cn(
+          "inline-block",
+          "p-1 px-3 rounded-xl",
+          "bg-[var(--bg-light-3)]",
 
-        <header className="pt-20">
-          {/* Badge */}
-          <div className={cn(
-            "inline-block",
-            "p-1 px-3 rounded-xl",
-            "bg-[var(--bg-light-3)]",
-            "dark:bg-[var(--bg-dark-3)]",
+          "text-[var(--text-light-accent)]",
 
-            "text-[var(--text-light-accent)]",
-            "dark:text-[var(--text-dark-accent)]",
-
-            "font-semibold tracking-tight leading-none  text-sm")}>
-            v{props.version}
-          </div>
+          "font-semibold tracking-tight leading-none  text-sm")}>
+          v{props.version}
+        </div>
 
 
-          <h1 className="mt-4 text-6xl font-semibold tracking-tighter text-pretty
+        <h1 className="mt-4 text-6xl font-semibold tracking-tighter text-pretty
               pt-4
             ">
-            <TitleExample />
-            {/* Animate Children with Ease */}
-          </h1>
-          <div className="mt-3 text-xl text-[var(--text-light-4)] text-pretty leading-tight font-medium tracking-tight">
-            Fully open source component to bring your children to life with <span className="text-pretty text-[var(--text-light-2)] dark:text-[var(--text-dark-2)]">React Flip Children</span>
-          </div>
+          <TitleExample />
+          {/* Animate Children with Ease */}
+        </h1>
+        <div className="mt-3 text-xl text-[var(--text-light-4)] text-pretty leading-tight font-medium tracking-tight">
+          Fully open source component to bring your children to life with <span className="text-pretty text-[var(--text-light-2)] ">React Flip Children</span>
+        </div>
 
-          <div className="pt-8 text-xl flex *:flex-1 text-center mb-2 flex-wrap gap-2">
-            <LargeButton
-              onClick={() => {
-                // @ts-expect-error global function
-                window.shuffle()
-              }}
-              className="flex gap-2 items-center justify-center">
-              <RadixIconsShuffle />
-              Shuffle
-            </LargeButton>
-            <LargeButton>Documentation {'->'}</LargeButton>
-          </div>
-          <LargeButton className="flex gap-2 items-center justify-center">
-            <RadixIconsMix className="text-lg" />
-            Playground {'->'}</LargeButton>
-        </header>
+        <div className="pt-8 text-xl flex *:flex-1 text-center mb-2 flex-wrap gap-2">
+          <LargeButton
+            onClick={() => {
+              // @ts-expect-error global function
+              window.shuffle()
+            }}
+            className="flex gap-2 items-center justify-center">
+            <RadixIconsShuffle />
+            Shuffle
+          </LargeButton>
+          <LargeButton
+            href="/docs"
+          >Documentation {'->'}</LargeButton>
+        </div>
+        <LargeButton
+          href="/playground"
+          className="flex gap-2 items-center justify-center">
+          <RadixIconsMix className="text-lg" />
+          Playground {'->'}</LargeButton>
+      </header>
 
-        <section className={cn(
-          "my-40",
+      <section className={cn(
+        "my-40",
 
-          "[&_p]:my-2",
+        "[&_p]:my-2",
 
-          "[&_h2]:mt-40",
-          "[&_h2]:text-lg",
-          "[&_h2]:font-semibold",
+        "[&_h2]:mt-40",
+        "[&_h2]:text-lg",
+        "[&_h2]:font-semibold",
 
-          "[&_h3]:my-10",
-          "[&_h3]:mt-28",
-          "[&_h3]:text-[var(--text-light-2)]",
-          "[&_h3]:font-semibold",
-          "[&_h3]:text-sm",
+        // "[&_h3]:my-10",
+        "[&_h3]:mt-28",
+        "[&_h3]:text-[var(--text-light-2)]",
+        "[&_h3]:font-semibold",
+        "[&_h3]:text-sm",
 
-          "[&_code]:text-sm",
+        "[&_code]:text-sm",
 
-          "[&_pre]:whitespace-pre-wrap",
-          "[&_pre]:text-sm",
+        "[&_pre]:whitespace-pre-wrap",
+        "[&_pre]:text-sm",
 
-          "[&_pre]:p-2",
-          "[&_pre]:p-4",
-          "[&_pre]:my-4",
-          "[&_pre]:rounded-md",
+        "[&_pre]:p-2",
+        "[&_pre]:p-4",
+        "[&_pre]:my-4",
+        "[&_pre]:rounded-md",
 
-          "[&_pre]:border",
-          "[&_pre]:border-[var(--border-light-2)]",
-          "[&_pre]:dark:border-[var(--border-dark-2)]",
+        "[&_pre]:border",
+        "[&_pre]:border-[var(--border-light-2)]",
 
-        )}>
+        "[&_header]:mb-10",
+      )}>
 
-          <h2>Installation</h2>
-          <CodeBlock
-            lang="bash"
-            className="!py-3"
-            code={`npm install react-flip-children`}
-            lightTheme="github-light"
-          />
+        <h2>Installation</h2>
+        <CodeBlock
+          lang="bash"
+          className="!py-3"
+          code={`npm install react-flip-children`}
+          lightTheme="github-light"
+        />
 
-          <h2>Usage</h2>
-          <p>
-            Simply wrap the children you want to animate with the <code>AnimateChildren</code> component.
-          </p>
-          <CodeBlock
-            className="[&_code]:text-[0.95em]"
-            code={`
+        <h2>Usage</h2>
+        <p>
+          Simply wrap the children you want to animate with the <code>AnimateChildren</code> component.
+        </p>
+        <CodeBlock
+          className="[&_code]:text-[0.95em]"
+          code={`
 import { AnimateChildren } from 'react-flip-children'
 
 function App() {
@@ -164,33 +171,41 @@ function App() {
   )
 }
               `}
-            lightTheme="min-light"
-          />
+          lightTheme="min-light"
+        />
 
-          <h2>Examples</h2>
-          <p>
-            Here are some examples of what you can do with <code>AnimateChildren</code>.
-          </p>
+        <h2>Examples</h2>
+        <p>
+          Here are some examples of what you can do with <code>AnimateChildren</code>.
+        </p>
 
-          <h3>Notification List</h3>
-          <NotificationExample />
+        <h3>Notification List</h3>
+        <CodePreview code={props.codes.notifications} />
+        <br />
+        <NotificationExample />
 
-          <h3>API Keys</h3>
-          <APIKeysExample />
+        <h3>API Keys</h3>
+        <CodePreview code={props.codes.apikeys} />
+        <br />
+        <APIKeysExample />
 
-          <h3>Form Builder</h3>
-          <FormBuilderExample />
+        <h3>Form Builder</h3>
+        <CodePreview code={props.codes.formbuilder} />
+        <br />
+        <FormBuilderExample />
 
-          <h3>Gallery <span className="font-normal">(Advanced)</span></h3>
-          <GalleryExample />
+        <h3>Gallery <span className="font-normal">(Advanced)</span></h3>
+        <CodePreview code={props.codes.gallery} />
+        <br />
+        <GalleryExample />
 
-          <h3>Multistep Tabs <span className="font-normal">(Advanced)</span></h3>
-          <MultiStepExample />
-          
-        </section>
+        <h3>Multistep Tabs <span className="font-normal">(Advanced)</span></h3>
+        <CodePreview code={props.codes.multistep} />
+        <br />
+        <MultiStepExample />
 
+      </section>
 
-      </div>
       <Footer />
     </main>
   )
@@ -204,7 +219,7 @@ function LargeButton(
       {...props}
       className={cn(
         "",
-        "text-base py-2.5 rounded-lg text-[var(--text-light-2)] dark:text-[var(--text-dark-2)]",
+        "text-base py-2.5 rounded-lg text-[var(--text-light-2)] ",
         className,
       )}
     />
@@ -221,5 +236,52 @@ function RadixIconsShuffle(props: SVGProps<SVGSVGElement>) {
 function RadixIconsMix(props: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 15 15" {...props}><path fill="currentColor" fillRule="evenodd" d="M2.15 4a1.85 1.85 0 1 1 3.7 0a1.85 1.85 0 0 1-3.7 0M4 1.25a2.75 2.75 0 1 0 0 5.5a2.75 2.75 0 0 0 0-5.5M5.82 11L2.5 12.837V9.163zM2.64 8.212a.7.7 0 0 0-1.039.612v4.352a.7.7 0 0 0 1.039.613l3.933-2.176a.7.7 0 0 0 0-1.225zM8.3 9a.7.7 0 0 1 .7-.7h4a.7.7 0 0 1 .7.7v4a.7.7 0 0 1-.7.7H9a.7.7 0 0 1-.7-.7zm.9.2v3.6h3.6V9.2zm4.243-7.007a.45.45 0 0 0-.636-.636L11 3.364L9.193 1.557a.45.45 0 1 0-.636.636L10.364 4L8.557 5.807a.45.45 0 1 0 .636.636L11 4.636l1.807 1.807a.45.45 0 0 0 .636-.636L11.636 4z" clipRule="evenodd"></path></svg>
+  )
+}
+
+function CodePreview(
+  props: {
+    code: string
+  }
+) {
+  const [open, setOpen] = useState(false)
+  return (
+    <>
+      <div
+        onClick={() => setOpen(!open)}
+        className={cn(
+          "text-sm text-[var(--text-light-3)] hover:text-[var(--text-light)] cursor-pointer",
+        )}>
+        {open ? "hide" : "view code"}
+      </div>
+      <div className={cn(
+        "overflow-hidden w-[calc(100vw_-_30px)] relative -translate-x-1/2  left-1/2  text-sm !max-w-none",
+        "bg-[var(--bg-dark-2)] rounded-xl",
+        "[&_pre]:border-none",
+        "[&_pre]:!my-0",
+        "[&_pre]:!mx-2",
+      )}>
+        <div className="overflow-x-auto flex" style={{
+          translate: "transformZ(0)"
+        }}>
+          <AnimateChildren
+            delayDeletion={1000}
+            duration={1000}
+            useAbsolutePositionOnDelete
+            disableScaleAnimation
+          >
+            {
+              open ?
+                <div key="code" className={cn(
+                  "h-auto w-max shrink-0"
+                )}>
+                  <CodeBlock key="code" code={props.code} lightTheme="vesper" />
+                </div> : <div></div>
+            }
+          </AnimateChildren>
+        </div>
+      </div>
+    </>
+
   )
 }

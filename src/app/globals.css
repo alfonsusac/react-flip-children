@@ -177,9 +177,7 @@ a {
   /* border: 1px solid rgba(255, 255, 255, 0.1); */
 }
 
-.anchor-none {
-  overflow-anchor: none;
-}
+
 
 /* --- Docs --------------------------------- */
 
@@ -188,9 +186,25 @@ a {
   -webkit-mask: linear-gradient(to bottom, #151519, #15151900);
 }
 
+/* --- Utilities --------------------------------- */
+
+html:has(.root-stable-both-scrollbar) {
+  scrollbar-gutter: stable both-edges;
+}
+html:has(.root-stable-scrollbar) {
+  scrollbar-gutter: stable;
+}
+
 .stable-scrollbar {
   scrollbar-gutter: stable;
 }
+.stable-both-scrollbar {
+  scrollbar-gutter: stable both-edges;
+}
 .geometric-precision {
   text-rendering: geometricPrecision;
+}
+
+.anchor-none {
+  overflow-anchor: none;
 }

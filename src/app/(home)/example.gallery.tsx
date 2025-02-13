@@ -1,6 +1,18 @@
-import { useState, type SVGProps } from "react";
+import { useState } from "react";
 import { AnimateChildren } from "../../../lib/AnimateChildren/src";
 import { cn } from "lazy-cn";
+import { LucideArrowLeft, LucideArrowRight } from "./assets";
+
+const fruitList = [
+  "https://www.heroui.com/images/fruit-1.jpeg",
+  "https://www.heroui.com/images/fruit-2.jpeg",
+  "https://www.heroui.com/images/fruit-3.jpeg",
+  "https://www.heroui.com/images/fruit-4.jpeg",
+  "https://www.heroui.com/images/fruit-5.jpeg",
+  "https://www.heroui.com/images/fruit-6.jpeg",
+  "https://www.heroui.com/images/fruit-7.jpeg",
+  "https://www.heroui.com/images/fruit-8.jpeg",
+];
 
 export function GalleryExample() {
 
@@ -17,8 +29,8 @@ export function GalleryExample() {
     setCurrent((prev) => prev + 1);
   }
 
-  const srcIndex = ((current % list.length) + list.length) % list.length;
-  const src = list[srcIndex].img;
+  const srcIndex = ((current % fruitList.length) + fruitList.length) % fruitList.length;
+  const src = fruitList[srcIndex];
 
   return (
     <div className="flex flex-col">
@@ -29,7 +41,7 @@ export function GalleryExample() {
           <img
             key={src}
             src={src}
-            alt={list[srcIndex].title + " image"}
+            alt={srcIndex + "image"}
             className={cn(
               "absolute inset-0 object-cover w-full h-full",
               "transition-all",
@@ -63,62 +75,5 @@ export function GalleryExample() {
       </div>
     </div>
   )
-
-
 }
 
-
-export function LucideArrowLeft(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m12 19l-7-7l7-7m7 7H5"></path></svg>
-  )
-}
-
-export function LucideArrowRight(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h14m-7-7l7 7l-7 7"></path></svg>
-  )
-}
-
-const list = [
-  {
-    title: "Orange",
-    img: "https://www.heroui.com/images/fruit-1.jpeg",
-    price: "$5.50",
-  },
-  {
-    title: "Tangerine",
-    img: "https://www.heroui.com/images/fruit-2.jpeg",
-    price: "$3.00",
-  },
-  {
-    title: "Raspberry",
-    img: "https://www.heroui.com/images/fruit-3.jpeg",
-    price: "$10.00",
-  },
-  {
-    title: "Lemon",
-    img: "https://www.heroui.com/images/fruit-4.jpeg",
-    price: "$5.30",
-  },
-  {
-    title: "Avocado",
-    img: "https://www.heroui.com/images/fruit-5.jpeg",
-    price: "$15.70",
-  },
-  {
-    title: "Lemon 2",
-    img: "https://www.heroui.com/images/fruit-6.jpeg",
-    price: "$8.00",
-  },
-  {
-    title: "Banana",
-    img: "https://www.heroui.com/images/fruit-7.jpeg",
-    price: "$7.50",
-  },
-  {
-    title: "Watermelon",
-    img: "https://www.heroui.com/images/fruit-8.jpeg",
-    price: "$12.20",
-  },
-];

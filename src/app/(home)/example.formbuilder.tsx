@@ -1,7 +1,7 @@
 import { cn } from "lazy-cn"
 import { useArrayDemo } from "../(updates)/shared"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
-import type { SVGProps } from "react"
+import { LucideArrowDown, LucideArrowUp, LucideTrash } from "./assets"
 
 export function FormBuilderExample() {
 
@@ -76,24 +76,6 @@ export function FormBuilderExample() {
   )
 }
 
-
-export function LucideTrash(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 6h18m-2 0v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"></path></svg>
-  )
-}
-
-export function LucideArrowUp(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m5 12l7-7l7 7m-7 7V5"></path></svg>
-  )
-}
-
-export function LucideArrowDown(props: SVGProps<SVGSVGElement>) {
-  return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" {...props}><path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 5v14m7-7l-7 7l-7-7"></path></svg>
-  )
-}
 
 const defaultQuestions = [
   {
