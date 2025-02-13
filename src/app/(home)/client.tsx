@@ -2,7 +2,7 @@
 
 import { cn } from "lazy-cn"
 import { LinkButton2 } from "../ui/Button"
-import type { ComponentProps, SVGProps } from "react"
+import { useEffect, type ComponentProps, type SVGProps } from "react"
 import { Footer } from "../ui/Footer"
 import { CodeBlock } from "../docs/ui/code"
 import { NotificationExample } from "./example.notificaitons"
@@ -10,6 +10,7 @@ import { FormBuilderExample } from "./example.formbuilder"
 import { GalleryExample } from "./example.gallery"
 import { APIKeysExample } from "./example.apikeys"
 import { TitleExample } from "./example.title"
+import { MultiStepExample } from "./example.multistep"
 
 export default function Home(
   props: {
@@ -183,7 +184,9 @@ function App() {
           <h3>Gallery <span className="font-normal">(Advanced)</span></h3>
           <GalleryExample />
 
-
+          <h3>Multistep Tabs <span className="font-normal">(Advanced)</span></h3>
+          <MultiStepExample />
+          
         </section>
 
 

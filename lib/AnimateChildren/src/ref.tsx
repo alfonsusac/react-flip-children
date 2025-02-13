@@ -10,6 +10,7 @@ export function mergeRef<T>(
       } else if (typeof ref === "function") {
         return { cleanup: ref(node), ref }
       } else {
+        console.log("this ref is object")
         ref.current = node
         return { cleanup: undefined, ref }
       }
@@ -22,6 +23,7 @@ export function mergeRef<T>(
         } else if (typeof ref === "function") {
           ref(null)
         } else if (ref) {
+          console.log("this ref is object (cleanup)")
           ref.current = null
         }
       })
