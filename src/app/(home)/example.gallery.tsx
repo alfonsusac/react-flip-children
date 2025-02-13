@@ -1,3 +1,5 @@
+/* eslint-disable @next/next/no-img-element */
+
 import { useState } from "react";
 import { AnimateChildren } from "../../../lib/AnimateChildren/src";
 import { cn } from "lazy-cn";
