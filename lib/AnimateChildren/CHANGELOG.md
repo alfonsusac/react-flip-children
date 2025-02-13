@@ -1,5 +1,11 @@
 # react-flip-children
 
+## 0.3.3
+
+### Patch Changes
+
+- improve parent animation
+
 ## 0.3.2
 
 ### Patch Changes
