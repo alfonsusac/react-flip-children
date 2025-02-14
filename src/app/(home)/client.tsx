@@ -278,13 +278,14 @@ function CodePreview(
             disableScaleAnimation
           >
             {
-              open ?
-                <div key="code" className={cn(
-                  "h-auto w-max shrink-0"
-                )}>
-                  <CodeBlock key="code" code={props.code} lightTheme="vesper" />
-                </div> : <div></div>
+              open &&
+              <div key="code" className={cn(
+                "h-auto w-max shrink-0"
+              )}>
+                <CodeBlock key="code" code={props.code} lightTheme="vesper" />
+              </div>
             }
+            <div />
           </AnimateChildren>
         </div>
       </div>
