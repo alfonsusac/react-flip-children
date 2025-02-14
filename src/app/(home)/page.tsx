@@ -11,6 +11,7 @@ export default async function HomePage() {
     multistep: await read("example.multistep"),
     notifications: await read("example.notifications"),
     title: await read("example.title"),
+    accordion: await read("example.accordion"),
   }
 
   return (
@@ -32,4 +33,5 @@ export type Codes = {
   multistep: string;
   notifications: string;
   title: string;
+  accordion: string;
 }

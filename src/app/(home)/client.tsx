@@ -13,6 +13,7 @@ import { TitleExample } from "./example.title"
 import { MultiStepExample } from "./example.multistep"
 import type { Codes } from "./page"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
+import { AccordionExample } from "./example.accordion"
 
 export default function Home(
   props: {
@@ -179,20 +180,26 @@ function App() {
           Here are some examples of what you can do with <code>AnimateChildren</code>.
         </p>
 
-        <h3>Notification List</h3>
-        <CodePreview code={props.codes.notifications} />
-        <br />
-        <NotificationExample />
-
         <h3>API Keys</h3>
         <CodePreview code={props.codes.apikeys} />
         <br />
         <APIKeysExample />
 
+        <h3>Notification List</h3>
+        <CodePreview code={props.codes.notifications} />
+        <br />
+        <NotificationExample />
+
         <h3>Form Builder</h3>
         <CodePreview code={props.codes.formbuilder} />
         <br />
         <FormBuilderExample />
+
+        <h3>Accordion</h3>
+        <CodePreview code={props.codes.accordion} />
+        <br />
+        <AccordionExample />
+
 
         <h3>Gallery <span className="font-normal">(Advanced)</span></h3>
         <CodePreview code={props.codes.gallery} />
