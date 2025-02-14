@@ -85,6 +85,7 @@ export function MultiStepExample() {
               type="text"
               autoComplete="off"
               autoCorrect="off"
+              aria-autocomplete="none" 
               value={formData[steps[step].input]}
               onChange={handleChange}
               className={cn(
