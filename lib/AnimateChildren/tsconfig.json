@@ -1,31 +1,22 @@
 {
   "compilerOptions": {
+    // Build
+    "jsx": "react",
+    "moduleResolution": "bundler",
     "removeComments": true,
-    "declaration": true,
+    "target": "ESNext",
+    // DX
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    // Performance
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
-    "moduleResolution": "node",
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
-    "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true,
-    "jsx": "react",
-    "lib": [
-      "dom",
-    ],
-    "module": "ESNext",
-    "target": "ESNext",
-    "outDir": "dist",
+    "resolveJsonModule": true,
   },
   "exclude": [
     "node_modules"
   ],
-  "include": [
-    "src/**/*"
-  ],
-  "files": [
-    "src/index.ts"
-  ]
 }

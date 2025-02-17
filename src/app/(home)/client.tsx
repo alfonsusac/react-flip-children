@@ -14,6 +14,7 @@ import { MultiStepExample } from "./example.multistep"
 import type { Codes } from "./page"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import { AccordionExample } from "./example.accordion"
+import { PlaylistExample } from "./example.playlist"
 
 export default function Home(
   props: {
@@ -185,6 +186,11 @@ function App() {
         <br />
         <APIKeysExample />
 
+        <h3>Song Playlist</h3>
+        <CodePreview code={props.codes.playlist} />
+        <br />
+        <PlaylistExample />
+
         <h3>Notification List</h3>
         <CodePreview code={props.codes.notifications} />
         <br />
@@ -266,11 +272,9 @@ function CodePreview(
         "bg-[var(--bg-dark-2)] rounded-xl",
         "[&_pre]:border-none",
         "[&_pre]:!my-0",
-        "[&_pre]:!mx-2",
+        "[&_pre]:!px-4",
       )}>
-        <div className="overflow-x-auto flex" style={{
-          translate: "transformZ(0)"
-        }}>
+        <div>
           <AnimateChildren
             delayDeletion={1000}
             duration={1000}
@@ -280,9 +284,11 @@ function CodePreview(
             {
               open &&
               <div key="code" className={cn(
-                "h-auto w-max shrink-0"
+                "overflow-x-auto"
               )}>
-                <CodeBlock key="code" code={props.code} lightTheme="vesper" />
+                <div className="min-w-max">
+                  <CodeBlock key="code" code={props.code} lightTheme="vesper" />
+                </div>
               </div>
             }
             <div />

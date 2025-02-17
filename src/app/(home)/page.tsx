@@ -12,6 +12,7 @@ export default async function HomePage() {
     notifications: await read("example.notifications"),
     title: await read("example.title"),
     accordion: await read("example.accordion"),
+    playlist: await read("example.playlist"),
   }
 
   return (
@@ -34,4 +35,5 @@ export type Codes = {
   notifications: string;
   title: string;
   accordion: string;
+  playlist: string;
 }
