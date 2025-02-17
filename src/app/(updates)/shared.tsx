@@ -148,26 +148,6 @@ export const exampleArticles: {
       author: "Sébastien Lorber",
     },
     {
-      title: "Records & Tuples for React",
-      date: "July 31, 2020",
-      author: "Sébastien Lorber",
-    },
-    {
-      title: "Using Expo in Gatsby",
-      date: "May 11, 2020",
-      author: "Sébastien Lorber",
-    },
-    {
-      title: "Atomic CSS-in-JS",
-      date: "April 27, 2020",
-      author: "Sébastien Lorber",
-    },
-    {
-      title: "Handling API request race conditions in React",
-      date: "August 30, 2019",
-      author: "Sébastien Lorber",
-    },
-    {
       title: "Next-level frosted glass with backdrop-filter",
       date: "December 2nd, 2024",
       author: "Joshua Comeau"
@@ -178,14 +158,24 @@ export const exampleArticles: {
       author: "Joshua Comeau"
     },
     {
+      title: "Move on to ESM-only",
+      date: "Feb 5th, 2025",
+      author: "Anthony Fu",
+    },
+    {
+      title: "Why are slow sites annoying?",
+      date: "Jan 30th, 2025",
+      author: "Tiger Abrodi",
+    },
+    {
       title: "A Friendly Introduction to Container Queries",
       date: "November 4th, 2024",
       author: "Joshua Comeau"
     },
     {
-      title: "How I Built My Blog",
-      date: "September 24th, 2024",
-      author: "Joshua Comeau"
+      title: "Nuances of Server Actions in Next.js",
+      date: "May 4th, 2024",
+      author: "Tiger Abrodi"
     },
     {
       title: "The Undeniable Utility Of CSS :has",
@@ -202,7 +192,7 @@ export const exampleArticles: {
       date: "September 19th, 2024",
       author: "Fuma"
     },
-  ]
+]
 
 
 export function useGenericArrayDemo<T>(

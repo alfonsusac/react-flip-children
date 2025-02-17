@@ -91,7 +91,7 @@ export default function Home(
           {/* Animate Children with Ease */}
         </h1>
         <div className="mt-3 text-xl text-[var(--text-light-4)] text-pretty leading-tight font-medium tracking-tight">
-          Fully open source component to bring your children to life with <span className="text-pretty text-[var(--text-light-2)] ">React Flip Children</span>
+          A fully open-source component to animate your child elements with <img src="/icon.png" className="inline w-[1em] h-[1em]"/> <span className="text-pretty text-[var(--text-light-2)] ">React Flip Children</span>
         </div>
 
         <div className="pt-8 text-xl flex *:flex-1 text-center mb-2 flex-wrap gap-2">
