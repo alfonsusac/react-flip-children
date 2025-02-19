@@ -58,6 +58,7 @@ export function NotificationExample() {
                 </div>
               </div>
               <button
+                aria-label="archive"
                 onClick={() => remove(item)}
                 className="self-center p-2 text-[var(--text-light-3)] hover:text-[var(--text-light-2)] hover:bg-[var(--bg-light-3)] rounded-full opacity-0 group-hover:opacity-100 transition-all duration-100">
                 <RadixIconsArchive className="text-lg" />
@@ -67,11 +68,13 @@ export function NotificationExample() {
         </AnimateChildren>
       </div>
 
-      <div className="flex gap-2 items-center justify-center p-3 text-sm hover:bg-[var(--bg-light-2)] cursor-pointer font-medium border-t border-[var(--border-light)]"
+      <button
+        aria-label="archive all"
+        className="flex gap-2 items-center justify-center p-3 text-sm hover:bg-[var(--bg-light-2)] cursor-pointer font-medium border-t border-[var(--border-light)]"
         onClick={() => demo.arr.forEach((item, index) => setTimeout(() => remove(item), index * 100))}
       >
         Archive All
-      </div>
+      </button>
     </div>
   )
 }

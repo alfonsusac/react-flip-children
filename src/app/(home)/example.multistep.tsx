@@ -82,10 +82,11 @@ export function MultiStepExample() {
             <p className="font-semibold">
               {steps[step].description}</p>
             <input
+              title={steps[step].input}
               type="text"
               autoComplete="off"
               autoCorrect="off"
-              aria-autocomplete="none" 
+              aria-autocomplete="none"
               value={formData[steps[step].input]}
               onChange={handleChange}
               className={cn(
@@ -96,8 +97,12 @@ export function MultiStepExample() {
               {steps[step].helperText}
             </p>
             <div className="flex gap-1 justify-end">
-              <Button onClick={handleRestart}>Restart</Button>
-              <Button onClick={handleNext}>Next</Button>
+              <Button
+                aria-label="restart"  
+                onClick={handleRestart}>Restart</Button>
+              <Button
+                aria-label="next"  
+                onClick={handleNext}>Next</Button>
             </div>
           </div>
         </AnimateChildren>

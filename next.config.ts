@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
       {
         hostname: 'picsum.photos',
       },
+      {
+        hostname: 'images.genius.com',
+      },
+      {
+        hostname: 'www.heroui.com',
+      },
     ]
   }
 };

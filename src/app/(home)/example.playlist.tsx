@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useArrayDemo } from "../(updates)/shared";
 import { AnimateChildren } from "../../../lib/AnimateChildren/src";
 import { LucideArrowDown, LucideArrowUp, LucideTrash, RadixIconsPlus, RadixIconsShuffle } from "./assets";
@@ -35,7 +36,10 @@ export function PlaylistExample() {
                   style={{ zIndex: item }}
                 >
                   <div className="p-2">
-                    <img
+                    <Image
+                      alt="cover"
+                      width={40}
+                      height={40}
                       src={songs[item % songs.length].cover}
                       className="bg-zinc-200 h-full aspect-square rounded-md" />
                   </div>
@@ -49,16 +53,19 @@ export function PlaylistExample() {
                   </div>
                   <div className="gap-2 justify-end items-center hidden group-hover:flex mr-2">
                     <button
+                      aria-label="move up"
                       onClick={() => demo.moveUp(item)}
                       className="p-2 text-[var(--text-light-3)] hover:text-[var(--text-light-2)] hover:bg-[var(--bg-light-3)] rounded-full transition-all duration-100">
                       <LucideArrowUp />
                     </button>
                     <button
+                      aria-label="move down"
                       onClick={() => demo.moveDown(item)}
                       className="p-2 text-[var(--text-light-3)] hover:text-[var(--text-light-2)] hover:bg-[var(--bg-light-3)] rounded-full transition-all duration-100">
                       <LucideArrowDown />
                     </button>
                     <button
+                      aria-label="remove"
                       onClick={() => demo.remove(item)}
                       className="p-2 text-[var(--text-light-3)] hover:text-[var(--text-light-2)] hover:bg-[var(--bg-light-3)] rounded-full transition-all duration-100">
                       <LucideTrash />
@@ -84,7 +91,7 @@ const songs = [
     title: "Be a Flower",
     artist: "Ryokuoushoku Shakai",
     length: "3:20",
-    cover: "https://lh3.googleusercontent.com/NXXSkZbIeHfz7VaEqux9fE9oJY4jhnBeMFiqumSibPZvOBUF4ItL8D7kaCEqHP--BmXPriGQOT458PgS=w544-h544-l90-rj"
+    cover: "https://images.genius.com/8f8f117de6e330cf4be7200559874d7b.1000x1000x1.png"
   },
   {
     title: "Darken",

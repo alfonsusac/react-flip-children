@@ -13,18 +13,9 @@ export default function CoverPage() {
     <main
       style={{
         //@ts-expect-error custom css props
-        "--bg-dark": "#151519",
-        "--bg-dark-2": "#21212a",
-        "--bg-dark-3": "#2f2f3d",
-
         "--bg-light": "#fff",
         "--bg-light-2": "#f8f8fc",
         "--bg-light-3": "#f1f1f6",
-
-        "--text-dark": "#eef",
-        "--text-dark-2": "#ccd",
-        "--text-dark-3": "#aab",
-        "--text-dark-4": "#889",
 
         "--text-light": "#334",
         "--text-light-2": "#445",
@@ -32,10 +23,6 @@ export default function CoverPage() {
         "--text-light-4": "#99a",
 
         "--text-light-accent": "#61619a",
-        "--text-dark-accent": "#a4a4e6",
-
-        "--border-dark": "#36364c",
-        "--border-dark-2": "#27272d",
 
         "--border-light": "#e3e3ef",
         "--border-light-2": "#ededf8",

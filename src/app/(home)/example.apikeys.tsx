@@ -12,8 +12,8 @@ export function APIKeysExample() {
 
       <div className="flex flex-col gap-2 text-[var(--text-light-3)]">
         <div className="flex gap-2">
-          <div className="grow flex-1">Key</div>
-          <div className="grow flex-1">Value</div>
+          <div aria-hidden="true" className="grow flex-1">Key</div>
+          <div aria-hidden="true" className="grow flex-1">Value</div>
           <div className="w-8 shrink-0"/>
         </div>
 
@@ -37,9 +37,11 @@ export function APIKeysExample() {
                   className="p-1 px-1.5 bg-[var(--bg-light)] rounded-md border border-[var(--border-light-2)] grow focus:outline-none focus:border-[var(--text-light-4)] min-w-0 text-[var(--text-light)]"
                 />
                 <input
+                  title={"value for " + item}
                   className="p-1 px-1.5 bg-[var(--bg-light)] rounded-md border border-[var(--border-light-2)] grow focus:outline-none focus:border-[var(--text-light-4)] min-w-0"
                 />
                 <button
+                  aria-label={"delete item " + item}
                   onClick={() => demo.remove(item)}
                   className="p-1 w-8 h-8 shrink-0 flex items-center justify-center rounded-md bg-[var(--bg-light-2)] hover:bg-[var(--bg-light-3)] cursor-pointer active:bg-[var(--bg-light-3)] select-none transition-all text-[var(--text-light)] border border-[var(--border-light)]">
                   <LucideTrash />
@@ -48,6 +50,7 @@ export function APIKeysExample() {
             </div>
           ))}
           <button
+            aria-label="add another"
             onClick={() => demo.addLast()}
             className={cn(
               "self-start",

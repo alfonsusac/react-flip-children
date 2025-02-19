@@ -15,6 +15,7 @@ import type { Codes } from "./page"
 import { AnimateChildren } from "../../../lib/AnimateChildren/src"
 import { AccordionExample } from "./example.accordion"
 import { PlaylistExample } from "./example.playlist"
+import Image from "next/image"
 
 export default function Home(
   props: {
@@ -22,6 +23,8 @@ export default function Home(
     codes: Codes
   }
 ) {
+
+
   return (
     <main
       style={{
@@ -42,7 +45,7 @@ export default function Home(
         "--text-light": "#334",
         "--text-light-2": "#445",
         "--text-light-3": "#778",
-        "--text-light-4": "#99a",
+        "--text-light-4": "#889",
 
         "--text-light-accent": "#61619a",
         "--text-dark-accent": "#a4a4e6",
@@ -68,6 +71,8 @@ export default function Home(
         "root-stable-both-scrollbar",
 
         "overflow-x-hidden",
+
+        '[&_*[class*="--text-light-4"]]:opacity-[0.9]'
       )}
     >
       <header className="pt-20">
@@ -90,12 +95,13 @@ export default function Home(
           <TitleExample />
           {/* Animate Children with Ease */}
         </h1>
-        <div className="mt-3 text-xl text-[var(--text-light-4)] text-pretty leading-tight font-medium tracking-tight">
-          A fully open-source component to animate your child elements with <img src="/icon.png" className="inline w-[1em] h-[1em]"/> <span className="text-pretty text-[var(--text-light-2)] ">React Flip Children</span>
+        <div aria-hidden="true" role="presentation" className="mt-3 text-xl text-[var(--text-light-4)] text-pretty leading-tight font-medium tracking-tight">
+          A fully open-source component to animate your child elements with <MyIcon className="inline w-[1em] h-[1em]" /> <span className="text-pretty text-[var(--text-light-2)] ">React Flip Children</span>
         </div>
 
         <div className="pt-8 text-xl flex *:flex-1 text-center mb-2 flex-wrap gap-2">
           <LargeButton
+            href="#"
             onClick={() => {
               // @ts-expect-error global function
               window.shuffle()
@@ -261,6 +267,7 @@ function CodePreview(
   return (
     <>
       <div
+        aria-hidden="true"
         onClick={() => setOpen(!open)}
         className={cn(
           "text-sm text-[var(--text-light-3)] hover:text-[var(--text-light)] cursor-pointer",
@@ -297,5 +304,20 @@ function CodePreview(
       </div>
     </>
 
+  )
+}
+
+
+
+function MyIcon(
+  props: SVGProps<SVGSVGElement>
+) {
+  return (
+    <svg width="37" height="37" viewBox="0 0 37 37" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <rect x="18" y="1.5" width="19" height="19" rx="3" fill="#FCD732" />
+      <rect x="3" y="5.5" width="19" height="18" rx="3" fill="#FB4949" />
+      <rect y="12.5" width="19" height="19" rx="3" fill="#498DFB" />
+      <rect x="16" y="16.5" width="18" height="19" rx="3" fill="#43D4AD" />
+    </svg>
   )
 }

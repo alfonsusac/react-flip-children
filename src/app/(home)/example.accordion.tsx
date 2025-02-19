@@ -35,6 +35,7 @@ function Accordion(
   return (
     <div className="border-t overflow-hidden text-sm flex flex-col text-[var(--text-light-2)]">
       <button
+        aria-label="accordion"
         className="p-3 w-full text-start flex items-center gap-2 font-semibold"
         onClick={() => setOpen(!open)}>
         <div className="grow">

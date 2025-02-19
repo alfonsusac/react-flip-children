@@ -4,6 +4,7 @@ import { useState } from "react";
 import { AnimateChildren } from "../../../lib/AnimateChildren/src";
 import { cn } from "lazy-cn";
 import { LucideArrowLeft, LucideArrowRight } from "./assets";
+import Image from "next/image";
 
 const fruitList = [
   "https://www.heroui.com/images/fruit-1.jpeg",
@@ -40,8 +41,11 @@ export function GalleryExample() {
         data-direction={direction}
       >
         <AnimateChildren useAbsolutePositionOnDelete duration={1000}>
-          <img
+          <Image
+            loading="lazy"
             key={src}
+            width={478}
+            height={268}
             src={src}
             alt={srcIndex + "image"}
             className={cn(
@@ -65,11 +69,13 @@ export function GalleryExample() {
       </div>
       <div className="flex gap-1 justify-center pt-2 text-lg text-[var(--text-light-3)]">
         <button
+          aria-label="left"
           onClick={goLeft}
           className="p-2 rounded-full hover:bg-[var(--bg-light-3)] hover:text-[var(--text-light-2)]">
           <LucideArrowLeft />
         </button>
         <button
+          aria-label="right"
           onClick={goRight}
           className="p-2 rounded-full hover:bg-[var(--bg-light-3)] hover:text-[var(--text-light-2)]">
           <LucideArrowRight />

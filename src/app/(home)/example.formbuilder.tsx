@@ -30,10 +30,12 @@ export function FormBuilderExample() {
               )}>
               <div className="flex gap-2">
                 <input
+                  title={"question " + item}
                   defaultValue={defaultQuestions[item % defaultQuestions.length].label}
                   className="p-1 px-1.5 min-w-0 text-lg bg-[var(--bg-light)] rounded-md border-b border-[var(--border-light-2)] grow rounded-b-none focus:outline-none focus:border-b-[var(--text-light)]"
                 />
                 <select
+                  title={"type for question " + item}
                   className="p-1 px-1.5 self-stretch text-sm bg-[var(--bg-light)] rounded-md border border-[var(--border-light-2)]"
                 >
                   <option>Text</option>
@@ -41,16 +43,19 @@ export function FormBuilderExample() {
               </div>
               <div className="flex gap-2 justify-end">
                 <button
+                  aria-label="move up"
                   onClick={() => demo.moveUp(item)}
                   className="p-2 text-[var(--text-light-3)] hover:text-[var(--text-light-2)] hover:bg-[var(--bg-light-3)] rounded-full transition-all duration-100">
                   <LucideArrowUp />
                 </button>
                 <button
+                  aria-label="move down"
                   onClick={() => demo.moveDown(item)}
                   className="p-2 text-[var(--text-light-3)] hover:text-[var(--text-light-2)] hover:bg-[var(--bg-light-3)] rounded-full transition-all duration-100">
                   <LucideArrowDown />
                 </button>
                 <button
+                  aria-label="remove"
                   onClick={() => demo.remove(item)}
                   className="p-2 text-[var(--text-light-3)] hover:text-[var(--text-light-2)] hover:bg-[var(--bg-light-3)] rounded-full transition-all duration-100">
                   <LucideTrash />
