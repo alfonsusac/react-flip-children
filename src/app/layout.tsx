@@ -32,7 +32,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "React Flip Children",
-  description: "A FLIP animation for reordering children in React",
+  description: "A lightweight FLIP animation library for smoothly reordering children in React, ensuring seamless transitions and improved user experience.",
   authors: [
     {
       name: "Alfonsus Ardani",
@@ -40,7 +40,6 @@ export const metadata: Metadata = {
     }
   ]
 };
-
 
 
 function getFontVariable(
