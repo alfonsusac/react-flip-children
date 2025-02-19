@@ -65,9 +65,9 @@ export function Sidebar() {
 
   useEffect(() => {
     if (sidebarOpen) {
-      document.body.classList.add("overflow-hidden", "[@media(min-width:1135px)]:overflow-auto", "mr-[10px]")
+      document.body.classList.add("overflow-hidden", "[@media(min-width:1135px)]:overflow-auto", "[@media(max-width:1135px)]:mr-[10px]")
     } else {
-      document.body.classList.remove("overflow-hidden", "[@media(min-width:1135px)]:overflow-auto", "mr-[10px]")
+      document.body.classList.remove("overflow-hidden", "[@media(min-width:1135px)]:overflow-auto", "[@media(max-width:1135px)]:mr-[10px]")
     }
   }, [sidebarOpen])
 
