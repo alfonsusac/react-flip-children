@@ -41,7 +41,6 @@ export const metadata: Metadata = {
   ]
 };
 
-
 function getFontVariable(
   ...fonts: NextFontWithVariable[]
 ) {
